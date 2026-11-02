@@ -1,5 +1,6 @@
 ---
 import { portfolioData } from "../data/portfolioData";
+import EditorIcon from "../components/icons/EditorIcon.astro";
 
 const currentTheme = portfolioData.theme || "terracotta";
 
@@ -94,7 +95,7 @@ const palettes = [
           class="device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-white/20 text-white"
           title="Visualizar em Desktop"
         >
-          <span>🖥️</span>
+          <EditorIcon name="desktop" class="w-3.5 h-3.5" />
           <span class="hidden md:inline">Desktop</span>
         </button>
         <button
@@ -103,7 +104,7 @@ const palettes = [
           class="device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-white/60 hover:text-white"
           title="Visualizar em Celular (iPhone)"
         >
-          <span>📱</span>
+          <EditorIcon name="phone" class="w-3.5 h-3.5" />
           <span class="hidden md:inline">Celular (Mobile)</span>
         </button>
       </div>
@@ -113,17 +114,17 @@ const palettes = [
         <button
           type="button"
           id="btn-reload"
-          class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 transition cursor-pointer text-xs"
+          class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 transition cursor-pointer text-xs flex items-center justify-center"
           title="Recarregar tela"
         >
-          🔄
+          <EditorIcon name="refresh" class="w-3.5 h-3.5" />
         </button>
         <a
           href="/keystatic"
           class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white text-xs font-bold uppercase tracking-wider transition shadow-lg cursor-pointer"
         >
           <span>Editor de Conteúdo</span>
-          <span>↗</span>
+          <EditorIcon name="external-link" class="w-3 h-3" />
         </a>
       </div>
     </header>
@@ -134,8 +135,8 @@ const palettes = [
       <aside class="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-white/10 bg-[#171412] flex flex-col flex-shrink-0 overflow-y-auto max-h-72 lg:max-h-full">
         <!-- Palette Header -->
         <div class="p-5 border-b border-white/10">
-          <div class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#C28D3F] mb-1">
-            <span>✨</span>
+          <div class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#C28D3F] mb-1">
+            <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
             <span>Personalização Visual</span>
           </div>
           <h2 class="text-lg font-bold text-white">Paleta de Cores do Site</h2>
@@ -175,7 +176,7 @@ const palettes = [
                   </div>
                 </div>
                 <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
-                  ✓
+                  <EditorIcon name="check" class="w-3.5 h-3.5" />
                 </span>
               </button>
             );
@@ -184,7 +185,10 @@ const palettes = [
 
         <!-- How to Save Notice -->
         <div class="p-4 mx-4 mb-4 rounded-xl bg-white/5 border border-white/10 text-xs text-white/70">
-          <p class="font-semibold text-white mb-1">💡 Como salvar permanentemente:</p>
+          <div class="flex items-center gap-1.5 font-semibold text-white mb-1">
+            <EditorIcon name="lightbulb" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Como salvar permanentemente:</span>
+          </div>
           <p class="leading-relaxed text-[11px]">
             Para aplicar a cor escolhida a todos os visitantes, abra o <a href="/keystatic/branch/main/singleton/general" class="text-[#C28D3F] underline font-bold">Editor de Informações Gerais</a>, escolha a mesma paleta e clique em <strong>Save</strong>.
           </p>
@@ -197,16 +201,28 @@ const palettes = [
           </span>
           <div class="grid grid-cols-2 gap-2 text-[11px]">
             <a href="/keystatic/branch/main/singleton/topbar" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
-              📢 Aviso Topo
+              <span class="flex items-center gap-1.5">
+                <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
+                <span>Aviso Topo</span>
+              </span>
             </a>
             <a href="/keystatic/branch/main/collection/cases" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
-              🎬 Cases 3D
+              <span class="flex items-center gap-1.5">
+                <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
+                <span>Cases 3D</span>
+              </span>
             </a>
             <a href="/keystatic/branch/main/collection/portfolioVideos" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
-              📹 Vídeos Nichos
+              <span class="flex items-center gap-1.5">
+                <EditorIcon name="video" class="w-3.5 h-3.5 text-[#C28D3F]" />
+                <span>Vídeos Nichos</span>
+              </span>
             </a>
             <a href="/keystatic/branch/main/collection/photos" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
-              📷 Fotos UGC
+              <span class="flex items-center gap-1.5">
+                <EditorIcon name="camera" class="w-3.5 h-3.5 text-[#C28D3F]" />
+                <span>Fotos UGC</span>
+              </span>
             </a>
           </div>
         </div>
