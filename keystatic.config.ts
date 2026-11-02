@@ -11,7 +11,12 @@ export default config({
   },
   ui: {
     brand: {
-      name: 'Amanda Silveira · UGC Admin',
+      name: 'Amanda Silveira · UGC Studio Admin',
+    },
+    navigation: {
+      '🎨 Identidade Visual & Avisos': ['general', 'topbar', 'hero'],
+      '🎬 Criativos & Portfólio': ['cases', 'portfolioVideos', 'photos'],
+      '💼 Serviços & Prova Social': ['services', 'partnerBrands', 'testimonials'],
     },
   },
   singletons: {
@@ -19,6 +24,7 @@ export default config({
       label: 'Barra de Aviso do Topo (Urgência & Datas Comemorativas)',
       path: 'src/content/topbar',
       format: 'json',
+      previewUrl: '/',
       schema: {
         badge: fields.text({
           label: 'Selo / Destaque (ex: Vagas Abertas, Black Friday 🔥, Dia das Mães 🌸)',
@@ -35,23 +41,16 @@ export default config({
       },
     }),
     general: singleton({
-      label: 'Informações Gerais & Contato',
+      label: 'Informações Gerais, Tema & Contato',
       path: 'src/content/general',
       format: 'json',
+      previewUrl: '/#contato',
       schema: {
         fullName: fields.text({ label: 'Nome Completo', defaultValue: 'Amanda Silveira' }),
         role: fields.text({ label: 'Cargo / Especialidade', defaultValue: 'Criadora de Conteúdo UGC & Estrategista de Criativos' }),
         whatsappNumber: fields.text({ label: 'Número WhatsApp (apenas números com DDD)', defaultValue: '5511999998888' }),
         instagram: fields.text({ label: 'Instagram', defaultValue: '@amandasilveira.ugc' }),
         tiktok: fields.text({ label: 'TikTok', defaultValue: '@amandasilveiraugc' }),
-        contactBadge: fields.text({ label: 'Selo do Contato (ex: Vamos Criar Juntos 💌)', defaultValue: 'Vamos Criar Juntos' }),
-        contactTitle: fields.text({ label: 'Título do Formulário', defaultValue: 'Solicite uma Proposta' }),
-        contactSubtitle: fields.text({ label: 'Subtítulo Cursivo (ex: resposta rápida em até 24 horas ⚡)', defaultValue: 'resposta rápida em até 24 horas' }),
-        contactDesc: fields.text({
-          label: 'Texto Descritivo de Orçamento',
-          multiline: true,
-          defaultValue: 'Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.',
-        }),
         theme: fields.select({
           label: '🎨 Paleta Visual & Cor de Destaque do Site',
           description: 'Muda instantaneamente os botões, selos, destaques cursivos e métricas do portfólio.',
@@ -79,12 +78,21 @@ export default config({
           ],
           defaultValue: 'terracotta',
         }),
+        contactBadge: fields.text({ label: 'Selo do Contato (ex: Vamos Criar Juntos 💌)', defaultValue: 'Vamos Criar Juntos' }),
+        contactTitle: fields.text({ label: 'Título do Formulário', defaultValue: 'Solicite uma Proposta' }),
+        contactSubtitle: fields.text({ label: 'Subtítulo Cursivo (ex: resposta rápida em até 24 horas ⚡)', defaultValue: 'resposta rápida em até 24 horas' }),
+        contactDesc: fields.text({
+          label: 'Texto Descritivo de Orçamento',
+          multiline: true,
+          defaultValue: 'Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.',
+        }),
       },
     }),
     hero: singleton({
       label: 'Hero (Início da Página)',
       path: 'src/content/hero',
       format: 'json',
+      previewUrl: '/',
       schema: {
         headline: fields.text({ label: 'Título Principal', defaultValue: 'Vídeos autênticos que' }),
         headlineCursive: fields.text({ label: 'Destaque Cursivo', defaultValue: 'geram desejo e convertem' }),
@@ -106,6 +114,7 @@ export default config({
       slugField: 'title',
       path: 'src/content/services/*',
       format: 'json',
+      previewUrl: '/#servicos',
       schema: {
         title: fields.slug({ name: { label: 'Nome do Formato (ex: Vídeos de Alta Conversão, Unboxing, Provador Fashion, Cobertura de Evento)' } }),
         step: fields.text({ label: 'Número de Ordem (ex: 01, 02, 03...)', defaultValue: '01' }),
@@ -119,6 +128,7 @@ export default config({
       slugField: 'name',
       path: 'src/content/brands/*',
       format: 'json',
+      previewUrl: '/#marcas',
       schema: {
         name: fields.slug({ name: { label: 'Nome da Marca' } }),
       },
@@ -128,6 +138,7 @@ export default config({
       slugField: 'brand',
       path: 'src/content/cases/*',
       format: 'json',
+      previewUrl: '/#cases',
       schema: {
         brand: fields.slug({ name: { label: 'Nome da Marca / Produto' } }),
         title: fields.text({ label: 'Título do Vídeo' }),
@@ -149,6 +160,7 @@ export default config({
       slugField: 'title',
       path: 'src/content/portfolio-videos/*',
       format: 'json',
+      previewUrl: '/#portfolio',
       schema: {
         title: fields.slug({ name: { label: 'Título do Criativo' } }),
         brand: fields.text({ label: 'Marca' }),
@@ -172,6 +184,7 @@ export default config({
       slugField: 'title',
       path: 'src/content/photos/*',
       format: 'json',
+      previewUrl: '/#fotos',
       schema: {
         title: fields.slug({ name: { label: 'Título / Descrição da Foto' } }),
         url: fields.text({ label: 'URL da Imagem' }),
@@ -182,6 +195,7 @@ export default config({
       slugField: 'clientName',
       path: 'src/content/testimonials/*',
       format: 'json',
+      previewUrl: '/#depoimentos',
       schema: {
         clientName: fields.slug({ name: { label: 'Nome do Cliente' } }),
         role: fields.text({ label: 'Cargo (ex: Head de Marketing)' }),

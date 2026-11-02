@@ -179,6 +179,14 @@ const schemaOrgPerson = {
           openVideoLightbox: (youtubeId: string) => void;
         }
       }
+
+      // Allow live palette preview via ?theme=... query param
+      const urlParams = new URLSearchParams(window.location.search);
+      const previewTheme = urlParams.get("theme");
+      const validThemes = ["terracotta", "rose", "monochrome", "olive", "mocha"];
+      if (previewTheme && validThemes.includes(previewTheme)) {
+        document.documentElement.setAttribute("data-theme", previewTheme);
+      }
     </script>
   </body>
 </html>
