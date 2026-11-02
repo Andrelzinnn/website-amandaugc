@@ -1,5 +1,45 @@
 ---
 import { portfolioData } from "../data/portfolioData";
+
+const currentTheme = portfolioData.theme || "terracotta";
+
+const palettes = [
+  {
+    id: "terracotta",
+    name: "Terracota & Dourado",
+    subtitle: "Editorial Quente & Sofisticado",
+    color1: "#A8382B",
+    color2: "#C28D3F",
+  },
+  {
+    id: "rose",
+    name: "Rosa Nude & Champagne",
+    subtitle: "Delicado · Skincare, Beleza & Glow",
+    color1: "#C4556C",
+    color2: "#D4A373",
+  },
+  {
+    id: "monochrome",
+    name: "Preto & Branco Editorial",
+    subtitle: "Minimalista · Moda High-End & Luxo",
+    color1: "#1B1815",
+    color2: "#737373",
+  },
+  {
+    id: "olive",
+    name: "Verde Oliva & Sage",
+    subtitle: "Natural · Orgânicos, Saúde & Bem-Estar",
+    color1: "#3A5A40",
+    color2: "#A3B18A",
+  },
+  {
+    id: "mocha",
+    name: "Marrom Mocha & Caramelo",
+    subtitle: "Aconchegante · Lifestyle & Casa",
+    color1: "#7B4B32",
+    color2: "#C49A6C",
+  },
+];
 ---
 
 <!doctype html>
@@ -106,100 +146,40 @@ import { portfolioData } from "../data/portfolioData";
 
         <!-- Color Swatch Cards -->
         <div class="p-4 space-y-2.5">
-          <!-- 1. Terracotta -->
-          <button
-            type="button"
-            class="palette-card w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between border-[#A8382B] bg-[#A8382B]/10 active-card"
-            data-theme="terracotta"
-          >
-            <div class="flex items-center gap-3">
-              <div class="flex items-center -space-x-1.5">
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #A8382B;"></span>
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #C28D3F;"></span>
-              </div>
-              <div>
-                <span class="block text-xs font-bold text-white">Terracota & Dourado</span>
-                <span class="block text-[10px] text-white/60">Editorial Quente & Sofisticado</span>
-              </div>
-            </div>
-            <span class="check-icon text-xs text-[#A8382B] font-bold">✓</span>
-          </button>
-
-          <!-- 2. Rose -->
-          <button
-            type="button"
-            class="palette-card w-full text-left p-3.5 rounded-2xl border border-white/10 hover:border-white/30 bg-white/5 transition-all cursor-pointer flex items-center justify-between"
-            data-theme="rose"
-          >
-            <div class="flex items-center gap-3">
-              <div class="flex items-center -space-x-1.5">
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #C4556C;"></span>
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #D4A373;"></span>
-              </div>
-              <div>
-                <span class="block text-xs font-bold text-white">Rosa Nude & Champagne</span>
-                <span class="block text-[10px] text-white/60">Delicado · Skincare, Beleza & Glow</span>
-              </div>
-            </div>
-            <span class="check-icon text-xs text-white/40 hidden">✓</span>
-          </button>
-
-          <!-- 3. Monochrome -->
-          <button
-            type="button"
-            class="palette-card w-full text-left p-3.5 rounded-2xl border border-white/10 hover:border-white/30 bg-white/5 transition-all cursor-pointer flex items-center justify-between"
-            data-theme="monochrome"
-          >
-            <div class="flex items-center gap-3">
-              <div class="flex items-center -space-x-1.5">
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #1B1815; border-color: #fff;"></span>
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #737373;"></span>
-              </div>
-              <div>
-                <span class="block text-xs font-bold text-white">Preto & Branco Editorial</span>
-                <span class="block text-[10px] text-white/60">Minimalista · Moda High-End & Luxo</span>
-              </div>
-            </div>
-            <span class="check-icon text-xs text-white/40 hidden">✓</span>
-          </button>
-
-          <!-- 4. Olive -->
-          <button
-            type="button"
-            class="palette-card w-full text-left p-3.5 rounded-2xl border border-white/10 hover:border-white/30 bg-white/5 transition-all cursor-pointer flex items-center justify-between"
-            data-theme="olive"
-          >
-            <div class="flex items-center gap-3">
-              <div class="flex items-center -space-x-1.5">
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #3A5A40;"></span>
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #A3B18A;"></span>
-              </div>
-              <div>
-                <span class="block text-xs font-bold text-white">Verde Oliva & Sage</span>
-                <span class="block text-[10px] text-white/60">Natural · Orgânicos, Saúde & Bem-Estar</span>
-              </div>
-            </div>
-            <span class="check-icon text-xs text-white/40 hidden">✓</span>
-          </button>
-
-          <!-- 5. Mocha -->
-          <button
-            type="button"
-            class="palette-card w-full text-left p-3.5 rounded-2xl border border-white/10 hover:border-white/30 bg-white/5 transition-all cursor-pointer flex items-center justify-between"
-            data-theme="mocha"
-          >
-            <div class="flex items-center gap-3">
-              <div class="flex items-center -space-x-1.5">
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #7B4B32;"></span>
-                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #C49A6C;"></span>
-              </div>
-              <div>
-                <span class="block text-xs font-bold text-white">Marrom Mocha & Caramelo</span>
-                <span class="block text-[10px] text-white/60">Aconchegante · Lifestyle & Casa</span>
-              </div>
-            </div>
-            <span class="check-icon text-xs text-white/40 hidden">✓</span>
-          </button>
+          {palettes.map((p) => {
+            const isActive = p.id === currentTheme;
+            return (
+              <button
+                type="button"
+                class={`palette-card w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                  isActive
+                    ? "border-[#A8382B] bg-[#A8382B]/10 active-card"
+                    : "border-white/10 hover:border-white/30 bg-white/5"
+                }`}
+                data-theme={p.id}
+              >
+                <div class="flex items-center gap-3">
+                  <div class="flex items-center -space-x-1.5 flex-shrink-0">
+                    <span
+                      class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm"
+                      style={`background-color: ${p.color1};`}
+                    ></span>
+                    <span
+                      class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm"
+                      style={`background-color: ${p.color2};`}
+                    ></span>
+                  </div>
+                  <div>
+                    <span class="block text-xs font-bold text-white">{p.name}</span>
+                    <span class="block text-[10px] text-white/60">{p.subtitle}</span>
+                  </div>
+                </div>
+                <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
+                  ✓
+                </span>
+              </button>
+            );
+          })}
         </div>
 
         <!-- How to Save Notice -->
@@ -241,7 +221,8 @@ import { portfolioData } from "../data/portfolioData";
         >
           <iframe
             id="site-iframe"
-            src={`/?theme=${portfolioData.theme || 'terracotta'}`}
+            data-initial-theme={currentTheme}
+            src={`/?theme=${currentTheme}`}
             class="w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border border-white/10"
             title="Pré-visualização do site"
           ></iframe>
@@ -258,7 +239,7 @@ import { portfolioData } from "../data/portfolioData";
       const btnReload = document.getElementById("btn-reload");
       const paletteCards = document.querySelectorAll(".palette-card");
 
-      let currentTheme = "terracotta";
+      let currentTheme = iframe?.getAttribute("data-initial-theme") || "terracotta";
 
       // Palette Card Selection & Live Iframe Theme Update
       paletteCards.forEach((card) => {
