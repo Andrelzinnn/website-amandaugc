@@ -118,70 +118,90 @@ const { featuredCase } = portfolioData;
         </p>
       </div>
 
-      <!-- Right Column: Results & Strategy Narrative -->
-      <div class="lg:col-span-7 flex flex-col">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#A8382B]/10 text-[#A8382B] text-xs font-bold uppercase tracking-wider self-start mb-4">
-          ★ <span data-i18n="case.pill">{featuredCase.badge}</span>
-        </div>
+      <!-- Right Column: Results & Strategy Narrative Stack -->
+      <div class="lg:col-span-7 relative grid items-start">
+        {featuredCase.cards.map((item, idx) => (
+          <div
+            class={`case-narrative flex flex-col transition-all duration-500 ease-out ${
+              idx === 0
+                ? "opacity-100 visible translate-y-0"
+                : "opacity-0 invisible translate-y-3 pointer-events-none"
+            }`}
+            style="grid-area: 1 / 1;"
+            data-narrative-index={idx}
+          >
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#A8382B]/10 text-[#A8382B] text-xs font-bold uppercase tracking-wider self-start mb-4">
+              ★ <span data-i18n={`case.${idx + 1}.badge`}>{item.badge}</span>
+            </div>
 
-        <h3 class="text-2xl sm:text-3xl font-impact text-[#1B1815] uppercase tracking-wide mb-2">
-          {featuredCase.brand}
-        </h3>
+            <h3
+              data-i18n={`case.${idx + 1}.brand`}
+              class="text-2xl sm:text-3xl font-impact text-[#1B1815] uppercase tracking-wide mb-2"
+            >
+              {item.brand}
+            </h3>
 
-        <!-- Big Highlight Metric Panel -->
-        <div class="p-6 rounded-2xl bg-white border border-[#1B1815]/10 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 my-6">
-          <div>
-            <span data-i18n="case.consolidated" class="text-xs font-semibold text-[#57524C] uppercase tracking-wider block">
-              Resultado Consolidado
-            </span>
-            <span class="text-4xl sm:text-5xl font-impact font-bold text-[#A8382B] tracking-tight">
-              {featuredCase.highlightMetric}
-            </span>
+            <!-- Big Highlight Metric Panel -->
+            <div class="p-6 rounded-2xl bg-white border border-[#1B1815]/10 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 my-6">
+              <div>
+                <span
+                  data-i18n="case.consolidated"
+                  class="text-xs font-semibold text-[#57524C] uppercase tracking-wider block"
+                >
+                  Resultado Consolidado
+                </span>
+                <span class="text-4xl sm:text-5xl font-impact font-bold text-[#A8382B] tracking-tight">
+                  {item.highlightMetric}
+                </span>
+              </div>
+              <div class="sm:text-right border-t sm:border-t-0 sm:border-l border-[#1B1815]/10 pt-3 sm:pt-0 sm:pl-6">
+                <span
+                  data-i18n="case.commercial"
+                  class="text-xs font-semibold text-[#57524C] uppercase tracking-wider block"
+                >
+                  Impacto Comercial
+                </span>
+                <span
+                  data-i18n={`case.${idx + 1}.metricLabel`}
+                  class="text-lg font-bold text-[#1B1815]"
+                >
+                  {item.metricLabel}
+                </span>
+              </div>
+            </div>
+
+            <!-- Strategy Points -->
+            <div class="space-y-4">
+              <h4
+                data-i18n="case.pillars"
+                class="text-xs font-bold uppercase tracking-widest text-[#57524C]"
+              >
+                Pilares Estratégicos Aplicados:
+              </h4>
+              <ul class="space-y-3">
+                {item.strategyPoints.map((point, pIdx) => (
+                  <li class="flex items-start gap-3 text-sm text-[#57524C] leading-relaxed">
+                    <span class="flex-none flex items-center justify-center w-5 h-5 rounded-full bg-[#1B1815] text-[#FAF8F5] text-[10px] font-bold mt-0.5">
+                      {pIdx + 1}
+                    </span>
+                    <span data-i18n={`case.${idx + 1}.p${pIdx + 1}`}>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <!-- Social Proof Quote for this case -->
+            <div class="mt-8 p-4 rounded-xl bg-[#EFECE6] border-l-4 border-[#A8382B] text-xs sm:text-sm text-[#1B1815] italic">
+              <span data-i18n={`case.${idx + 1}.quote`}>"{item.quote}"</span>
+              <span
+                data-i18n={`case.${idx + 1}.author`}
+                class="block mt-1 font-bold not-italic text-[11px] uppercase tracking-wider text-[#57524C]"
+              >
+                — {item.author}
+              </span>
+            </div>
           </div>
-          <div class="sm:text-right border-t sm:border-t-0 sm:border-l border-[#1B1815]/10 pt-3 sm:pt-0 sm:pl-6">
-            <span data-i18n="case.commercial" class="text-xs font-semibold text-[#57524C] uppercase tracking-wider block">
-              Impacto Comercial
-            </span>
-            <span data-i18n="case.metricLabel" class="text-lg font-bold text-[#1B1815]">
-              {featuredCase.metricLabel}
-            </span>
-          </div>
-        </div>
-
-        <!-- Strategy Points -->
-        <div class="space-y-4">
-          <h4 data-i18n="case.pillars" class="text-xs font-bold uppercase tracking-widest text-[#57524C]">
-            Pilares Estratégicos Aplicados:
-          </h4>
-          <ul class="space-y-3">
-            <li class="flex items-start gap-3 text-sm text-[#57524C] leading-relaxed">
-              <span class="flex-none flex items-center justify-center w-5 h-5 rounded-full bg-[#1B1815] text-[#FAF8F5] text-[10px] font-bold mt-0.5">
-                1
-              </span>
-              <span data-i18n="case.p1">{featuredCase.strategyPoints[0]}</span>
-            </li>
-            <li class="flex items-start gap-3 text-sm text-[#57524C] leading-relaxed">
-              <span class="flex-none flex items-center justify-center w-5 h-5 rounded-full bg-[#1B1815] text-[#FAF8F5] text-[10px] font-bold mt-0.5">
-                2
-              </span>
-              <span data-i18n="case.p2">{featuredCase.strategyPoints[1]}</span>
-            </li>
-            <li class="flex items-start gap-3 text-sm text-[#57524C] leading-relaxed">
-              <span class="flex-none flex items-center justify-center w-5 h-5 rounded-full bg-[#1B1815] text-[#FAF8F5] text-[10px] font-bold mt-0.5">
-                3
-              </span>
-              <span data-i18n="case.p3">{featuredCase.strategyPoints[2]}</span>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Social Proof Quote for this case -->
-        <div class="mt-8 p-4 rounded-xl bg-[#EFECE6] border-l-4 border-[#A8382B] text-xs sm:text-sm text-[#1B1815] italic">
-          <span data-i18n="case.quote">"Foi o criativo mais lucrativo da nossa história para Meta Ads. O retorno superou todas as nossas expectativas."</span>
-          <span data-i18n="case.author" class="block mt-1 font-bold not-italic text-[11px] uppercase tracking-wider text-[#57524C]">
-            — Diretor de Marketing, Aura Glow
-          </span>
-        </div>
+        ))}
       </div>
     </div>
   </div>
@@ -190,6 +210,7 @@ const { featuredCase } = portfolioData;
 <script>
   let activeIndex = 0;
   const cards = document.querySelectorAll(".case-card");
+  const narratives = document.querySelectorAll(".case-narrative");
   const total = cards.length;
   const counter = document.getElementById("case-current-index");
   const nextBtn = document.getElementById("next-case-btn");
@@ -218,6 +239,18 @@ const { featuredCase } = portfolioData;
       }
     });
 
+    narratives.forEach((nar, i) => {
+      const el = nar as HTMLElement;
+      const isAct = i === activeIndex;
+      if (isAct) {
+        el.classList.remove("opacity-0", "invisible", "translate-y-3", "pointer-events-none");
+        el.classList.add("opacity-100", "visible", "translate-y-0");
+      } else {
+        el.classList.remove("opacity-100", "visible", "translate-y-0");
+        el.classList.add("opacity-0", "invisible", "translate-y-3", "pointer-events-none");
+      }
+    });
+
     if (counter) counter.textContent = (activeIndex + 1).toString();
   };
 
@@ -235,8 +268,8 @@ const { featuredCase } = portfolioData;
     card.addEventListener("click", () => {
       if (idx === activeIndex) {
         const youtubeId = card.getAttribute("data-youtube");
-        if (youtubeId && window.openVideoLightbox) {
-          window.openVideoLightbox(youtubeId);
+        if (youtubeId && (window as any).openVideoLightbox) {
+          (window as any).openVideoLightbox(youtubeId);
         }
       } else {
         activeIndex = idx;
