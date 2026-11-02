@@ -72,7 +72,7 @@ const palettes = [
   </head>
   <body class="bg-[#12100E] text-[#FAF8F5] min-h-screen flex flex-col antialiased selection:bg-[#A8382B] selection:text-white">
     <!-- Top Studio Header -->
-    <header class="h-14 border-b border-white/10 bg-[#1B1815] px-4 sm:px-6 flex items-center justify-between z-20 flex-shrink-0">
+    <header class="h-14 border-b border-[#2D2824] bg-[#1B1815] px-4 sm:px-6 flex items-center justify-between z-20 flex-shrink-0">
       <div class="flex items-center gap-3">
         <a href="/" class="flex items-center gap-2 group">
           <span class="w-8 h-8 rounded-lg bg-[#A8382B] text-white flex items-center justify-center font-bold text-sm shadow-md">
@@ -82,17 +82,17 @@ const palettes = [
             Amanda Silveira
           </span>
         </a>
-        <span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/70 font-semibold tracking-wider uppercase text-[10px]">
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#24201C] text-[#C4BDB5] border border-[#2D2824] font-semibold tracking-wider uppercase text-[10px]">
           Studio Admin & Live Preview
         </span>
       </div>
 
       <!-- Device View Controls -->
-      <div class="flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-white/10">
+      <div class="flex items-center gap-1 bg-[#12100E] p-1 rounded-xl border border-[#2D2824]">
         <button
           type="button"
           id="btn-desktop"
-          class="device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-white/20 text-white"
+          class="device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]"
           title="Visualizar em Desktop"
         >
           <EditorIcon name="desktop" class="w-3.5 h-3.5" />
@@ -101,7 +101,7 @@ const palettes = [
         <button
           type="button"
           id="btn-mobile"
-          class="device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-white/60 hover:text-white"
+          class="device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent"
           title="Visualizar em Celular (iPhone)"
         >
           <EditorIcon name="phone" class="w-3.5 h-3.5" />
@@ -114,7 +114,7 @@ const palettes = [
         <button
           type="button"
           id="btn-reload"
-          class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 transition cursor-pointer text-xs flex items-center justify-center"
+          class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[#C4BDB5] hover:text-white border border-[#2D2824] transition cursor-pointer text-xs flex items-center justify-center"
           title="Recarregar tela"
         >
           <EditorIcon name="refresh" class="w-3.5 h-3.5" />
@@ -132,15 +132,15 @@ const palettes = [
     <!-- Main Workspace: Split View -->
     <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
       <!-- Left Sidebar: Visual Theme & Quick Settings -->
-      <aside class="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-white/10 bg-[#171412] flex flex-col flex-shrink-0 overflow-y-auto max-h-72 lg:max-h-full">
+      <aside class="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-[#2D2824] bg-[#1B1815] flex flex-col flex-shrink-0 overflow-y-auto max-h-72 lg:max-h-full">
         <!-- Palette Header -->
-        <div class="p-5 border-b border-white/10">
+        <div class="p-5 border-b border-[#2D2824]">
           <div class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#C28D3F] mb-1">
             <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
             <span>Personalização Visual</span>
           </div>
           <h2 class="text-lg font-bold text-white">Paleta de Cores do Site</h2>
-          <p class="text-xs text-white/60 mt-1 leading-relaxed">
+          <p class="text-xs text-[#9E968E] mt-1 leading-relaxed">
             Clique em qualquer paleta abaixo para pré-visualizar a mudança de cor no site ao vivo em tempo real.
           </p>
         </div>
@@ -154,8 +154,8 @@ const palettes = [
                 type="button"
                 class={`palette-card w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
                   isActive
-                    ? "border-[#A8382B] bg-[#A8382B]/10 active-card"
-                    : "border-white/10 hover:border-white/30 bg-white/5"
+                    ? "border-[#A8382B] bg-[#361A16] active-card"
+                    : "border-[#2D2824] hover:border-[#3D3630] bg-[#24201C] hover:bg-[#2D2824]"
                 }`}
                 data-theme={p.id}
               >
@@ -172,7 +172,7 @@ const palettes = [
                   </div>
                   <div>
                     <span class="block text-xs font-bold text-white">{p.name}</span>
-                    <span class="block text-[10px] text-white/60">{p.subtitle}</span>
+                    <span class="block text-[10px] text-[#9E968E]">{p.subtitle}</span>
                   </div>
                 </div>
                 <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
@@ -184,41 +184,41 @@ const palettes = [
         </div>
 
         <!-- How to Save Notice -->
-        <div class="p-4 mx-4 mb-4 rounded-xl bg-white/5 border border-white/10 text-xs text-white/70">
+        <div class="p-4 mx-4 mb-4 rounded-xl bg-[#24201C] border border-[#2D2824] text-xs text-[#C4BDB5]">
           <div class="flex items-center gap-1.5 font-semibold text-white mb-1">
             <EditorIcon name="lightbulb" class="w-3.5 h-3.5 text-[#C28D3F]" />
             <span>Como salvar permanentemente:</span>
           </div>
-          <p class="leading-relaxed text-[11px]">
-            Para aplicar a cor escolhida a todos os visitantes, abra o <a href="/keystatic/branch/main/singleton/general" class="text-[#C28D3F] underline font-bold">Editor de Informações Gerais</a>, escolha a mesma paleta e clique em <strong>Save</strong>.
+          <p class="leading-relaxed text-[11px] text-[#9E968E]">
+            Para aplicar a cor escolhida a todos os visitantes, abra o <a href="/keystatic/branch/main/singleton/general" class="text-[#C28D3F] underline font-bold hover:text-white transition">Editor de Informações Gerais</a>, escolha a mesma paleta e clique em <strong>Save</strong>.
           </p>
         </div>
 
         <!-- Quick Shortcuts -->
-        <div class="mt-auto p-4 border-t border-white/10">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-white/50 block mb-2">
+        <div class="mt-auto p-4 border-t border-[#2D2824]">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-[#8A827B] block mb-2">
             Atalhos Rápidos de Edição
           </span>
           <div class="grid grid-cols-2 gap-2 text-[11px]">
-            <a href="/keystatic/branch/main/singleton/topbar" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
+            <a href="/keystatic/branch/main/singleton/topbar" class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] hover:border-[#3D3630] transition block font-medium text-[#E8E2D9]">
               <span class="flex items-center gap-1.5">
                 <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
                 <span>Aviso Topo</span>
               </span>
             </a>
-            <a href="/keystatic/branch/main/collection/cases" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
+            <a href="/keystatic/branch/main/collection/cases" class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] hover:border-[#3D3630] transition block font-medium text-[#E8E2D9]">
               <span class="flex items-center gap-1.5">
                 <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
                 <span>Cases 3D</span>
               </span>
             </a>
-            <a href="/keystatic/branch/main/collection/portfolioVideos" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
+            <a href="/keystatic/branch/main/collection/portfolioVideos" class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] hover:border-[#3D3630] transition block font-medium text-[#E8E2D9]">
               <span class="flex items-center gap-1.5">
                 <EditorIcon name="video" class="w-3.5 h-3.5 text-[#C28D3F]" />
                 <span>Vídeos Nichos</span>
               </span>
             </a>
-            <a href="/keystatic/branch/main/collection/photos" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
+            <a href="/keystatic/branch/main/collection/photos" class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] hover:border-[#3D3630] transition block font-medium text-[#E8E2D9]">
               <span class="flex items-center gap-1.5">
                 <EditorIcon name="camera" class="w-3.5 h-3.5 text-[#C28D3F]" />
                 <span>Fotos UGC</span>
@@ -239,7 +239,7 @@ const palettes = [
             id="site-iframe"
             data-initial-theme={currentTheme}
             src={`/?theme=${currentTheme}`}
-            class="w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border border-white/10"
+            class="w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border-2 border-[#2D2824]"
             title="Pré-visualização do site"
           ></iframe>
         </div>
@@ -264,14 +264,14 @@ const palettes = [
           currentTheme = theme;
 
           paletteCards.forEach((c) => {
-            c.classList.remove("border-[#A8382B]", "bg-[#A8382B]/10", "active-card");
-            c.classList.add("border-white/10", "bg-white/5");
+            c.classList.remove("border-[#A8382B]", "bg-[#361A16]", "active-card");
+            c.classList.add("border-[#2D2824]", "bg-[#24201C]");
             const check = c.querySelector(".check-icon");
             if (check) check.classList.add("hidden");
           });
 
-          card.classList.remove("border-white/10", "bg-white/5");
-          card.classList.add("border-[#A8382B]", "bg-[#A8382B]/10", "active-card");
+          card.classList.remove("border-[#2D2824]", "bg-[#24201C]");
+          card.classList.add("border-[#A8382B]", "bg-[#361A16]", "active-card");
           const check = card.querySelector(".check-icon");
           if (check) check.classList.remove("hidden");
 
@@ -286,28 +286,28 @@ const palettes = [
         });
       });
 
-      // Device Switcher
+      // Device Switcher with Solid Colors
       btnDesktop?.addEventListener("click", () => {
-        btnDesktop.classList.add("bg-white/20", "text-white");
-        btnDesktop.classList.remove("text-white/60");
-        btnMobile?.classList.remove("bg-white/20", "text-white");
-        btnMobile?.classList.add("text-white/60");
+        btnDesktop.className = "device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]";
+        if (btnMobile) {
+          btnMobile.className = "device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent";
+        }
 
         if (wrapper && iframe) {
           wrapper.className = "w-full h-full transition-all duration-300 flex items-center justify-center";
-          iframe.className = "w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border border-white/10";
+          iframe.className = "w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border-2 border-[#2D2824]";
         }
       });
 
       btnMobile?.addEventListener("click", () => {
-        btnMobile.classList.add("bg-white/20", "text-white");
-        btnMobile.classList.remove("text-white/60");
-        btnDesktop?.classList.remove("bg-white/20", "text-white");
-        btnDesktop?.classList.add("text-white/60");
+        btnMobile.className = "device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]";
+        if (btnDesktop) {
+          btnDesktop.className = "device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent";
+        }
 
         if (wrapper && iframe) {
           wrapper.className = "w-full h-full transition-all duration-300 flex items-center justify-center p-4";
-          iframe.className = "w-[390px] h-[844px] bg-[#FAF8F5] rounded-[48px] shadow-2xl transition-all duration-300 border-8 border-[#1B1815] ring-1 ring-white/20";
+          iframe.className = "w-[390px] h-[844px] bg-[#FAF8F5] rounded-[48px] shadow-2xl transition-all duration-300 border-8 border-[#1B1815] ring-2 ring-[#2D2824]";
         }
       });
 
