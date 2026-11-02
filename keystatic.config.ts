@@ -7,7 +7,7 @@ export default config({
         kind: 'cloud',
       },
   cloud: {
-    project: process.env.PUBLIC_KEYSTATIC_PROJECT || 'seu-time/seu-projeto',
+    project: 'website-amanda-ugc/website-amandaugc',
   },
   ui: {
     brand: {
