@@ -104,7 +104,7 @@ const rawPortfolioData = {
         id: "case-3",
         title: "Review Sincero após 14 dias de uso",
         brand: "Óleo Reparador Iluminador · Lumière",
-        thumbnail: "https://images.unsplash.com/photo-1512290900672-1f55b9021200?auto=format&fit=crop&w=700&q=80",
+        thumbnail: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=700&q=80",
         youtubeId: "dQw4w9WgXcQ",
         stats: "450k views · Conversão +42%",
         badge: "Quebra de Objeções & Prova Social",
