@@ -125,7 +125,7 @@ export const translations: Record<string, Record<string, string>> = {
     "popup.title": "Quer receber um roteiro de teste para a sua marca?",
     "popup.subtitle": "Preencha seus dados e eu te envio uma ideia exclusiva de criativo + tabela de pacotes no WhatsApp. 💌",
     "popup.btn": "QUERO RECEBER O ROTEIRO",
-    "popup.badgeTrigger": "Ideia de Conteúdo Grátis 🎁",
+    "popup.badgeTrigger": "Ideia de Conteúdo Grátis",
 
     // FAQ & Footer
     "faq.badge": "Tire suas dúvidas",
@@ -259,7 +259,7 @@ export const translations: Record<string, Record<string, string>> = {
     "popup.title": "Want a free concept script tailored for your brand?",
     "popup.subtitle": "Fill in your details and I'll send an exclusive creative angle + my full rates over WhatsApp. 💌",
     "popup.btn": "I WANT THE SCRIPT CONCEPT",
-    "popup.badgeTrigger": "Free Video Idea 🎁",
+    "popup.badgeTrigger": "Free Video Idea",
 
     // FAQ & Footer
     "faq.badge": "Got Questions?",

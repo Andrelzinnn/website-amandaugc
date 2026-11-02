@@ -1,17 +1,19 @@
 ---
 import { portfolioData } from "../data/portfolioData";
+import EditorIcon from "./icons/EditorIcon.astro";
 const { creator } = portfolioData;
 ---
 
 <!-- Fixed floating bottom button when collapsed -->
-<div id="lead-pill" class="fixed right-5 bottom-5 z-40 hidden transition-all duration-300 transform scale-95 hover:scale-105">
+<div id="lead-pill" class="fixed right-4 sm:right-5 bottom-5 z-40 hidden transition-all duration-300 transform scale-95 hover:scale-105">
   <button
     type="button"
     id="open-lead-btn"
-    class="flex items-center gap-2.5 px-5 py-3 rounded-full bg-[#1B1815] text-[#FAF8F5] text-xs font-semibold tracking-wide shadow-2xl hover:bg-[#A8382B] transition-colors cursor-pointer border border-white/20"
+    class="flex items-center gap-2 p-3 sm:px-4 sm:py-2.5 rounded-full bg-[#1B1815] hover:bg-[#A8382B] text-[#FAF8F5] text-xs font-semibold tracking-wide shadow-2xl transition-all cursor-pointer border border-[#3D3630] group"
+    aria-label="Ideia de Conteúdo Grátis"
   >
-    <span class="text-base">🎁</span>
-    <span data-i18n="popup.badgeTrigger">Ideia de Conteúdo Grátis 🎁</span>
+    <EditorIcon name="gift" class="w-4 h-4 text-[#C28D3F] group-hover:text-white transition-colors flex-shrink-0" />
+    <span data-i18n="popup.badgeTrigger" class="hidden sm:inline">Ideia de Conteúdo Grátis</span>
   </button>
 </div>
 
