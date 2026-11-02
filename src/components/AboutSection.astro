@@ -1,0 +1,84 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { creator } = portfolioData;
+---
+
+<section
+  id="sobre"
+  class="py-16 sm:py-24 bg-[#EFECE6] border-t border-[#1B1815]/10"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+      <!-- Left Column: Image with frame -->
+      <div class="lg:col-span-5 relative">
+        <div class="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+          <img
+            src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80"
+            alt={`Foto profissional de ${creator.fullName}`}
+            class="w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+        <div class="absolute -bottom-4 -right-4 p-4 rounded-2xl bg-white shadow-xl border border-[#1B1815]/10 max-w-[200px] text-center">
+          <span data-i18n="about.badgeExp" class="text-2xl font-impact font-bold text-[#A8382B] block">
+            +3 Anos
+          </span>
+          <span data-i18n="about.badgeExpLabel" class="text-[11px] font-semibold text-[#57524C] uppercase tracking-wider">
+            Especializada em UGC & Performance
+          </span>
+        </div>
+      </div>
+
+      <!-- Right Column: Bio Narrative & Authority -->
+      <div class="lg:col-span-7">
+        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A8382B] mb-2">
+          <span class="w-6 h-px bg-[#A8382B]"></span>
+          <span data-i18n="about.badge">Bastidores & Trajetória</span>
+        </div>
+
+        <h2 data-i18n="about.title" class="text-3xl sm:text-4xl md:text-5xl font-impact uppercase tracking-tight text-[#1B1815] mb-2">
+          Prazer, sou a Amanda Silveira
+        </h2>
+        <p data-i18n="about.subtitle" class="font-cursive text-3xl sm:text-4xl text-[#A8382B] mb-6">
+          e eu crio conexões reais para a sua marca
+        </p>
+
+        <div class="space-y-4 text-sm sm:text-base text-[#57524C] leading-relaxed">
+          <p data-i18n="about.p1">
+            Depois de anos acompanhando o mercado de publicidade digital,
+            percebi que o consumidor moderno não tolera mais propagandas
+            engessadas com cara de comercial de TV. As pessoas compram de
+            <strong>pessoas reais</strong>, em quem confiam.
+          </p>
+          <p data-i18n="about.p2">
+            Meu trabalho une a
+            <strong>espontaneidade do criador de conteúdo nativo</strong> com o
+            rigor da <strong>estratégia de tráfego pago</strong>: ganchos
+            visuais para parar o scroll, storytelling conciso e chamada para
+            ação focada em clique e compra.
+          </p>
+        </div>
+
+        <!-- Capability Tags -->
+        <div class="mt-8 pt-6 border-t border-[#1B1815]/15 flex flex-wrap gap-2.5">
+          <span class="px-4 py-2 rounded-full bg-white border border-[#1B1815]/10 text-xs font-semibold text-[#1B1815]">
+            🎥 Gravação em 4K HDR
+          </span>
+          <span class="px-4 py-2 rounded-full bg-white border border-[#1B1815]/10 text-xs font-semibold text-[#1B1815]">
+            🎙️ Áudio Lapela Profissional
+          </span>
+          <span class="px-4 py-2 rounded-full bg-white border border-[#1B1815]/10 text-xs font-semibold text-[#1B1815]">
+            ⚡ Roteiros de Alta Retenção
+          </span>
+          <span class="px-4 py-2 rounded-full bg-white border border-[#1B1815]/10 text-xs font-semibold text-[#1B1815]">
+            📦 Entrega Rápida (5-7 dias)
+          </span>
+          <span class="px-4 py-2 rounded-full bg-white border border-[#1B1815]/10 text-xs font-semibold text-[#1B1815]">
+            📄 Emissão de Nota Fiscal
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

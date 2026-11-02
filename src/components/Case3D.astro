@@ -1,0 +1,249 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { featuredCase } = portfolioData;
+---
+
+<section
+  id="cases"
+  class="py-16 sm:py-24 bg-[#FAF8F5] relative overflow-hidden"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <!-- Section Header -->
+    <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+      <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A8382B] mb-3">
+        <span class="w-6 h-px bg-[#A8382B]"></span>
+        <span data-i18n="case.badge">Estratégia & Performance</span>
+        <span class="w-6 h-px bg-[#A8382B]"></span>
+      </div>
+      <h2 data-i18n="case.title" class="text-3xl sm:text-4xl md:text-5xl font-impact tracking-tight text-[#1B1815] uppercase">
+        {featuredCase.title}
+      </h2>
+      <p data-i18n="case.subtitle" class="font-cursive text-3xl sm:text-4xl text-[#57524C] mt-1">
+        {featuredCase.subtitle}
+      </p>
+    </div>
+
+    <!-- Case Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center">
+      <!-- Left Column: Interactive 3D Stack of Phone Cards -->
+      <div class="lg:col-span-5 flex flex-col items-center">
+        <!-- Controls Top -->
+        <div class="w-64 flex items-center justify-between text-xs font-semibold uppercase tracking-wider text-[#57524C] mb-4">
+          <span>
+            Vídeo <span id="case-current-index">1</span> de{" "}
+            {featuredCase.cards.length}
+          </span>
+          <div class="flex gap-2">
+            <button
+              type="button"
+              id="prev-case-btn"
+              class="w-8 h-8 rounded-full border border-[#1B1815]/20 bg-white flex items-center justify-center hover:bg-[#EFECE6] transition cursor-pointer"
+              aria-label="Vídeo anterior"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              id="next-case-btn"
+              class="w-8 h-8 rounded-full border border-[#1B1815]/20 bg-white flex items-center justify-center hover:bg-[#EFECE6] transition cursor-pointer"
+              aria-label="Próximo vídeo"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+
+        <!-- 3D Stack Container -->
+        <div
+          class="relative w-64 sm:w-72 aspect-[9/16] perspective-1000 my-4"
+          id="case-deck"
+        >
+          {featuredCase.cards.map((card, idx) => (
+            <div
+              class="case-card absolute inset-0 rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 cursor-pointer border-2 border-white/60 bg-black"
+              data-index={idx}
+              data-youtube={card.youtubeId}
+            >
+              <img
+                src={card.thumbnail}
+                alt={card.title}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-between p-5 text-white">
+                <span class="inline-block self-start px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider">
+                  {card.brand}
+                </span>
+
+                <div>
+                  <!-- Play Trigger -->
+                  <div class="w-12 h-12 mx-auto my-auto rounded-full bg-[#A8382B] text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition">
+                    <svg
+                      class="w-5 h-5 ml-1"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+
+                  <div class="mt-4">
+                    <p class="text-xs font-bold line-clamp-2">{card.title}</p>
+                    <span class="inline-block mt-1 text-[11px] text-[#C28D3F] font-semibold">
+                      {card.stats}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <p class="text-xs text-[#57524C] mt-4 font-medium flex items-center gap-1.5">
+          <svg
+            class="w-4 h-4 text-[#A8382B]"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+            />
+          </svg>
+          <span data-i18n="case.hint">Clique no card ou use as setas para alternar</span>
+        </p>
+      </div>
+
+      <!-- Right Column: Results & Strategy Narrative -->
+      <div class="lg:col-span-7 flex flex-col">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#A8382B]/10 text-[#A8382B] text-xs font-bold uppercase tracking-wider self-start mb-4">
+          ★ <span data-i18n="case.pill">{featuredCase.badge}</span>
+        </div>
+
+        <h3 class="text-2xl sm:text-3xl font-impact text-[#1B1815] uppercase tracking-wide mb-2">
+          {featuredCase.brand}
+        </h3>
+
+        <!-- Big Highlight Metric Panel -->
+        <div class="p-6 rounded-2xl bg-white border border-[#1B1815]/10 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4 my-6">
+          <div>
+            <span data-i18n="case.consolidated" class="text-xs font-semibold text-[#57524C] uppercase tracking-wider block">
+              Resultado Consolidado
+            </span>
+            <span class="text-4xl sm:text-5xl font-impact font-bold text-[#A8382B] tracking-tight">
+              {featuredCase.highlightMetric}
+            </span>
+          </div>
+          <div class="sm:text-right border-t sm:border-t-0 sm:border-l border-[#1B1815]/10 pt-3 sm:pt-0 sm:pl-6">
+            <span data-i18n="case.commercial" class="text-xs font-semibold text-[#57524C] uppercase tracking-wider block">
+              Impacto Comercial
+            </span>
+            <span data-i18n="case.metricLabel" class="text-lg font-bold text-[#1B1815]">
+              {featuredCase.metricLabel}
+            </span>
+          </div>
+        </div>
+
+        <!-- Strategy Points -->
+        <div class="space-y-4">
+          <h4 data-i18n="case.pillars" class="text-xs font-bold uppercase tracking-widest text-[#57524C]">
+            Pilares Estratégicos Aplicados:
+          </h4>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3 text-sm text-[#57524C] leading-relaxed">
+              <span class="flex-none flex items-center justify-center w-5 h-5 rounded-full bg-[#1B1815] text-[#FAF8F5] text-[10px] font-bold mt-0.5">
+                1
+              </span>
+              <span data-i18n="case.p1">{featuredCase.strategyPoints[0]}</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-[#57524C] leading-relaxed">
+              <span class="flex-none flex items-center justify-center w-5 h-5 rounded-full bg-[#1B1815] text-[#FAF8F5] text-[10px] font-bold mt-0.5">
+                2
+              </span>
+              <span data-i18n="case.p2">{featuredCase.strategyPoints[1]}</span>
+            </li>
+            <li class="flex items-start gap-3 text-sm text-[#57524C] leading-relaxed">
+              <span class="flex-none flex items-center justify-center w-5 h-5 rounded-full bg-[#1B1815] text-[#FAF8F5] text-[10px] font-bold mt-0.5">
+                3
+              </span>
+              <span data-i18n="case.p3">{featuredCase.strategyPoints[2]}</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Social Proof Quote for this case -->
+        <div class="mt-8 p-4 rounded-xl bg-[#EFECE6] border-l-4 border-[#A8382B] text-xs sm:text-sm text-[#1B1815] italic">
+          <span data-i18n="case.quote">"Foi o criativo mais lucrativo da nossa história para Meta Ads. O retorno superou todas as nossas expectativas."</span>
+          <span data-i18n="case.author" class="block mt-1 font-bold not-italic text-[11px] uppercase tracking-wider text-[#57524C]">
+            — Diretor de Marketing, Aura Glow
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  let activeIndex = 0;
+  const cards = document.querySelectorAll(".case-card");
+  const total = cards.length;
+  const counter = document.getElementById("case-current-index");
+  const nextBtn = document.getElementById("next-case-btn");
+  const prevBtn = document.getElementById("prev-case-btn");
+
+  const updateDeck = () => {
+    cards.forEach((card, i) => {
+      const el = card as HTMLElement;
+      const diff = (i - activeIndex + total) % total;
+
+      if (diff === 0) {
+        el.style.transform = "translate(0, 0) scale(1) rotate(0deg)";
+        el.style.zIndex = "30";
+        el.style.opacity = "1";
+        el.style.pointerEvents = "auto";
+      } else if (diff === 1) {
+        el.style.transform = "translate(14%, -3%) scale(0.94) rotate(6deg)";
+        el.style.zIndex = "20";
+        el.style.opacity = "0.55";
+        el.style.pointerEvents = "auto";
+      } else {
+        el.style.transform = "translate(-14%, -1%) scale(0.90) rotate(-6deg)";
+        el.style.zIndex = "10";
+        el.style.opacity = "0.45";
+        el.style.pointerEvents = "auto";
+      }
+    });
+
+    if (counter) counter.textContent = (activeIndex + 1).toString();
+  };
+
+  nextBtn?.addEventListener("click", () => {
+    activeIndex = (activeIndex + 1) % total;
+    updateDeck();
+  });
+
+  prevBtn?.addEventListener("click", () => {
+    activeIndex = (activeIndex - 1 + total) % total;
+    updateDeck();
+  });
+
+  cards.forEach((card, idx) => {
+    card.addEventListener("click", () => {
+      if (idx === activeIndex) {
+        const youtubeId = card.getAttribute("data-youtube");
+        if (youtubeId && window.openVideoLightbox) {
+          window.openVideoLightbox(youtubeId);
+        }
+      } else {
+        activeIndex = idx;
+        updateDeck();
+      }
+    });
+  });
+
+  updateDeck();
+</script>

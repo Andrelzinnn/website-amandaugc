@@ -1,0 +1,233 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { creator } = portfolioData;
+---
+
+<section id="contato" class="py-16 sm:py-24 bg-white border-t border-[#1B1815]/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+      
+      <!-- Left Column: Copy & Direct Contacts -->
+      <div class="lg:col-span-5">
+        <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A8382B] mb-2">
+          <span class="w-6 h-px bg-[#A8382B]"></span>
+          <span data-i18n="contact.badge">Vamos Criar Juntos</span>
+        </div>
+        <h2 data-i18n="contact.title" class="text-3xl sm:text-4xl md:text-5xl font-impact tracking-tight text-[#1B1815] uppercase leading-[1.05]">
+          Solicite uma Proposta
+        </h2>
+        <p data-i18n="contact.subtitle" class="font-cursive text-3xl sm:text-4xl text-[#57524C] mt-1 mb-6">
+          resposta rápida em até 24 horas
+        </p>
+
+        <p data-i18n="contact.desc" class="text-sm sm:text-base text-[#57524C] leading-relaxed mb-8">
+          Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.
+        </p>
+
+        <!-- Direct Channels -->
+        <div class="space-y-4">
+          <a
+            href={`https://wa.me/${creator.whatsapp}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-4 p-4 rounded-xl bg-[#FAF8F5] border border-[#1B1815]/10 hover:border-[#A8382B] transition group"
+          >
+            <div class="w-10 h-10 rounded-full bg-[#2C5E43] text-white flex items-center justify-center font-bold text-sm">
+              💬
+            </div>
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-[#1B1815] block">WhatsApp Comercial</span>
+              <span class="text-xs text-[#57524C] group-hover:text-[#A8382B] transition-colors">+55 (11) 99999-8888</span>
+            </div>
+          </a>
+
+          <a
+            href={`mailto:${creator.email}`}
+            class="flex items-center gap-4 p-4 rounded-xl bg-[#FAF8F5] border border-[#1B1815]/10 hover:border-[#A8382B] transition group"
+          >
+            <div class="w-10 h-10 rounded-full bg-[#1B1815] text-white flex items-center justify-center font-bold text-sm">
+              ✉️
+            </div>
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-[#1B1815] block">E-mail para Briefings</span>
+              <span class="text-xs text-[#57524C] group-hover:text-[#A8382B] transition-colors">{creator.email}</span>
+            </div>
+          </a>
+
+          <a
+            href={`https://instagram.com/${creator.instagram.replace('@', '')}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-4 p-4 rounded-xl bg-[#FAF8F5] border border-[#1B1815]/10 hover:border-[#A8382B] transition group"
+          >
+            <div class="w-10 h-10 rounded-full bg-[#A8382B] text-white flex items-center justify-center font-bold text-sm">
+              📸
+            </div>
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-[#1B1815] block">Instagram</span>
+              <span class="text-xs text-[#57524C] group-hover:text-[#A8382B] transition-colors">{creator.instagram}</span>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Interactive Proposal Form -->
+      <div class="lg:col-span-7 p-6 sm:p-10 rounded-3xl bg-[#FAF8F5] border border-[#1B1815]/10 shadow-sm">
+        <form id="proposal-form" class="space-y-4" data-whatsapp={creator.whatsapp}>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label data-i18n="form.name" class="block text-xs font-bold uppercase tracking-wider text-[#1B1815] mb-1.5">
+                Seu Nome *
+              </label>
+              <input
+                type="text"
+                id="form-name"
+                required
+                placeholder="Ex.: Mariana Silva"
+                class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
+              />
+            </div>
+
+            <div>
+              <label data-i18n="form.brand" class="block text-xs font-bold uppercase tracking-wider text-[#1B1815] mb-1.5">
+                Nome da Marca *
+              </label>
+              <input
+                type="text"
+                id="form-brand"
+                required
+                placeholder="Ex.: Glow Skincare"
+                class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
+              />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label data-i18n="form.whatsapp" class="block text-xs font-bold uppercase tracking-wider text-[#1B1815] mb-1.5">
+                WhatsApp com DDD *
+              </label>
+              <input
+                type="tel"
+                id="form-whatsapp"
+                required
+                placeholder="(11) 99999-9999"
+                class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
+              />
+            </div>
+
+            <div>
+              <label data-i18n="form.niche" class="block text-xs font-bold uppercase tracking-wider text-[#1B1815] mb-1.5">
+                Nicho do Produto *
+              </label>
+              <select
+                id="form-niche"
+                class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
+              >
+                <option value="Beleza & Skincare">Beleza & Skincare</option>
+                <option value="Moda & Acessórios">Moda & Acessórios</option>
+                <option value="Casa & Decoração">Casa & Decoração</option>
+                <option value="Saúde & Suplementos">Saúde & Suplementos</option>
+                <option value="Tecnologia & Apps">Tecnologia & Apps</option>
+                <option value="Outro">Outro nicho</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label data-i18n="form.qty" class="block text-xs font-bold uppercase tracking-wider text-[#1B1815] mb-1.5">
+                Quantidade de Vídeos
+              </label>
+              <select
+                id="form-qty"
+                class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
+              >
+                <option value="1 vídeo teste">1 vídeo teste</option>
+                <option value="Pacote com 3 vídeos">Pacote com 3 vídeos (Mais pedido)</option>
+                <option value="Pacote com 5 vídeos">Pacote com 5 vídeos</option>
+                <option value="Contrato mensal recorrente">Contrato mensal recorrente</option>
+              </select>
+            </div>
+
+            <div>
+              <label data-i18n="form.budget" class="block text-xs font-bold uppercase tracking-wider text-[#1B1815] mb-1.5">
+                Orçamento Estimado (R$)
+              </label>
+              <input
+                type="text"
+                id="form-budget"
+                placeholder="Ex.: R$ 2.500"
+                class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label data-i18n="form.details" class="block text-xs font-bold uppercase tracking-wider text-[#1B1815] mb-1.5">
+              Detalhes ou Link da Loja / Produto
+            </label>
+            <textarea
+              id="form-message"
+              rows="3"
+              placeholder="Fale brevemente sobre o produto, objetivo do anúncio ou link do site..."
+              class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
+            ></textarea>
+          </div>
+
+          <button
+            type="submit"
+            class="w-full py-4 rounded-xl bg-[#A8382B] text-white text-sm font-semibold tracking-wide hover:bg-[#82271D] transition-colors shadow-lg shadow-[#A8382B]/20 flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <span data-i18n="form.submit">Enviar Solicitação via WhatsApp</span>
+            <span>💬</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("proposal-form") as HTMLFormElement;
+  const budgetInput = document.getElementById("form-budget") as HTMLInputElement;
+
+  // Simple currency mask
+  budgetInput?.addEventListener("input", (e) => {
+    let value = (e.target as HTMLInputElement).value.replace(/\D/g, "");
+    if (value) {
+      const num = parseInt(value, 10) / 100;
+      (e.target as HTMLInputElement).value = num.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      });
+    }
+  });
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = (document.getElementById("form-name") as HTMLInputElement).value;
+    const brand = (document.getElementById("form-brand") as HTMLInputElement).value;
+    const whatsapp = (document.getElementById("form-whatsapp") as HTMLInputElement).value;
+    const niche = (document.getElementById("form-niche") as HTMLSelectElement).value;
+    const qty = (document.getElementById("form-qty") as HTMLSelectElement).value;
+    const budget = (document.getElementById("form-budget") as HTMLInputElement).value || "A definir";
+    const msg = (document.getElementById("form-message") as HTMLTextAreaElement).value;
+
+    const text = `*Nova Solicitação de Proposta UGC* 🌟\n\n` +
+      `*Nome:* ${name}\n` +
+      `*Marca:* ${brand}\n` +
+      `*WhatsApp do Cliente:* ${whatsapp}\n` +
+      `*Nicho:* ${niche}\n` +
+      `*Quantidade Desejada:* ${qty}\n` +
+      `*Orçamento Previsto:* ${budget}\n` +
+      (msg ? `*Observações:* ${msg}\n\n` : "\n") +
+      `Enviado através do portfólio oficial.`;
+
+    const creatorWhatsapp = form?.getAttribute("data-whatsapp") || "5511999998888";
+    const url = `https://wa.me/${creatorWhatsapp}?text=${encodeURIComponent(text)}`;
+    window.open(url, "_blank");
+  });
+</script>

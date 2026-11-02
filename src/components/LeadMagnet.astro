@@ -1,0 +1,170 @@
+---
+import { portfolioData } from "../data/portfolioData";
+const { creator } = portfolioData;
+---
+
+<!-- Fixed floating bottom button when collapsed -->
+<div id="lead-pill" class="fixed right-5 bottom-5 z-40 hidden transition-all duration-300 transform scale-95 hover:scale-105">
+  <button
+    type="button"
+    id="open-lead-btn"
+    class="flex items-center gap-2.5 px-5 py-3 rounded-full bg-[#1B1815] text-[#FAF8F5] text-xs font-semibold tracking-wide shadow-2xl hover:bg-[#A8382B] transition-colors cursor-pointer border border-white/20"
+  >
+    <span class="text-base">🎁</span>
+    <span data-i18n="popup.badgeTrigger">Ideia de Conteúdo Grátis 🎁</span>
+  </button>
+</div>
+
+<!-- Modal Backdrop & Dialog Container -->
+<div
+  id="lead-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/60 backdrop-blur-xs transition-opacity duration-300"
+  aria-modal="true"
+  role="dialog"
+  data-whatsapp={creator.whatsapp}
+>
+  <div
+    id="lead-dialog"
+    class="relative w-full max-w-md bg-white rounded-3xl p-7 sm:p-9 shadow-2xl border border-[#1B1815]/10 transform transition-all duration-300 scale-95"
+  >
+    <!-- Close Button -->
+    <button
+      type="button"
+      id="close-lead-btn"
+      class="absolute top-5 right-5 w-8 h-8 rounded-full bg-[#EFECE6] text-[#57524C] hover:text-[#1B1815] flex items-center justify-center transition cursor-pointer"
+      aria-label="Fechar"
+    >
+      <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Header -->
+    <div class="mb-5">
+      <span data-i18n="popup.badge" class="inline-block px-3 py-1 rounded-full bg-[#A8382B]/10 text-[#A8382B] text-[10px] font-bold uppercase tracking-wider mb-2">
+        Ideia Gratuita de Conteúdo
+      </span>
+      <h3 data-i18n="popup.title" class="text-xl sm:text-2xl font-impact uppercase tracking-tight text-[#1B1815] leading-snug">
+        Quer receber um roteiro de teste para a sua marca?
+      </h3>
+      <p data-i18n="popup.subtitle" class="text-xs sm:text-sm text-[#57524C] mt-2 leading-relaxed">
+        Preencha seus dados e eu te envio uma ideia exclusiva de criativo + tabela de pacotes no WhatsApp. 💌
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form id="lead-form" class="space-y-3.5">
+      <div>
+        <label data-i18n="form.name" class="block text-[11px] font-bold uppercase tracking-wider text-[#1B1815] mb-1">
+          Seu Nome *
+        </label>
+        <input
+          type="text"
+          id="lead-name"
+          required
+          placeholder="Ex.: Carolina"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-[#1B1815]/20 bg-[#FAF8F5] text-xs focus:outline-none focus:border-[#A8382B]"
+        />
+      </div>
+
+      <div>
+        <label data-i18n="form.brand" class="block text-[11px] font-bold uppercase tracking-wider text-[#1B1815] mb-1">
+          Nome da Marca / Loja *
+        </label>
+        <input
+          type="text"
+          id="lead-brand"
+          required
+          placeholder="Ex.: Loja Aura"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-[#1B1815]/20 bg-[#FAF8F5] text-xs focus:outline-none focus:border-[#A8382B]"
+        />
+      </div>
+
+      <div>
+        <label data-i18n="form.whatsapp" class="block text-[11px] font-bold uppercase tracking-wider text-[#1B1815] mb-1">
+          WhatsApp com DDD *
+        </label>
+        <input
+          type="tel"
+          id="lead-whatsapp"
+          required
+          placeholder="(11) 99999-9999"
+          class="w-full px-3.5 py-2.5 rounded-xl border border-[#1B1815]/20 bg-[#FAF8F5] text-xs focus:outline-none focus:border-[#A8382B]"
+        />
+      </div>
+
+      <button
+        type="submit"
+        class="w-full mt-2 py-3.5 rounded-xl bg-[#A8382B] text-white text-xs font-bold uppercase tracking-wider hover:bg-[#82271D] transition-colors shadow-lg shadow-[#A8382B]/20 cursor-pointer"
+      >
+        <span data-i18n="popup.btn">QUERO RECEBER O ROTEIRO</span>
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById("lead-modal");
+  const dialog = document.getElementById("lead-dialog");
+  const closeBtn = document.getElementById("close-lead-btn");
+  const pill = document.getElementById("lead-pill");
+  const openBtn = document.getElementById("open-lead-btn");
+  const form = document.getElementById("lead-form") as HTMLFormElement;
+
+  const showModal = () => {
+    if (!modal || !dialog) return;
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    pill?.classList.add("hidden");
+    setTimeout(() => {
+      dialog.classList.remove("scale-95");
+      dialog.classList.add("scale-100");
+    }, 10);
+  };
+
+  const hideModal = () => {
+    if (!modal || !dialog) return;
+    dialog.classList.remove("scale-100");
+    dialog.classList.add("scale-95");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+    // Show floating pill once closed
+    pill?.classList.remove("hidden");
+  };
+
+  closeBtn?.addEventListener("click", hideModal);
+  openBtn?.addEventListener("click", showModal);
+  modal?.addEventListener("click", (e) => {
+    if (e.target === modal) hideModal();
+  });
+
+  // Automatically trigger modal after 6 seconds if not dismissed previously
+  setTimeout(() => {
+    const hasSeen = sessionStorage.getItem("seen_lead_popup");
+    if (!hasSeen) {
+      showModal();
+      sessionStorage.setItem("seen_lead_popup", "true");
+    } else {
+      pill?.classList.remove("hidden");
+    }
+  }, 6000);
+
+  // Form submit redirects to WhatsApp with formatted request
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = (document.getElementById("lead-name") as HTMLInputElement).value;
+    const brand = (document.getElementById("lead-brand") as HTMLInputElement).value;
+    const whatsapp = (document.getElementById("lead-whatsapp") as HTMLInputElement).value;
+
+    const text = `*Solicitação de Ideia de Conteúdo / Tabela de Pacotes UGC* 🎁\n\n` +
+      `*Nome:* ${name}\n` +
+      `*Marca:* ${brand}\n` +
+      `*WhatsApp:* ${whatsapp}\n\n` +
+      `Olá Amanda! Gostaria de receber uma ideia de criativo para o meu produto e a sua tabela de valores.`;
+
+    const creatorWhatsapp = modal?.getAttribute("data-whatsapp") || "5511999998888";
+    const url = `https://wa.me/${creatorWhatsapp}?text=${encodeURIComponent(text)}`;
+    hideModal();
+    window.open(url, "_blank");
+  });
+</script>

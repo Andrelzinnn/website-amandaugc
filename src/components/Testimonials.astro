@@ -1,0 +1,55 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { testimonials } = portfolioData;
+---
+
+<section class="py-16 sm:py-24 bg-[#FAF8F5] border-t border-[#1B1815]/10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
+      <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A8382B] mb-2">
+        <span class="w-6 h-px bg-[#A8382B]"></span>
+        <span data-i18n="testimonials.badge">Prova Social</span>
+        <span class="w-6 h-px bg-[#A8382B]"></span>
+      </div>
+      <h2 data-i18n="testimonials.title" class="text-3xl sm:text-4xl md:text-5xl font-impact tracking-tight text-[#1B1815] uppercase">
+        O que dizem as marcas
+      </h2>
+      <p data-i18n="testimonials.subtitle" class="font-cursive text-3xl sm:text-4xl text-[#57524C] mt-1">
+        avaliações de quem já contratou
+      </p>
+    </div>
+
+    <!-- Testimonials Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+      {testimonials.map((t) => (
+        <div class="p-6 sm:p-8 rounded-2xl bg-white border border-[#1B1815]/10 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+          <div>
+            <!-- Stars -->
+            <div class="flex text-[#C28D3F] text-sm mb-4">
+              {"★".repeat(t.rating)}
+            </div>
+            <!-- Quote -->
+            <blockquote class="text-sm sm:text-base text-[#1B1815] italic leading-relaxed mb-6">
+              "{t.quote}"
+            </blockquote>
+          </div>
+
+          <div class="pt-4 border-t border-[#1B1815]/10 flex items-center justify-between">
+            <div>
+              <span class="text-xs font-bold uppercase tracking-wider text-[#1B1815] block">
+                {t.clientName}
+              </span>
+              <span class="text-[11px] text-[#57524C]">
+                {t.role} · <strong class="text-[#A8382B]">{t.brand}</strong>
+              </span>
+            </div>
+            <span class="w-7 h-7 rounded-full bg-[#EFECE6] flex items-center justify-center text-xs font-bold text-[#57524C]">
+              ✓
+            </span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

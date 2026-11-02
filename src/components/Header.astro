@@ -1,0 +1,261 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { creator } = portfolioData;
+const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponent(portfolioData.hero.ctaWhatsapp)}`;
+---
+
+<header class="sticky top-0 z-40 w-full transition-all duration-300">
+  <!-- Top Notice Bar -->
+  <div class="bg-[#1B1815] text-[#FAF8F5] py-2 px-4 text-xs font-medium text-center flex items-center justify-center gap-3">
+    <span data-i18n="topbar.badge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#A8382B] text-white text-[10px] font-bold tracking-wider uppercase">
+      Vagas Abertas
+    </span>
+    <span data-i18n="topbar.text">
+      Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis
+    </span>
+    <a
+      href={whatsappLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      data-i18n="topbar.cta"
+      class="hidden sm:inline-flex items-center underline hover:text-[#C28D3F] transition ml-1 font-semibold"
+    >
+      Garantir data →
+    </a>
+  </div>
+
+  <!-- Main Navigation -->
+  <nav class="glass-nav border-b border-[#1B1815]/10 px-4 sm:px-8 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <!-- Logo -->
+      <a
+        href="#"
+        class="group flex items-baseline gap-1.5 text-lg font-serif-editorial font-bold tracking-tight text-[#1B1815]"
+      >
+        <span>{creator.firstName}</span>
+        <span class="font-normal italic text-[#57524C]">
+          {creator.lastName}
+        </span>
+        <span class="inline-block w-1.5 h-1.5 rounded-full bg-[#A8382B] group-hover:scale-125 transition-transform"></span>
+        <span class="ml-1 text-[11px] font-impact uppercase tracking-widest text-[#57524C]/80">
+          UGC
+        </span>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden md:flex items-center gap-7 text-xs font-semibold tracking-wider uppercase text-[#57524C]">
+        <a href="#sobre" data-i18n="nav.about" class="hover:text-[#1B1815] transition">
+          Sobre
+        </a>
+        <a href="#cases" data-i18n="nav.results" class="hover:text-[#1B1815] transition">
+          Resultados
+        </a>
+        <a href="#portfolio" data-i18n="nav.portfolio" class="hover:text-[#1B1815] transition">
+          Portfólio
+        </a>
+        <a href="#fotos" data-i18n="nav.photos" class="hover:text-[#1B1815] transition">
+          Fotos UGC
+        </a>
+        <a href="#servicos" data-i18n="nav.services" class="hover:text-[#1B1815] transition">
+          Formatos
+        </a>
+        <a href="#contato" data-i18n="nav.contact" class="hover:text-[#1B1815] transition">
+          Contato
+        </a>
+      </div>
+
+      <!-- Action Button & Language Switcher -->
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher Pill (Identical to reference site) -->
+        <div class="inline-flex items-center border border-[#1B1815]/15 rounded-full p-0.5 bg-white/70 shadow-xs">
+          <button
+            type="button"
+            id="lang-pt"
+            class="lang-btn px-2.5 py-1 text-[11px] font-bold rounded-full transition-all cursor-pointer bg-[#1B1815] text-white"
+            aria-pressed="true"
+            data-lang="pt"
+          >
+            PT
+          </button>
+          <button
+            type="button"
+            id="lang-en"
+            class="lang-btn px-2.5 py-1 text-[11px] font-bold rounded-full transition-all cursor-pointer text-[#57524C] hover:text-[#1B1815]"
+            aria-pressed="false"
+            data-lang="en"
+          >
+            EN
+          </button>
+        </div>
+
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#1B1815] text-[#FAF8F5] text-xs font-semibold tracking-wide hover:bg-[#A8382B] transition-colors shadow-sm hover:shadow"
+        >
+          <span data-i18n="nav.whatsapp">Falar no WhatsApp</span>
+          <svg
+            class="w-3.5 h-3.5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path
+              d="M5 12h14M12 5l7 7-7 7"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button
+          type="button"
+          id="mobile-menu-btn"
+          class="md:hidden p-2 rounded-lg border border-[#1B1815]/15 text-[#1B1815] hover:bg-black/5"
+          aria-label="Abrir menu de navegação"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+        >
+          <svg
+            id="hamburger-icon"
+            class="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+          <svg
+            id="close-icon"
+            class="w-5 h-5 hidden"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div
+      id="mobile-menu"
+      class="hidden md:hidden pt-4 pb-3 border-t border-[#1B1815]/10 mt-3 flex flex-col gap-3 text-sm font-medium text-[#57524C]"
+      role="region"
+      aria-label="Navegação móvel"
+    >
+      <a href="#sobre" data-i18n="nav.about" class="py-1 hover:text-[#1B1815] transition mobile-nav-link">
+        Sobre
+      </a>
+      <a href="#cases" data-i18n="nav.results" class="py-1 hover:text-[#1B1815] transition mobile-nav-link">
+        Resultados
+      </a>
+      <a href="#portfolio" data-i18n="nav.portfolio" class="py-1 hover:text-[#1B1815] transition mobile-nav-link">
+        Portfólio por Nicho
+      </a>
+      <a href="#fotos" data-i18n="nav.photos" class="py-1 hover:text-[#1B1815] transition mobile-nav-link">
+        Galeria de Fotos
+      </a>
+      <a href="#servicos" data-i18n="nav.services" class="py-1 hover:text-[#1B1815] transition mobile-nav-link">
+        Formatos & Serviços
+      </a>
+      <a href="#contato" data-i18n="nav.contact" class="py-1 hover:text-[#1B1815] transition mobile-nav-link">
+        Solicitar Orçamento
+      </a>
+      <a
+        href={whatsappLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-i18n="nav.whatsapp"
+        class="mt-2 text-center py-2.5 rounded-xl bg-[#1B1815] text-[#FAF8F5] text-xs font-semibold tracking-wide"
+      >
+        Chamar no WhatsApp
+      </a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  import { translations } from "../data/translations";
+
+  // Mobile menu handlers
+  const btn = document.getElementById("mobile-menu-btn");
+  const menu = document.getElementById("mobile-menu");
+  const hamIcon = document.getElementById("hamburger-icon");
+  const closeIcon = document.getElementById("close-icon");
+  const links = document.querySelectorAll(".mobile-nav-link");
+
+  const toggle = () => {
+    const isExpanded = btn?.getAttribute("aria-expanded") === "true";
+    btn?.setAttribute("aria-expanded", isExpanded ? "false" : "true");
+    btn?.setAttribute("aria-label", isExpanded ? "Abrir menu de navegação" : "Fechar menu de navegação");
+    menu?.classList.toggle("hidden");
+    hamIcon?.classList.toggle("hidden");
+    closeIcon?.classList.toggle("hidden");
+  };
+
+  btn?.addEventListener("click", toggle);
+  links.forEach((l) => l.addEventListener("click", toggle));
+
+  // --- LANGUAGE SWITCHER LOGIC ---
+  let currentLang = "pt";
+
+  const applyLanguage = (lang: string) => {
+    const dict = translations[lang];
+    if (!dict) return;
+
+    currentLang = lang;
+    localStorage.setItem("user_lang", lang);
+
+    // Update buttons UI
+    document.querySelectorAll(".lang-btn").forEach((b) => {
+      const isTarget = b.getAttribute("data-lang") === lang;
+      b.setAttribute("aria-pressed", isTarget ? "true" : "false");
+      if (isTarget) {
+        b.className = "lang-btn px-2.5 py-1 text-[11px] font-bold rounded-full transition-all cursor-pointer bg-[#1B1815] text-white";
+      } else {
+        b.className = "lang-btn px-2.5 py-1 text-[11px] font-bold rounded-full transition-all cursor-pointer text-[#57524C] hover:text-[#1B1815]";
+      }
+    });
+
+    // Update all elements with data-i18n
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      const key = el.getAttribute("data-i18n");
+      if (key && dict[key]) {
+        el.textContent = dict[key];
+      }
+    });
+
+    document.documentElement.lang = lang === "pt" ? "pt-BR" : "en";
+  };
+
+  document.querySelectorAll(".lang-btn").forEach((b) => {
+    b.addEventListener("click", () => {
+      const targetLang = b.getAttribute("data-lang");
+      if (targetLang) applyLanguage(targetLang);
+    });
+  });
+
+  // Check saved or browser language
+  const savedLang = localStorage.getItem("user_lang");
+  if (savedLang && (savedLang === "pt" || savedLang === "en")) {
+    applyLanguage(savedLang);
+  }
+</script>

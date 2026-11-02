@@ -1,0 +1,313 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { niches } = portfolioData;
+---
+
+<section
+  id="portfolio"
+  class="py-16 sm:py-24 bg-white border-t border-[#1B1815]/10 relative carousel-zone"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <!-- Section Header -->
+    <div class="text-center max-w-2xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A8382B] mb-2">
+        <span class="w-6 h-px bg-[#A8382B]"></span>
+        <span data-i18n="portfolio.badge">Vídeos & Nichos</span>
+        <span class="w-6 h-px bg-[#A8382B]"></span>
+      </div>
+      <h2
+        data-i18n="portfolio.title"
+        class="text-3xl sm:text-4xl md:text-5xl font-impact tracking-tight text-[#1B1815] uppercase"
+      >
+        Portfólio de Criativos
+      </h2>
+      <p
+        data-i18n="portfolio.subtitle"
+        class="font-cursive text-3xl sm:text-4xl text-[#57524C] mt-1"
+      >
+        navegue pelos nichos de atuação
+      </p>
+    </div>
+
+    <!-- Niche Filter Tabs -->
+    <div
+      class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3 mb-10"
+      id="niche-tabs"
+    >
+      {niches.map((niche, idx) => (
+        <button
+          type="button"
+          class={`niche-tab px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all duration-200 cursor-pointer ${
+            idx === 0
+              ? "bg-[#1B1815] text-[#FAF8F5] shadow-md"
+              : "bg-[#EFECE6] text-[#57524C] hover:bg-[#E5DFD5] hover:text-[#1B1815]"
+          }`}
+          data-niche-id={niche.id}
+        >
+          <span data-i18n={`niche.${niche.id}.name`}>{niche.name}</span>
+          {niche.badge && (
+            <span
+              data-i18n={`niche.${niche.id}.badge`}
+              class="ml-1.5 px-1.5 py-0.5 rounded-full bg-[#A8382B] text-white text-[9px] uppercase font-bold tracking-wider"
+            >
+              {niche.badge}
+            </span>
+          )}
+        </button>
+      ))}
+    </div>
+
+    <!-- Videos Grid / Carousel Container -->
+    {niches.map((niche, idx) => (
+      <div
+        class={`niche-content ${idx === 0 ? "block" : "hidden"}`}
+        id={`niche-container-${niche.id}`}
+      >
+        <!-- Niche Header with Arrows -->
+        <div class="flex items-center justify-between mb-6 pb-3 border-b border-[#1B1815]/10">
+          <div>
+            <h3
+              data-i18n={`niche.${niche.id}.name`}
+              class="text-xl sm:text-2xl font-impact uppercase text-[#1B1815] tracking-wide"
+            >
+              {niche.name}
+            </h3>
+            <span class="text-xs font-semibold text-[#57524C]">
+              {niche.videos.length} <span data-i18n="portfolio.count">criativos disponíveis</span>
+            </span>
+          </div>
+
+          <div class="flex gap-2">
+            <button
+              type="button"
+              class="scroll-prev w-9 h-9 rounded-full border border-[#1B1815]/20 bg-[#FAF8F5] flex items-center justify-center hover:bg-[#EFECE6] transition cursor-pointer text-[#1B1815]"
+              data-target={`carousel-${niche.id}`}
+              aria-label="Rolar para esquerda"
+            >
+              ‹
+            </button>
+            <button
+              type="button"
+              class="scroll-next w-9 h-9 rounded-full border border-[#1B1815]/20 bg-[#FAF8F5] flex items-center justify-center hover:bg-[#EFECE6] transition cursor-pointer text-[#1B1815]"
+              data-target={`carousel-${niche.id}`}
+              aria-label="Rolar para direita"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+
+        <!-- Horizontal Scrollable Track -->
+        <div
+          id={`carousel-${niche.id}`}
+          class="carousel-track flex gap-4 sm:gap-6 overflow-x-auto no-scrollbar scroll-smooth snap-x snap-mandatory pb-4"
+        >
+          {niche.videos.map((vid) => (
+            <div
+              class="video-card flex-none w-[220px] sm:w-[260px] aspect-[9/16] rounded-2xl overflow-hidden relative group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1.5 snap-start bg-black"
+              data-youtube={vid.youtubeId}
+            >
+              <img
+                src={vid.thumbnailUrl}
+                alt={vid.title}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+
+              <!-- Top Brand Tag -->
+              <div class="absolute top-3 left-3 z-10">
+                <span class="px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider text-[#1B1815] shadow-sm">
+                  {vid.brand}
+                </span>
+              </div>
+
+              <!-- Center Play Icon -->
+              <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+                <div class="w-12 h-12 rounded-full bg-[#1B1815]/80 text-white flex items-center justify-center group-hover:scale-110 group-hover:bg-[#A8382B] transition shadow-lg">
+                  <svg class="w-5 h-5 ml-0.5 fill-current" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Bottom Content Overlay -->
+              <div class="absolute inset-x-0 bottom-0 p-4 bg-gradient-to-t from-black/90 via-black/40 to-transparent text-white z-10">
+                <span
+                  data-i18n={`video.${vid.id}.tag`}
+                  class="text-[10px] font-bold uppercase tracking-wider text-[#C28D3F] block mb-0.5"
+                >
+                  {vid.tag}
+                </span>
+                <p
+                  data-i18n={`video.${vid.id}.title`}
+                  class="text-xs font-semibold leading-tight line-clamp-2"
+                >
+                  {vid.title}
+                </p>
+                {vid.metrics && (
+                  <div class="mt-2 pt-2 border-t border-white/20 flex items-center justify-between text-[10px] text-white/80 font-medium">
+                    <span>{vid.metrics.views} views</span>
+                    <span class="font-bold text-white">
+                      ROAS {vid.metrics.roas}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<!-- Floating Magnetic Cursor HTML Elements -->
+<div id="magnetic-cursor" class="cursor-seta" aria-hidden="true">
+  <svg id="cursor-arrow-icon" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+  </svg>
+</div>
+
+<script>
+  // Tab switching logic
+  const tabs = document.querySelectorAll(".niche-tab");
+  const contents = document.querySelectorAll(".niche-content");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const nicheId = tab.getAttribute("data-niche-id");
+
+      tabs.forEach((t) => {
+        t.classList.remove("bg-[#1B1815]", "text-[#FAF8F5]", "shadow-md");
+        t.classList.add("bg-[#EFECE6]", "text-[#57524C]");
+      });
+      tab.classList.add("bg-[#1B1815]", "text-[#FAF8F5]", "shadow-md");
+      tab.classList.remove("bg-[#EFECE6]", "text-[#57524C]");
+
+      contents.forEach((c) => c.classList.add("hidden"));
+      const activeContent = document.getElementById(`niche-container-${nicheId}`);
+      activeContent?.classList.remove("hidden");
+    });
+  });
+
+  // Carousel scroll buttons
+  const prevBtns = document.querySelectorAll(".scroll-prev");
+  const nextBtns = document.querySelectorAll(".scroll-next");
+
+  prevBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-target");
+      if (targetId) {
+        const el = document.getElementById(targetId);
+        el?.scrollBy({ left: -280, behavior: "smooth" });
+      }
+    });
+  });
+
+  nextBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-target");
+      if (targetId) {
+        const el = document.getElementById(targetId);
+        el?.scrollBy({ left: 280, behavior: "smooth" });
+      }
+    });
+  });
+
+  // Video card click triggers lightbox
+  const videoCards = document.querySelectorAll(".video-card");
+  videoCards.forEach((card) => {
+    card.addEventListener("click", () => {
+      const ytid = card.getAttribute("data-youtube");
+      if (ytid && window.openVideoLightbox) {
+        window.openVideoLightbox(ytid);
+      }
+    });
+  });
+
+  // --- MAGNETIC CURSOR LOGIC (Identical to reference site) ---
+  const cursor = document.getElementById("magnetic-cursor");
+  const arrowIcon = document.getElementById("cursor-arrow-icon");
+  const portfolioSection = document.getElementById("portfolio");
+
+  if (cursor && arrowIcon && portfolioSection && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    let currentDirection = 0; // -1: left, 1: right, 0: none/play
+
+    const hideCursor = () => {
+      cursor.classList.remove("visivel");
+      portfolioSection.classList.remove("sem-cursor");
+    };
+
+    portfolioSection.addEventListener("mousemove", (e) => {
+      // Find currently visible carousel
+      const visibleContainer = portfolioSection.querySelector(".niche-content:not(.hidden)");
+      const carousel = visibleContainer?.querySelector(".carousel-track") as HTMLElement | null;
+
+      if (!carousel) {
+        hideCursor();
+        return;
+      }
+
+      const rect = carousel.getBoundingClientRect();
+      const inCarouselY = e.clientY >= rect.top && e.clientY <= rect.bottom;
+
+      if (!inCarouselY) {
+        hideCursor();
+        return;
+      }
+
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+
+      const zoneWidth = 90; // Edge threshold in px
+      const canScrollLeft = carousel.scrollLeft > 5;
+      const canScrollRight = carousel.scrollLeft < carousel.scrollWidth - carousel.clientWidth - 5;
+
+      const nearLeft = e.clientX <= rect.left + zoneWidth && canScrollLeft;
+      const nearRight = e.clientX >= rect.right - zoneWidth && canScrollRight;
+
+      if (nearLeft) {
+        currentDirection = -1;
+        cursor.classList.remove("cursor-play");
+        arrowIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7" />';
+        cursor.classList.add("visivel");
+        portfolioSection.classList.add("sem-cursor");
+      } else if (nearRight) {
+        currentDirection = 1;
+        cursor.classList.remove("cursor-play");
+        arrowIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />';
+        cursor.classList.add("visivel");
+        portfolioSection.classList.add("sem-cursor");
+      } else {
+        // Over a video card: show play cursor
+        const target = e.target as HTMLElement;
+        const isCard = target.closest(".video-card");
+        if (isCard) {
+          currentDirection = 0;
+          cursor.classList.add("cursor-play");
+          arrowIcon.innerHTML = '<path fill="currentColor" stroke="none" d="M8 5v14l11-7z" />';
+          cursor.classList.add("visivel");
+          portfolioSection.classList.add("sem-cursor");
+        } else {
+          hideCursor();
+        }
+      }
+    });
+
+    // Handle click on edge zones to scroll
+    portfolioSection.addEventListener("click", (e) => {
+      if (currentDirection !== 0) {
+        const visibleContainer = portfolioSection.querySelector(".niche-content:not(.hidden)");
+        const carousel = visibleContainer?.querySelector(".carousel-track") as HTMLElement | null;
+        if (carousel) {
+          e.stopPropagation();
+          e.preventDefault();
+          carousel.scrollBy({ left: currentDirection * 300, behavior: "smooth" });
+        }
+      }
+    }, true);
+
+    portfolioSection.addEventListener("mouseleave", hideCursor);
+  }
+</script>

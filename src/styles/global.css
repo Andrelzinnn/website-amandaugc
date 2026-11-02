@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-warm: #FAF8F5;
+    --bg-card: #FFFFFF;
+    --color-sand: #EFECE6;
+    --color-linen: #E5DFD5;
+    --color-ink: #1B1815;
+    --color-ink-muted: #57524C;
+    --color-terracotta: #A8382B;
+    --color-terracotta-dark: #82271D;
+    --color-accent: #2C5E43;
+    --color-gold: #C28D3F;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color: var(--color-ink);
+    background-color: var(--bg-warm);
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Accessibility: Visible focus ring for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid var(--color-terracotta);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+/* Skip link for screen readers & keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -120px;
+  left: 16px;
+  z-index: 100;
+  background: var(--color-ink);
+  color: #fff;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 16px;
+}
+
+.font-serif-editorial {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.font-cursive {
+  font-family: 'Allura', cursive;
+}
+
+.font-impact {
+  font-family: 'League Spartan', sans-serif;
+}
+
+/* Custom Keyframe Animations */
+@keyframes marqueeLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marqueeRight {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes floatGentle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-7px); }
+}
+
+.animate-marquee-left {
+  display: flex;
+  width: max-content;
+  animation: marqueeLeft 34s linear infinite;
+}
+
+.animate-marquee-left:hover {
+  animation-play-state: paused;
+}
+
+.animate-marquee-right {
+  display: flex;
+  width: max-content;
+  animation: marqueeRight 38s linear infinite;
+}
+
+.animate-float-1 {
+  animation: floatGentle 6.5s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: floatGentle 7.8s ease-in-out 1.2s infinite;
+}
+
+.animate-float-3 {
+  animation: floatGentle 8.2s ease-in-out 2.5s infinite;
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee-left,
+  .animate-marquee-right,
+  .animate-float-1,
+  .animate-float-2,
+  .animate-float-3 {
+    animation: none !important;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+}
+
+.glass-nav {
+  background: rgba(250, 248, 245, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Hide scrollbar for carousels */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Interactive Magnetic Cursor in Carousel */
+.cursor-seta {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 60;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: rgba(27, 24, 21, 0.88);
+  color: #fff;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.6);
+  transition: opacity 0.18s ease, transform 0.22s cubic-bezier(0.22, 0.61, 0.36, 1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.cursor-seta.visivel {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.cursor-play {
+  width: 54px;
+  height: 54px;
+  background: rgba(168, 56, 43, 0.92);
+}
+
+.cursor-play svg {
+  margin-left: 3px;
+}
+
+/* Remove default mouse cursor over video cards when hovering on desktop */
+@media (hover: hover) and (pointer: fine) {
+  .carousel-zone.sem-cursor,
+  .carousel-zone .video-card {
+    cursor: none;
+  }
+}

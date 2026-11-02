@@ -1,0 +1,49 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { faq, creator } = portfolioData;
+---
+
+<footer class="bg-[#1B1815] text-[#FAF8F5]/80 pt-16 pb-12 border-t border-black">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <!-- FAQ Section inside Footer -->
+    <div class="mb-14 pb-12 border-b border-white/10">
+      <div class="text-center max-w-xl mx-auto mb-10">
+        <span data-i18n="faq.badge" class="text-xs font-bold uppercase tracking-widest text-[#C28D3F] block mb-2">
+          Tire suas dúvidas
+        </span>
+        <h3 data-i18n="faq.title" class="text-2xl sm:text-3xl font-impact uppercase text-[#FAF8F5] tracking-wide">
+          Perguntas Frequentes
+        </h3>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-5xl mx-auto">
+        {faq.map((item) => (
+          <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+            <h4 class="text-sm sm:text-base font-bold text-[#FAF8F5] mb-2">
+              {item.question}
+            </h4>
+            <p class="text-xs sm:text-sm text-[#FAF8F5]/70 leading-relaxed">
+              {item.answer}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#FAF8F5]/60">
+      <div class="flex items-center gap-2">
+        <span class="font-serif-editorial font-bold text-white text-base">{creator.fullName}</span>
+        <span>· <span data-i18n="footer.rights">Todos os direitos reservados ©</span> {new Date().getFullYear()}</span>
+      </div>
+
+      <div class="flex items-center gap-6 font-semibold uppercase tracking-wider text-[11px]">
+        <a href="#sobre" data-i18n="nav.about" class="hover:text-white transition">Sobre</a>
+        <a href="#cases" data-i18n="nav.results" class="hover:text-white transition">Resultados</a>
+        <a href="#portfolio" data-i18n="nav.portfolio" class="hover:text-white transition">Portfólio</a>
+        <a href="#contato" data-i18n="nav.contact" class="hover:text-white transition">Contato</a>
+      </div>
+    </div>
+  </div>
+</footer>

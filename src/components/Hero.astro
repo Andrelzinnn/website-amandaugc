@@ -1,0 +1,136 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { hero, creator } = portfolioData;
+const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponent(hero.ctaWhatsapp)}`;
+---
+
+<section class="relative pt-8 pb-16 md:pt-14 md:pb-24 overflow-hidden">
+  <div class="max-w-7xl mx-auto px-4 sm:px-8">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      <!-- Left Column: Copy & Value Proposition -->
+      <div class="lg:col-span-7 flex flex-col items-start z-10">
+        <!-- Category & Location Badge -->
+        <div class="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#EFECE6] border border-[#1B1815]/10 text-xs font-semibold text-[#57524C] mb-6">
+          <span class="w-2 h-2 rounded-full bg-[#A8382B] animate-pulse"></span>
+          <span data-i18n="hero.badge" class="font-bold tracking-wider uppercase">{hero.badge}</span>
+          <span class="opacity-40">|</span>
+          <span data-i18n="hero.location" class="text-[11px] font-medium">{hero.location}</span>
+        </div>
+
+        <!-- Big Headline with Mixed Typography -->
+        <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.04] tracking-tight font-impact text-[#1B1815] uppercase mb-4">
+          <span data-i18n="hero.headline">{hero.headline}</span>
+          <span data-i18n="hero.headlineCursive" class="block font-cursive text-5xl sm:text-6xl md:text-7xl lg:text-8xl normal-case text-[#A8382B] tracking-normal -mt-2 sm:-mt-4">
+            {hero.headlineCursive}
+          </span>
+        </h1>
+
+        <!-- Subtitle -->
+        <p data-i18n="hero.subheadline" class="text-base sm:text-lg text-[#57524C] max-w-xl font-normal leading-relaxed mb-8">
+          {hero.subheadline}
+        </p>
+
+        <!-- Numbers / Metrics Row -->
+        <div class="flex flex-wrap items-center gap-6 sm:gap-8 py-4 border-y border-[#1B1815]/10 w-full max-w-xl mb-8">
+          <div class="flex flex-col">
+            <span class="text-2xl sm:text-3xl font-impact font-bold text-[#1B1815]">
+              {hero.metrics[0].value}
+            </span>
+            <span data-i18n="hero.metric1.label" class="text-xs font-semibold text-[#57524C] uppercase tracking-wider">
+              {hero.metrics[0].label}
+            </span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-2xl sm:text-3xl font-impact font-bold text-[#1B1815]">
+              {hero.metrics[1].value}
+            </span>
+            <span data-i18n="hero.metric2.label" class="text-xs font-semibold text-[#57524C] uppercase tracking-wider">
+              {hero.metrics[1].label}
+            </span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-2xl sm:text-3xl font-impact font-bold text-[#1B1815]">
+              {hero.metrics[2].value}
+            </span>
+            <span data-i18n="hero.metric3.label" class="text-xs font-semibold text-[#57524C] uppercase tracking-wider">
+              {hero.metrics[2].label}
+            </span>
+          </div>
+        </div>
+
+        <!-- Call to Action Buttons -->
+        <div class="flex flex-wrap items-center gap-4 w-full sm:w-auto">
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#A8382B] text-white text-sm font-semibold tracking-wide hover:bg-[#82271D] transition-all transform hover:-translate-y-0.5 shadow-lg shadow-[#A8382B]/25 text-center flex items-center justify-center gap-3 cursor-pointer"
+          >
+            <span data-i18n="hero.cta">{hero.ctaText}</span>
+            <svg
+              class="w-4 h-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M5 12h14M12 5l7 7-7 7"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </a>
+
+          <a
+            href="#portfolio"
+            data-i18n="hero.secondaryCta"
+            class="w-full sm:w-auto px-7 py-4 rounded-xl bg-transparent border border-[#1B1815]/25 text-[#1B1815] text-sm font-semibold tracking-wide hover:bg-black/5 transition text-center cursor-pointer"
+          >
+            Ver Vídeos Recentes
+          </a>
+        </div>
+      </div>
+
+      <!-- Right Column: Visual Portrait & Floating Proof Bubbles -->
+      <div class="lg:col-span-5 relative flex justify-center items-end mt-4 lg:mt-0">
+        <!-- Background organic shape -->
+        <div class="absolute -inset-4 bg-gradient-to-tr from-[#E5DFD5] via-[#EFECE6] to-transparent rounded-[36px] -z-10 transform rotate-1 scale-95 opacity-80"></div>
+
+        <!-- Portrait Container -->
+        <div class="relative w-full max-w-sm sm:max-w-md aspect-[3/4] rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
+          <img
+            src={hero.photoUrl}
+            alt={hero.photoAlt}
+            class="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700"
+            loading="eager"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none"></div>
+        </div>
+
+        <!-- Floating Testimonial Bubble 1 (Bottom Left) -->
+        <div class="absolute -bottom-6 -left-4 sm:-left-8 max-w-[240px] sm:max-w-[270px] glass-panel p-3.5 rounded-2xl shadow-xl animate-float-1 z-20">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="flex h-5 w-5 items-center justify-center rounded-full bg-[#A8382B] text-white text-[10px] font-bold">★</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#1B1815]">{hero.feedbacks[0].brand}</span>
+          </div>
+          <p class="text-xs text-[#57524C] leading-snug italic font-medium">
+            "{hero.feedbacks[0].quote}"
+          </p>
+        </div>
+
+        <!-- Floating Testimonial Bubble 2 (Top Right) -->
+        <div class="absolute -top-4 -right-4 sm:-right-6 max-w-[220px] sm:max-w-[250px] glass-panel p-3.5 rounded-2xl shadow-xl animate-float-2 z-20">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="flex h-5 w-5 items-center justify-center rounded-full bg-[#2C5E43] text-white text-[10px] font-bold">✓</span>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-[#1B1815]">{hero.feedbacks[1].brand}</span>
+          </div>
+          <p class="text-xs text-[#57524C] leading-snug italic font-medium">
+            "{hero.feedbacks[1].quote}"
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

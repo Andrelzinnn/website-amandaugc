@@ -1,0 +1,89 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const { filmRoll } = portfolioData;
+// Duplicate for infinite continuous sliding
+const trackA = [...filmRoll.trackA, ...filmRoll.trackA, ...filmRoll.trackA];
+const trackB = [...filmRoll.trackB, ...filmRoll.trackB, ...filmRoll.trackB];
+---
+
+<section
+  id="fotos"
+  class="py-16 sm:py-24 bg-[#FAF8F5] overflow-hidden border-t border-[#1B1815]/10"
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-8 mb-10 text-center">
+    <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A8382B] mb-2">
+      <span class="w-6 h-px bg-[#A8382B]"></span>
+      <span data-i18n="film.badge">Fotografia Lifestyle & Still</span>
+      <span class="w-6 h-px bg-[#A8382B]"></span>
+    </div>
+    <h2 data-i18n="film.title" class="text-3xl sm:text-4xl md:text-5xl font-impact tracking-tight text-[#1B1815] uppercase">
+      Galeria de Fotos UGC
+    </h2>
+    <p data-i18n="film.subtitle" class="font-cursive text-3xl sm:text-4xl text-[#57524C] mt-1">
+      detalhes que valorizam o produto
+    </p>
+  </div>
+
+  <!-- Dual Film Tracks Container -->
+  <div class="space-y-4">
+    <!-- Track A (Slides Left) -->
+    <div class="relative w-full overflow-hidden">
+      <div class="animate-marquee-left flex items-center gap-2">
+        {trackA.map((photo) => (
+          <div class="relative flex-none w-[170px] sm:w-[220px] bg-[#17140F] p-3 sm:p-4 text-[#EFECE6]/80 group cursor-pointer shadow-md hover:shadow-xl transition-shadow">
+            <!-- Film roll headers -->
+            <div class="flex items-center justify-between text-[8px] font-impact uppercase tracking-widest mb-1.5 opacity-75">
+              <span>FOTOS UGC</span>
+              <span>ISO 400</span>
+            </div>
+
+            <!-- Photo Container -->
+            <div class="aspect-[4/5] overflow-hidden rounded-sm bg-neutral-800">
+              <img
+                src={photo.imageUrl}
+                alt={photo.alt}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            </div>
+
+            <!-- Film frame counter bottom -->
+            <div class="flex items-center justify-between text-[8px] font-impact uppercase tracking-widest mt-1.5 opacity-75">
+              <span>35mm</span>
+              <span>▸ {photo.frameNumber}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Track B (Slides Right) -->
+    <div class="relative w-full overflow-hidden">
+      <div class="animate-marquee-right flex items-center gap-2">
+        {trackB.map((photo) => (
+          <div class="relative flex-none w-[170px] sm:w-[220px] bg-[#17140F] p-3 sm:p-4 text-[#EFECE6]/80 group cursor-pointer shadow-md hover:shadow-xl transition-shadow">
+            <div class="flex items-center justify-between text-[8px] font-impact uppercase tracking-widest mb-1.5 opacity-75">
+              <span>FOTOS UGC</span>
+              <span>PORTRA</span>
+            </div>
+
+            <div class="aspect-[4/5] overflow-hidden rounded-sm bg-neutral-800">
+              <img
+                src={photo.imageUrl}
+                alt={photo.alt}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="flex items-center justify-between text-[8px] font-impact uppercase tracking-widest mt-1.5 opacity-75">
+              <span>35mm</span>
+              <span>▸ {photo.frameNumber}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

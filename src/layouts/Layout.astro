@@ -1,0 +1,184 @@
+---
+import "../styles/global.css";
+import { portfolioData } from "../data/portfolioData";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const {
+  title = `${portfolioData.creator.fullName} | Criadora de Conteúdo UGC & Estrategista de Criativos`,
+  description = "Portfólio oficial de Amanda Silveira, criadora UGC. Vídeos autênticos para Meta Ads, TikTok e Reels focados em retenção, provas sociais e alta conversão para marcas.",
+  image = portfolioData.hero.photoUrl,
+} = Astro.props;
+
+const siteUrl = "https://amandaugc.com.br";
+
+// Schema.org Structured Data (JSON-LD) for Google Rich Snippets & Person/CreativeWork
+const schemaOrgPerson = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": portfolioData.creator.fullName,
+  "jobTitle": portfolioData.creator.role,
+  "url": siteUrl,
+  "sameAs": [
+    `https://instagram.com/${portfolioData.creator.instagram.replace('@', '')}`,
+    `https://tiktok.com/@${portfolioData.creator.tiktok.replace('@', '')}`
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "São Paulo",
+    "addressRegion": "SP",
+    "addressCountry": "BR"
+  },
+  "knowsAbout": [
+    "User Generated Content (UGC)",
+    "Video Marketing",
+    "Meta Ads",
+    "TikTok Ads",
+    "E-commerce Conversion"
+  ]
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary SEO Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="author" content={portfolioData.creator.fullName} />
+    <meta name="keywords" content="UGC, UGC creator, criador de conteúdo UGC, anúncios TikTok, criativos Reels, vídeos para tráfego pago, Amanda Silveira UGC, marketing de influência" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#FAF8F5" />
+    <link rel="canonical" href={siteUrl} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={siteUrl} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={image} />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:site_name" content={portfolioData.creator.fullName} />
+
+    <!-- Twitter Cards -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={siteUrl} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={image} />
+
+    <!-- Favicon -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>"
+    />
+
+    <!-- Google Fonts Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Allura&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=League+Spartan:wght@500;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JSON-LD Structured Data for Google -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaOrgPerson)} />
+  </head>
+  <body class="min-h-screen selection:bg-[#A8382B]/20 selection:text-[#82271D]">
+    <!-- Accessibility Skip Link -->
+    <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
+
+    <slot />
+
+    <!-- Global Video Lightbox Modal Component -->
+    <div
+      id="video-lightbox"
+      class="fixed inset-0 z-50 hidden items-center justify-center bg-black/85 p-4 backdrop-blur-md transition-opacity duration-300"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Reprodutor de vídeo em tela cheia"
+    >
+      <div class="relative w-full max-w-sm aspect-[9/16] overflow-hidden rounded-2xl bg-black shadow-2xl">
+        <button
+          type="button"
+          id="close-lightbox"
+          class="absolute top-4 right-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-white backdrop-blur-md transition hover:bg-white/40 cursor-pointer"
+          aria-label="Fechar reprodutor de vídeo (ESC)"
+        >
+          <svg
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+        <iframe
+          id="lightbox-iframe"
+          class="h-full w-full border-0"
+          src=""
+          title="Vídeo demonstrativo do portfólio"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      </div>
+    </div>
+
+    <script>
+      // Global Lightbox handlers
+      const lightbox = document.getElementById("video-lightbox");
+      const iframe = document.getElementById("lightbox-iframe") as HTMLIFrameElement;
+      const closeBtn = document.getElementById("close-lightbox");
+
+      window.openVideoLightbox = (youtubeId: string) => {
+        if (!lightbox || !iframe) return;
+        iframe.src = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+        lightbox.classList.remove("hidden");
+        lightbox.classList.add("flex");
+        lightbox.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+        closeBtn?.focus();
+      };
+
+      const closeLightbox = () => {
+        if (!lightbox || !iframe) return;
+        iframe.src = "";
+        lightbox.classList.add("hidden");
+        lightbox.classList.remove("flex");
+        lightbox.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "auto";
+      };
+
+      closeBtn?.addEventListener("click", closeLightbox);
+      lightbox?.addEventListener("click", (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeLightbox();
+      });
+
+      declare global {
+        interface Window {
+          openVideoLightbox: (youtubeId: string) => void;
+        }
+      }
+    </script>
+  </body>
+</html>
