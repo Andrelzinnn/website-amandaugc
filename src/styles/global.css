@@ -192,3 +192,156 @@
     cursor: none;
   }
 }
+
+/* ========================================================
+   Editorial Theme Palettes (Driven by Keystatic Theme Picker)
+   ======================================================== */
+
+/* 🌸 Rosa Nude & Champagne (Delicado · Skincare & Glow) */
+html[data-theme="rose"] {
+  --color-terracotta: #C4556C;
+  --color-terracotta-dark: #9B3B50;
+  --color-gold: #D4A373;
+}
+html[data-theme="rose"] .bg-\[\#A8382B\],
+html[data-theme="rose"] .hover\:bg-\[\#A8382B\]:hover {
+  background-color: #C4556C !important;
+}
+html[data-theme="rose"] .text-\[\#A8382B\],
+html[data-theme="rose"] .hover\:text-\[\#A8382B\]:hover,
+html[data-theme="rose"] .group-hover\:text-\[\#A8382B\] {
+  color: #C4556C !important;
+}
+html[data-theme="rose"] .border-\[\#A8382B\],
+html[data-theme="rose"] .focus\:border-\[\#A8382B\]:focus {
+  border-color: #C4556C !important;
+}
+html[data-theme="rose"] .bg-\[\#A8382B\]\/10 {
+  background-color: rgba(196, 85, 108, 0.12) !important;
+}
+html[data-theme="rose"] .text-\[\#82271D\] {
+  color: #9B3B50 !important;
+}
+html[data-theme="rose"] .bg-\[\#82271D\],
+html[data-theme="rose"] .hover\:bg-\[\#82271D\]:hover {
+  background-color: #9B3B50 !important;
+}
+html[data-theme="rose"] .text-\[\#C28D3F\],
+html[data-theme="rose"] .hover\:text-\[\#C28D3F\]:hover {
+  color: #D4A373 !important;
+}
+html[data-theme="rose"] .cursor-play {
+  background: rgba(196, 85, 108, 0.92) !important;
+}
+
+/* ⚫ Preto & Branco Editorial (Minimalista · Moda High-End) */
+html[data-theme="monochrome"] {
+  --color-terracotta: #1B1815;
+  --color-terracotta-dark: #000000;
+  --color-gold: #666666;
+}
+html[data-theme="monochrome"] .bg-\[\#A8382B\],
+html[data-theme="monochrome"] .hover\:bg-\[\#A8382B\]:hover {
+  background-color: #1B1815 !important;
+}
+html[data-theme="monochrome"] .text-\[\#A8382B\],
+html[data-theme="monochrome"] .hover\:text-\[\#A8382B\]:hover,
+html[data-theme="monochrome"] .group-hover\:text-\[\#A8382B\] {
+  color: #1B1815 !important;
+}
+html[data-theme="monochrome"] .border-\[\#A8382B\],
+html[data-theme="monochrome"] .focus\:border-\[\#A8382B\]:focus {
+  border-color: #1B1815 !important;
+}
+html[data-theme="monochrome"] .bg-\[\#A8382B\]\/10 {
+  background-color: rgba(27, 24, 21, 0.08) !important;
+}
+html[data-theme="monochrome"] .text-\[\#82271D\] {
+  color: #000000 !important;
+}
+html[data-theme="monochrome"] .bg-\[\#82271D\],
+html[data-theme="monochrome"] .hover\:bg-\[\#82271D\]:hover {
+  background-color: #000000 !important;
+}
+html[data-theme="monochrome"] .text-\[\#C28D3F\],
+html[data-theme="monochrome"] .hover\:text-\[\#C28D3F\]:hover {
+  color: #737373 !important;
+}
+html[data-theme="monochrome"] .cursor-play {
+  background: rgba(27, 24, 21, 0.92) !important;
+}
+
+/* 🌿 Verde Oliva & Sage (Natural · Orgânicos & Bem-Estar) */
+html[data-theme="olive"] {
+  --color-terracotta: #3A5A40;
+  --color-terracotta-dark: #263D2B;
+  --color-gold: #A3B18A;
+}
+html[data-theme="olive"] .bg-\[\#A8382B\],
+html[data-theme="olive"] .hover\:bg-\[\#A8382B\]:hover {
+  background-color: #3A5A40 !important;
+}
+html[data-theme="olive"] .text-\[\#A8382B\],
+html[data-theme="olive"] .hover\:text-\[\#A8382B\]:hover,
+html[data-theme="olive"] .group-hover\:text-\[\#A8382B\] {
+  color: #3A5A40 !important;
+}
+html[data-theme="olive"] .border-\[\#A8382B\],
+html[data-theme="olive"] .focus\:border-\[\#A8382B\]:focus {
+  border-color: #3A5A40 !important;
+}
+html[data-theme="olive"] .bg-\[\#A8382B\]\/10 {
+  background-color: rgba(58, 90, 64, 0.12) !important;
+}
+html[data-theme="olive"] .text-\[\#82271D\] {
+  color: #263D2B !important;
+}
+html[data-theme="olive"] .bg-\[\#82271D\],
+html[data-theme="olive"] .hover\:bg-\[\#82271D\]:hover {
+  background-color: #263D2B !important;
+}
+html[data-theme="olive"] .text-\[\#C28D3F\],
+html[data-theme="olive"] .hover\:text-\[\#C28D3F\]:hover {
+  color: #A3B18A !important;
+}
+html[data-theme="olive"] .cursor-play {
+  background: rgba(58, 90, 64, 0.92) !important;
+}
+
+/* 🍫 Marrom Mocha & Caramelo (Neutro Aconchegante · Lifestyle & Casa) */
+html[data-theme="mocha"] {
+  --color-terracotta: #7B4B32;
+  --color-terracotta-dark: #5A3420;
+  --color-gold: #C49A6C;
+}
+html[data-theme="mocha"] .bg-\[\#A8382B\],
+html[data-theme="mocha"] .hover\:bg-\[\#A8382B\]:hover {
+  background-color: #7B4B32 !important;
+}
+html[data-theme="mocha"] .text-\[\#A8382B\],
+html[data-theme="mocha"] .hover\:text-\[\#A8382B\]:hover,
+html[data-theme="mocha"] .group-hover\:text-\[\#A8382B\] {
+  color: #7B4B32 !important;
+}
+html[data-theme="mocha"] .border-\[\#A8382B\],
+html[data-theme="mocha"] .focus\:border-\[\#A8382B\]:focus {
+  border-color: #7B4B32 !important;
+}
+html[data-theme="mocha"] .bg-\[\#A8382B\]\/10 {
+  background-color: rgba(123, 75, 50, 0.12) !important;
+}
+html[data-theme="mocha"] .text-\[\#82271D\] {
+  color: #5A3420 !important;
+}
+html[data-theme="mocha"] .bg-\[\#82271D\],
+html[data-theme="mocha"] .hover\:bg-\[\#82271D\]:hover {
+  background-color: #5A3420 !important;
+}
+html[data-theme="mocha"] .text-\[\#C28D3F\],
+html[data-theme="mocha"] .hover\:text-\[\#C28D3F\]:hover {
+  color: #C49A6C !important;
+}
+html[data-theme="mocha"] .cursor-play {
+  background: rgba(123, 75, 50, 0.92) !important;
+}
+

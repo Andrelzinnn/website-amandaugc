@@ -52,6 +52,33 @@ export default config({
           multiline: true,
           defaultValue: 'Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.',
         }),
+        theme: fields.select({
+          label: '🎨 Paleta Visual & Cor de Destaque do Site',
+          description: 'Muda instantaneamente os botões, selos, destaques cursivos e métricas do portfólio.',
+          options: [
+            {
+              label: '🔴 Terracota & Dourado (Padrão Atual · Editorial Quente & Sofisticado)',
+              value: 'terracotta',
+            },
+            {
+              label: '🌸 Rosa Nude & Champagne (Delicado · Skincare, Beleza & Glow)',
+              value: 'rose',
+            },
+            {
+              label: '⚫ Preto & Branco Editorial (Minimalista · Moda High-End & Luxo)',
+              value: 'monochrome',
+            },
+            {
+              label: '🌿 Verde Oliva & Sage (Natural · Orgânicos, Saúde & Bem-Estar)',
+              value: 'olive',
+            },
+            {
+              label: '🍫 Marrom Mocha & Caramelo (Neutro Aconchegante · Lifestyle & Casa)',
+              value: 'mocha',
+            },
+          ],
+          defaultValue: 'terracotta',
+        }),
       },
     }),
     hero: singleton({

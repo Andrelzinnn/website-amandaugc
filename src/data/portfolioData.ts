@@ -418,6 +418,7 @@ const rawPortfolioData = {
       answer: "Assim que fechamos o pacote e formalizamos o contrato, envio o endereço do meu estúdio em São Paulo. Você me fornece o código de rastreio e iniciamos a pesquisa e roteirização.",
     },
   ],
+  theme: "terracotta",
 };
 
 import fs from "node:fs";
@@ -453,6 +454,7 @@ function loadKeystaticOverrides(base: any) {
       }
       if (general.instagram) data.creator.instagram = general.instagram;
       if (general.tiktok) data.creator.tiktok = general.tiktok;
+      if (general.theme) data.theme = general.theme;
       data.contactSection = {
         badge: general.contactBadge || "Vamos Criar Juntos",
         title: general.contactTitle || "Solicite uma Proposta",

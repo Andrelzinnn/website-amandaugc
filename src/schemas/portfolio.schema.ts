@@ -143,6 +143,7 @@ export const PortfolioConfigSchema = z.object({
     subtitle: z.string().default("resposta rápida em até 24 horas"),
     desc: z.string().default("Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos."),
   }).optional(),
+  theme: z.enum(["terracotta", "rose", "monochrome", "olive", "mocha"]).default("terracotta"),
 });
 
 // Infer Typescript types directly from Zod schemas
