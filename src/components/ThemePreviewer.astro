@@ -1,0 +1,217 @@
+---
+import { portfolioData } from "../data/portfolioData";
+
+const defaultTheme = portfolioData.theme || "terracotta";
+
+const palettes = [
+  {
+    id: "terracotta",
+    name: "Terracota & Dourado",
+    subtitle: "Editorial Quente & Sofisticado",
+    color1: "#A8382B",
+    color2: "#C28D3F",
+  },
+  {
+    id: "rose",
+    name: "Rosa Nude & Champagne",
+    subtitle: "Delicado · Skincare & Glow",
+    color1: "#C4556C",
+    color2: "#D4A373",
+  },
+  {
+    id: "monochrome",
+    name: "Preto & Branco Luxo",
+    subtitle: "Minimalista · Moda High-End",
+    color1: "#1B1815",
+    color2: "#737373",
+  },
+  {
+    id: "olive",
+    name: "Verde Oliva & Sage",
+    subtitle: "Natural · Orgânicos & Bem-Estar",
+    color1: "#3A5A40",
+    color2: "#A3B18A",
+  },
+  {
+    id: "mocha",
+    name: "Marrom Mocha & Caramelo",
+    subtitle: "Aconchegante · Lifestyle & Casa",
+    color1: "#7B4B32",
+    color2: "#C49A6C",
+  },
+];
+---
+
+<!-- Floating Theme Previewer Pill (Bottom Left) -->
+<aside class="fixed left-4 sm:left-6 bottom-5 z-40 select-none font-sans" aria-label="Provador de Cores do Portfólio">
+  <!-- Trigger Button -->
+  <button
+    type="button"
+    id="theme-pill-btn"
+    class="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 rounded-full bg-[#1B1815]/95 hover:bg-[#1B1815] text-[#FAF8F5] text-xs font-semibold shadow-2xl backdrop-blur-md border border-white/20 transition-all transform hover:scale-105 active:scale-95 cursor-pointer group"
+    aria-expanded="false"
+    aria-controls="theme-drawer"
+  >
+    <span class="text-sm group-hover:rotate-12 transition-transform">🎨</span>
+    <span class="tracking-wide">Testar Cores</span>
+    <span class="w-2 h-2 rounded-full bg-[#A8382B] group-hover:scale-125 transition-transform" id="active-theme-dot"></span>
+  </button>
+
+  <!-- Expanded Drawer / Popover -->
+  <div
+    id="theme-drawer"
+    class="hidden absolute left-0 bottom-14 w-80 sm:w-88 rounded-3xl bg-[#1B1815]/98 text-[#FAF8F5] p-5 shadow-2xl border border-white/15 backdrop-blur-xl transition-all duration-300 transform origin-bottom-left"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Seletor de paletas visuais"
+  >
+    <!-- Header -->
+    <div class="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
+      <div class="flex items-center gap-2">
+        <span class="text-base">🎨</span>
+        <div>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-white">Provador de Cores</h3>
+          <p class="text-[10px] text-[#FAF8F5]/60">Veja o site mudar ao vivo com 1 toque</p>
+        </div>
+      </div>
+      <button
+        type="button"
+        id="close-theme-drawer"
+        class="w-7 h-7 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-xs text-white/70 hover:text-white transition cursor-pointer"
+        aria-label="Fechar provador"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Palette Swatch List -->
+    <div class="space-y-1.5 mb-4" id="palette-options">
+      {palettes.map((p) => (
+        <button
+          type="button"
+          class={`theme-option w-full p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+            p.id === defaultTheme
+              ? "border-[#A8382B] bg-white/10 active-option"
+              : "border-white/5 hover:border-white/20 bg-white/5"
+          }`}
+          data-theme-id={p.id}
+          data-theme-name={p.name}
+          data-color1={p.color1}
+        >
+          <div class="flex items-center gap-3">
+            <div class="flex items-center -space-x-1.5 flex-shrink-0">
+              <span
+                class="w-5 h-5 rounded-full border border-black/40 shadow-sm"
+                style={`background-color: ${p.color1};`}
+              ></span>
+              <span
+                class="w-5 h-5 rounded-full border border-black/40 shadow-sm"
+                style={`background-color: ${p.color2};`}
+              ></span>
+            </div>
+            <div>
+              <span class="block text-xs font-bold text-white">{p.name}</span>
+              <span class="block text-[10px] text-[#FAF8F5]/60">{p.subtitle}</span>
+            </div>
+          </div>
+          <span class={`check-badge text-xs font-bold ${p.id === defaultTheme ? "text-white" : "hidden"}`}>
+            ✓
+          </span>
+        </button>
+      ))}
+    </div>
+
+    <!-- Save in Admin Link / Guidance -->
+    <div class="pt-3 border-t border-white/10 flex items-center justify-between gap-2 text-[11px]">
+      <span class="text-white/60">Gostou dessa estética?</span>
+      <a
+        href="/keystatic/branch/main/singleton/general"
+        class="px-3 py-1.5 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white font-bold uppercase tracking-wider text-[10px] transition flex items-center gap-1 shadow-md"
+      >
+        <span>Salvar no Painel</span>
+        <span>🔒</span>
+      </a>
+    </div>
+  </div>
+</aside>
+
+<script>
+  const pillBtn = document.getElementById("theme-pill-btn");
+  const drawer = document.getElementById("theme-drawer");
+  const closeBtn = document.getElementById("close-theme-drawer");
+  const options = document.querySelectorAll(".theme-option");
+  const activeDot = document.getElementById("active-theme-dot");
+
+  const toggleDrawer = (open?: boolean) => {
+    if (!drawer || !pillBtn) return;
+    const isHidden = drawer.classList.contains("hidden");
+    const willOpen = open !== undefined ? open : isHidden;
+
+    if (willOpen) {
+      drawer.classList.remove("hidden");
+      pillBtn.setAttribute("aria-expanded", "true");
+    } else {
+      drawer.classList.add("hidden");
+      pillBtn.setAttribute("aria-expanded", "false");
+    }
+  };
+
+  pillBtn?.addEventListener("click", () => toggleDrawer());
+  closeBtn?.addEventListener("click", () => toggleDrawer(false));
+
+  // Apply theme to document
+  const applyTheme = (themeId: string, color?: string) => {
+    document.documentElement.setAttribute("data-theme", themeId);
+    localStorage.setItem("user_preview_theme", themeId);
+
+    // Update active UI state
+    options.forEach((opt) => {
+      const isCurrent = opt.getAttribute("data-theme-id") === themeId;
+      const check = opt.querySelector(".check-badge");
+      if (isCurrent) {
+        opt.classList.remove("border-white/5", "bg-white/5");
+        opt.classList.add("border-[#A8382B]", "bg-white/10", "active-option");
+        check?.classList.remove("hidden");
+        const c1 = opt.getAttribute("data-color1");
+        if (activeDot && c1) activeDot.style.backgroundColor = c1;
+      } else {
+        opt.classList.remove("border-[#A8382B]", "bg-white/10", "active-option");
+        opt.classList.add("border-white/5", "bg-white/5");
+        check?.classList.add("hidden");
+      }
+    });
+  };
+
+  options.forEach((opt) => {
+    opt.addEventListener("click", () => {
+      const themeId = opt.getAttribute("data-theme-id");
+      const color1 = opt.getAttribute("data-color1");
+      if (themeId) applyTheme(themeId, color1 || undefined);
+    });
+  });
+
+  // Prioritize URL parameter (e.g. from admin iframe preview) then localStorage
+  const urlTheme = new URLSearchParams(window.location.search).get("theme");
+  const saved = localStorage.getItem("user_preview_theme");
+  if (urlTheme && ["terracotta", "rose", "monochrome", "olive", "mocha"].includes(urlTheme)) {
+    applyTheme(urlTheme);
+  } else if (saved && ["terracotta", "rose", "monochrome", "olive", "mocha"].includes(saved)) {
+    applyTheme(saved);
+  }
+
+  // Hide preview pill when embedded inside admin studio iframe
+  if (window.self !== window.top) {
+    const aside = document.querySelector('aside[aria-label="Provador de Cores do Portfólio"]');
+    if (aside) (aside as HTMLElement).style.display = "none";
+  }
+
+  // Close when clicking outside
+  document.addEventListener("click", (e) => {
+    if (drawer && !drawer.classList.contains("hidden")) {
+      const target = e.target as HTMLElement;
+      if (!drawer.contains(target) && !pillBtn?.contains(target)) {
+        toggleDrawer(false);
+      }
+    }
+  });
+</script>

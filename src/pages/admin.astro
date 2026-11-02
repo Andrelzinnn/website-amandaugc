@@ -1,0 +1,324 @@
+---
+import { portfolioData } from "../data/portfolioData";
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Studio Admin & Live Preview | Amanda Silveira</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      }
+      .font-serif-editorial {
+        font-family: 'Fraunces', serif;
+      }
+    </style>
+  </head>
+  <body class="bg-[#12100E] text-[#FAF8F5] min-h-screen flex flex-col antialiased selection:bg-[#A8382B] selection:text-white">
+    <!-- Top Studio Header -->
+    <header class="h-14 border-b border-white/10 bg-[#1B1815] px-4 sm:px-6 flex items-center justify-between z-20 flex-shrink-0">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 group">
+          <span class="w-8 h-8 rounded-lg bg-[#A8382B] text-white flex items-center justify-center font-bold text-sm shadow-md">
+            AS
+          </span>
+          <span class="font-serif-editorial font-bold text-base tracking-tight text-white hidden sm:inline">
+            Amanda Silveira
+          </span>
+        </a>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-white/10 text-white/70 font-semibold tracking-wider uppercase text-[10px]">
+          Studio Admin & Live Preview
+        </span>
+      </div>
+
+      <!-- Device View Controls -->
+      <div class="flex items-center gap-1 bg-black/40 p-1 rounded-xl border border-white/10">
+        <button
+          type="button"
+          id="btn-desktop"
+          class="device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-white/20 text-white"
+          title="Visualizar em Desktop"
+        >
+          <span>🖥️</span>
+          <span class="hidden md:inline">Desktop</span>
+        </button>
+        <button
+          type="button"
+          id="btn-mobile"
+          class="device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-white/60 hover:text-white"
+          title="Visualizar em Celular (iPhone)"
+        >
+          <span>📱</span>
+          <span class="hidden md:inline">Celular (Mobile)</span>
+        </button>
+      </div>
+
+      <!-- Action Links -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <button
+          type="button"
+          id="btn-reload"
+          class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/80 transition cursor-pointer text-xs"
+          title="Recarregar tela"
+        >
+          🔄
+        </button>
+        <a
+          href="/keystatic"
+          class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white text-xs font-bold uppercase tracking-wider transition shadow-lg cursor-pointer"
+        >
+          <span>Editor de Conteúdo</span>
+          <span>↗</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Workspace: Split View -->
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <!-- Left Sidebar: Visual Theme & Quick Settings -->
+      <aside class="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-white/10 bg-[#171412] flex flex-col flex-shrink-0 overflow-y-auto max-h-72 lg:max-h-full">
+        <!-- Palette Header -->
+        <div class="p-5 border-b border-white/10">
+          <div class="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-[#C28D3F] mb-1">
+            <span>✨</span>
+            <span>Personalização Visual</span>
+          </div>
+          <h2 class="text-lg font-bold text-white">Paleta de Cores do Site</h2>
+          <p class="text-xs text-white/60 mt-1 leading-relaxed">
+            Clique em qualquer paleta abaixo para pré-visualizar a mudança de cor no site ao vivo em tempo real.
+          </p>
+        </div>
+
+        <!-- Color Swatch Cards -->
+        <div class="p-4 space-y-2.5">
+          <!-- 1. Terracotta -->
+          <button
+            type="button"
+            class="palette-card w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between border-[#A8382B] bg-[#A8382B]/10 active-card"
+            data-theme="terracotta"
+          >
+            <div class="flex items-center gap-3">
+              <div class="flex items-center -space-x-1.5">
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #A8382B;"></span>
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #C28D3F;"></span>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-white">Terracota & Dourado</span>
+                <span class="block text-[10px] text-white/60">Editorial Quente & Sofisticado</span>
+              </div>
+            </div>
+            <span class="check-icon text-xs text-[#A8382B] font-bold">✓</span>
+          </button>
+
+          <!-- 2. Rose -->
+          <button
+            type="button"
+            class="palette-card w-full text-left p-3.5 rounded-2xl border border-white/10 hover:border-white/30 bg-white/5 transition-all cursor-pointer flex items-center justify-between"
+            data-theme="rose"
+          >
+            <div class="flex items-center gap-3">
+              <div class="flex items-center -space-x-1.5">
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #C4556C;"></span>
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #D4A373;"></span>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-white">Rosa Nude & Champagne</span>
+                <span class="block text-[10px] text-white/60">Delicado · Skincare, Beleza & Glow</span>
+              </div>
+            </div>
+            <span class="check-icon text-xs text-white/40 hidden">✓</span>
+          </button>
+
+          <!-- 3. Monochrome -->
+          <button
+            type="button"
+            class="palette-card w-full text-left p-3.5 rounded-2xl border border-white/10 hover:border-white/30 bg-white/5 transition-all cursor-pointer flex items-center justify-between"
+            data-theme="monochrome"
+          >
+            <div class="flex items-center gap-3">
+              <div class="flex items-center -space-x-1.5">
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #1B1815; border-color: #fff;"></span>
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #737373;"></span>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-white">Preto & Branco Editorial</span>
+                <span class="block text-[10px] text-white/60">Minimalista · Moda High-End & Luxo</span>
+              </div>
+            </div>
+            <span class="check-icon text-xs text-white/40 hidden">✓</span>
+          </button>
+
+          <!-- 4. Olive -->
+          <button
+            type="button"
+            class="palette-card w-full text-left p-3.5 rounded-2xl border border-white/10 hover:border-white/30 bg-white/5 transition-all cursor-pointer flex items-center justify-between"
+            data-theme="olive"
+          >
+            <div class="flex items-center gap-3">
+              <div class="flex items-center -space-x-1.5">
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #3A5A40;"></span>
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #A3B18A;"></span>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-white">Verde Oliva & Sage</span>
+                <span class="block text-[10px] text-white/60">Natural · Orgânicos, Saúde & Bem-Estar</span>
+              </div>
+            </div>
+            <span class="check-icon text-xs text-white/40 hidden">✓</span>
+          </button>
+
+          <!-- 5. Mocha -->
+          <button
+            type="button"
+            class="palette-card w-full text-left p-3.5 rounded-2xl border border-white/10 hover:border-white/30 bg-white/5 transition-all cursor-pointer flex items-center justify-between"
+            data-theme="mocha"
+          >
+            <div class="flex items-center gap-3">
+              <div class="flex items-center -space-x-1.5">
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #7B4B32;"></span>
+                <span class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm" style="background-color: #C49A6C;"></span>
+              </div>
+              <div>
+                <span class="block text-xs font-bold text-white">Marrom Mocha & Caramelo</span>
+                <span class="block text-[10px] text-white/60">Aconchegante · Lifestyle & Casa</span>
+              </div>
+            </div>
+            <span class="check-icon text-xs text-white/40 hidden">✓</span>
+          </button>
+        </div>
+
+        <!-- How to Save Notice -->
+        <div class="p-4 mx-4 mb-4 rounded-xl bg-white/5 border border-white/10 text-xs text-white/70">
+          <p class="font-semibold text-white mb-1">💡 Como salvar permanentemente:</p>
+          <p class="leading-relaxed text-[11px]">
+            Para aplicar a cor escolhida a todos os visitantes, abra o <a href="/keystatic/branch/main/singleton/general" class="text-[#C28D3F] underline font-bold">Editor de Informações Gerais</a>, escolha a mesma paleta e clique em <strong>Save</strong>.
+          </p>
+        </div>
+
+        <!-- Quick Shortcuts -->
+        <div class="mt-auto p-4 border-t border-white/10">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-white/50 block mb-2">
+            Atalhos Rápidos de Edição
+          </span>
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <a href="/keystatic/branch/main/singleton/topbar" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
+              📢 Aviso Topo
+            </a>
+            <a href="/keystatic/branch/main/collection/cases" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
+              🎬 Cases 3D
+            </a>
+            <a href="/keystatic/branch/main/collection/portfolioVideos" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
+              📹 Vídeos Nichos
+            </a>
+            <a href="/keystatic/branch/main/collection/photos" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition block font-medium text-white/80">
+              📷 Fotos UGC
+            </a>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Main: Live Website Preview Canvas -->
+      <main class="flex-1 bg-[#0D0B0A] relative flex items-center justify-center p-2 sm:p-6 overflow-hidden">
+        <!-- Frame Container -->
+        <div
+          id="preview-wrapper"
+          class="w-full h-full transition-all duration-300 flex items-center justify-center"
+        >
+          <iframe
+            id="site-iframe"
+            src={`/?theme=${portfolioData.theme || 'terracotta'}`}
+            class="w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border border-white/10"
+            title="Pré-visualização do site"
+          ></iframe>
+        </div>
+      </main>
+    </div>
+
+    <!-- Client-side script for interactive Studio live preview -->
+    <script>
+      const iframe = document.getElementById("site-iframe") as HTMLIFrameElement;
+      const wrapper = document.getElementById("preview-wrapper");
+      const btnDesktop = document.getElementById("btn-desktop");
+      const btnMobile = document.getElementById("btn-mobile");
+      const btnReload = document.getElementById("btn-reload");
+      const paletteCards = document.querySelectorAll(".palette-card");
+
+      let currentTheme = "terracotta";
+
+      // Palette Card Selection & Live Iframe Theme Update
+      paletteCards.forEach((card) => {
+        card.addEventListener("click", () => {
+          const theme = card.getAttribute("data-theme") || "terracotta";
+          currentTheme = theme;
+
+          paletteCards.forEach((c) => {
+            c.classList.remove("border-[#A8382B]", "bg-[#A8382B]/10", "active-card");
+            c.classList.add("border-white/10", "bg-white/5");
+            const check = c.querySelector(".check-icon");
+            if (check) check.classList.add("hidden");
+          });
+
+          card.classList.remove("border-white/10", "bg-white/5");
+          card.classList.add("border-[#A8382B]", "bg-[#A8382B]/10", "active-card");
+          const check = card.querySelector(".check-icon");
+          if (check) check.classList.remove("hidden");
+
+          // Directly message the iframe or update its location query
+          if (iframe && iframe.contentWindow) {
+            try {
+              iframe.contentWindow.document.documentElement.setAttribute("data-theme", theme);
+            } catch (e) {
+              iframe.src = `/?theme=${theme}`;
+            }
+          }
+        });
+      });
+
+      // Device Switcher
+      btnDesktop?.addEventListener("click", () => {
+        btnDesktop.classList.add("bg-white/20", "text-white");
+        btnDesktop.classList.remove("text-white/60");
+        btnMobile?.classList.remove("bg-white/20", "text-white");
+        btnMobile?.classList.add("text-white/60");
+
+        if (wrapper && iframe) {
+          wrapper.className = "w-full h-full transition-all duration-300 flex items-center justify-center";
+          iframe.className = "w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border border-white/10";
+        }
+      });
+
+      btnMobile?.addEventListener("click", () => {
+        btnMobile.classList.add("bg-white/20", "text-white");
+        btnMobile.classList.remove("text-white/60");
+        btnDesktop?.classList.remove("bg-white/20", "text-white");
+        btnDesktop?.classList.add("text-white/60");
+
+        if (wrapper && iframe) {
+          wrapper.className = "w-full h-full transition-all duration-300 flex items-center justify-center p-4";
+          iframe.className = "w-[390px] h-[844px] bg-[#FAF8F5] rounded-[48px] shadow-2xl transition-all duration-300 border-8 border-[#1B1815] ring-1 ring-white/20";
+        }
+      });
+
+      btnReload?.addEventListener("click", () => {
+        if (iframe) {
+          iframe.src = `/?theme=${currentTheme}`;
+        }
+      });
+    </script>
+  </body>
+</html>

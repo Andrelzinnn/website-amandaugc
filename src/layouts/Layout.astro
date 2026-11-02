@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { portfolioData } from "../data/portfolioData";
+import ThemePreviewer from "../components/ThemePreviewer.astro";
 
 interface Props {
   title?: string;
@@ -98,6 +99,8 @@ const schemaOrgPerson = {
     <a href="#conteudo-principal" class="skip-link">Pular para o conteúdo principal</a>
 
     <slot />
+
+    <ThemePreviewer />
 
     <!-- Global Video Lightbox Modal Component -->
     <div
