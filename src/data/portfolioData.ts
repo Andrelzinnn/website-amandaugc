@@ -420,5 +420,134 @@ const rawPortfolioData = {
   ],
 };
 
-// Validate raw data with Zod at runtime and export the safe validated object
-export const portfolioData: PortfolioConfig = PortfolioConfigSchema.parse(rawPortfolioData);
+import fs from "node:fs";
+import path from "node:path";
+
+function loadKeystaticOverrides(base: any) {
+  try {
+    const contentDir = path.resolve(process.cwd(), "src/content");
+    if (!fs.existsSync(contentDir)) return base;
+
+    const data = JSON.parse(JSON.stringify(base));
+
+    // General singleton
+    const generalFile = path.join(contentDir, "general.json");
+    if (fs.existsSync(generalFile)) {
+      const general = JSON.parse(fs.readFileSync(generalFile, "utf-8"));
+      if (general.fullName) data.creator.fullName = general.fullName;
+      if (general.role) data.creator.role = general.role;
+      if (general.whatsappNumber) {
+        data.creator.whatsapp = general.whatsappNumber;
+        data.creator.whatsappNumber = general.whatsappNumber;
+      }
+      if (general.instagram) data.creator.instagram = general.instagram;
+      if (general.tiktok) data.creator.tiktok = general.tiktok;
+    }
+
+    // Hero singleton
+    const heroFile = path.join(contentDir, "hero.json");
+    if (fs.existsSync(heroFile)) {
+      const hero = JSON.parse(fs.readFileSync(heroFile, "utf-8"));
+      if (hero.headline) data.hero.headline = hero.headline;
+      if (hero.headlineCursive) data.hero.headlineCursive = hero.headlineCursive;
+      if (hero.subheadline) data.hero.subheadline = hero.subheadline;
+      if (hero.photoUrl) data.hero.photoUrl = hero.photoUrl;
+    }
+
+    // Cases collection
+    const casesDir = path.join(contentDir, "cases");
+    if (fs.existsSync(casesDir)) {
+      const caseFiles = fs.readdirSync(casesDir).filter((f) => f.endsWith(".json"));
+      if (caseFiles.length > 0) {
+        const loadedCards = caseFiles.map((f, i) => {
+          const item = JSON.parse(fs.readFileSync(path.join(casesDir, f), "utf-8"));
+          const pillars = [item.pillar1, item.pillar2, item.pillar3].filter(Boolean);
+          return {
+            id: `case-${i + 1}`,
+            brand: item.brand || "",
+            title: item.title || "",
+            badge: item.badge || "Top Performer Ads",
+            thumbnail: item.thumbnail || "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=700&q=80",
+            youtubeId: item.youtubeId || "dQw4w9WgXcQ",
+            stats: item.stats || "",
+            highlightMetric: item.highlightMetric || "",
+            metricLabel: item.metricLabel || "",
+            strategyPoints: pillars.length > 0 ? pillars : ["Gancho visual disruptivo", "Demonstração sensorial", "Chamada clara"],
+            quote: item.quote || "",
+            author: item.author || "",
+          };
+        });
+        if (loadedCards.length > 0) {
+          data.featuredCase.cards = loadedCards;
+          data.featuredCase.brand = loadedCards[0].brand;
+          data.featuredCase.badge = loadedCards[0].badge;
+          data.featuredCase.highlightMetric = loadedCards[0].highlightMetric;
+          data.featuredCase.metricLabel = loadedCards[0].metricLabel;
+          data.featuredCase.strategyPoints = loadedCards[0].strategyPoints;
+        }
+      }
+    }
+
+    // Portfolio videos collection
+    const videosDir = path.join(contentDir, "portfolio-videos");
+    if (fs.existsSync(videosDir)) {
+      const videoFiles = fs.readdirSync(videosDir).filter((f) => f.endsWith(".json"));
+      if (videoFiles.length > 0) {
+        const videosByNiche: Record<string, any[]> = {};
+        videoFiles.forEach((f, idx) => {
+          const v = JSON.parse(fs.readFileSync(path.join(videosDir, f), "utf-8"));
+          const nId = v.niche || "beleza";
+          if (!videosByNiche[nId]) videosByNiche[nId] = [];
+          videosByNiche[nId].push({
+            id: `vid-${idx + 1}`,
+            title: v.title || "Criativo UGC",
+            brand: v.brand || "Marca Parceira",
+            nicheId: nId,
+            format: "9:16",
+            thumbnailUrl: v.thumbnail || "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
+            tag: v.views || "UGC Ad",
+            youtubeId: v.youtubeId || "dQw4w9WgXcQ",
+            metrics: {
+              views: v.views || "100k views",
+            },
+          });
+        });
+
+        data.niches.forEach((n: any) => {
+          if (videosByNiche[n.id] && videosByNiche[n.id].length > 0) {
+            n.videos = videosByNiche[n.id];
+          }
+        });
+      }
+    }
+
+    // Testimonials collection
+    const testDir = path.join(contentDir, "testimonials");
+    if (fs.existsSync(testDir)) {
+      const testFiles = fs.readdirSync(testDir).filter((f) => f.endsWith(".json"));
+      if (testFiles.length > 0) {
+        data.testimonials = testFiles.map((f, i) => {
+          const t = JSON.parse(fs.readFileSync(path.join(testDir, f), "utf-8"));
+          return {
+            id: `t-${i + 1}`,
+            clientName: t.clientName || "",
+            role: t.role || "",
+            brand: t.brand || "",
+            avatarUrl: t.avatarUrl || "",
+            quote: t.quote || "",
+          };
+        });
+      }
+    }
+
+    return data;
+  } catch (err) {
+    console.warn("Could not load Keystatic content overrides:", err);
+    return base;
+  }
+}
+
+// Validate data with Zod at build time, integrating Keystatic content overrides
+const resolvedData = loadKeystaticOverrides(rawPortfolioData);
+export const portfolioData: PortfolioConfig = PortfolioConfigSchema.parse(resolvedData);
+
