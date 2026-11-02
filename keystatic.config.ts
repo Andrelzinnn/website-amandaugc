@@ -15,6 +15,25 @@ export default config({
     },
   },
   singletons: {
+    topbar: singleton({
+      label: 'Barra de Aviso do Topo (Urgência & Datas Comemorativas)',
+      path: 'src/content/topbar',
+      format: 'json',
+      schema: {
+        badge: fields.text({
+          label: 'Selo / Destaque (ex: Vagas Abertas, Black Friday 🔥, Dia das Mães 🌸)',
+          defaultValue: 'Vagas Abertas',
+        }),
+        text: fields.text({
+          label: 'Texto do Aviso (ex: Faltam 25 dias para a Black Friday · Reserve sua data)',
+          defaultValue: 'Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis',
+        }),
+        ctaText: fields.text({
+          label: 'Texto do Link de Ação (ex: Garantir data →)',
+          defaultValue: 'Garantir data →',
+        }),
+      },
+    }),
     general: singleton({
       label: 'Informações Gerais & Contato',
       path: 'src/content/general',
@@ -25,6 +44,14 @@ export default config({
         whatsappNumber: fields.text({ label: 'Número WhatsApp (apenas números com DDD)', defaultValue: '5511999998888' }),
         instagram: fields.text({ label: 'Instagram', defaultValue: '@amandasilveira.ugc' }),
         tiktok: fields.text({ label: 'TikTok', defaultValue: '@amandasilveiraugc' }),
+        contactBadge: fields.text({ label: 'Selo do Contato (ex: Vamos Criar Juntos 💌)', defaultValue: 'Vamos Criar Juntos' }),
+        contactTitle: fields.text({ label: 'Título do Formulário', defaultValue: 'Solicite uma Proposta' }),
+        contactSubtitle: fields.text({ label: 'Subtítulo Cursivo (ex: resposta rápida em até 24 horas ⚡)', defaultValue: 'resposta rápida em até 24 horas' }),
+        contactDesc: fields.text({
+          label: 'Texto Descritivo de Orçamento',
+          multiline: true,
+          defaultValue: 'Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.',
+        }),
       },
     }),
     hero: singleton({
@@ -47,6 +74,28 @@ export default config({
     }),
   },
   collections: {
+    services: collection({
+      label: 'Formatos de Trabalho (Serviços)',
+      slugField: 'title',
+      path: 'src/content/services/*',
+      format: 'json',
+      schema: {
+        title: fields.slug({ name: { label: 'Nome do Formato (ex: Vídeos de Alta Conversão, Unboxing, Provador Fashion, Cobertura de Evento)' } }),
+        step: fields.text({ label: 'Número de Ordem (ex: 01, 02, 03...)', defaultValue: '01' }),
+        shortDesc: fields.text({ label: 'Breve Descrição do Formato', multiline: true }),
+        deliverables: fields.text({ label: 'O que inclui (separe por vírgula)', multiline: true }),
+        idealFor: fields.text({ label: 'Ideal para (ex: Marcas de vestuário, e-commerces que precisam diminuir CPA)' }),
+      },
+    }),
+    partnerBrands: collection({
+      label: 'Marcas Parceiras (Carrossel)',
+      slugField: 'name',
+      path: 'src/content/brands/*',
+      format: 'json',
+      schema: {
+        name: fields.slug({ name: { label: 'Nome da Marca' } }),
+      },
+    }),
     cases: collection({
       label: 'Cases em Destaque (Deck 3D)',
       slugField: 'brand',

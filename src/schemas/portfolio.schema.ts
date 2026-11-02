@@ -132,6 +132,17 @@ export const PortfolioConfigSchema = z.object({
   services: z.array(ServiceItemSchema),
   testimonials: z.array(TestimonialSchema),
   faq: z.array(FaqItemSchema),
+  topbar: z.object({
+    badge: z.string().default("Vagas Abertas"),
+    text: z.string().default("Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis"),
+    ctaText: z.string().default("Garantir data →"),
+  }).optional(),
+  contactSection: z.object({
+    badge: z.string().default("Vamos Criar Juntos"),
+    title: z.string().default("Solicite uma Proposta"),
+    subtitle: z.string().default("resposta rápida em até 24 horas"),
+    desc: z.string().default("Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos."),
+  }).optional(),
 });
 
 // Infer Typescript types directly from Zod schemas

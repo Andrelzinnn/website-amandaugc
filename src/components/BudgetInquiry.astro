@@ -1,7 +1,15 @@
 ---
 import { portfolioData } from "../data/portfolioData";
 
-const { creator } = portfolioData;
+const {
+  creator,
+  contactSection = {
+    badge: "Vamos Criar Juntos",
+    title: "Solicite uma Proposta",
+    subtitle: "resposta rápida em até 24 horas",
+    desc: "Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.",
+  },
+} = portfolioData;
 ---
 
 <section id="contato" class="py-16 sm:py-24 bg-white border-t border-[#1B1815]/10">
@@ -12,17 +20,17 @@ const { creator } = portfolioData;
       <div class="lg:col-span-5">
         <div class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#A8382B] mb-2">
           <span class="w-6 h-px bg-[#A8382B]"></span>
-          <span data-i18n="contact.badge">Vamos Criar Juntos</span>
+          <span data-i18n="contact.badge">{contactSection.badge}</span>
         </div>
         <h2 data-i18n="contact.title" class="text-3xl sm:text-4xl md:text-5xl font-impact tracking-tight text-[#1B1815] uppercase leading-[1.05]">
-          Solicite uma Proposta
+          {contactSection.title}
         </h2>
         <p data-i18n="contact.subtitle" class="font-cursive text-3xl sm:text-4xl text-[#57524C] mt-1 mb-6">
-          resposta rápida em até 24 horas
+          {contactSection.subtitle}
         </p>
 
         <p data-i18n="contact.desc" class="text-sm sm:text-base text-[#57524C] leading-relaxed mb-8">
-          Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.
+          {contactSection.desc}
         </p>
 
         <!-- Direct Channels -->

@@ -1,7 +1,7 @@
 ---
 import { portfolioData } from "../data/portfolioData";
 
-const { creator } = portfolioData;
+const { creator, topbar = { badge: "Vagas Abertas", text: "Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis", ctaText: "Garantir data →" } } = portfolioData;
 const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponent(portfolioData.hero.ctaWhatsapp)}`;
 ---
 
@@ -9,10 +9,10 @@ const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponen
   <!-- Top Notice Bar -->
   <div class="bg-[#1B1815] text-[#FAF8F5] py-2 px-4 text-xs font-medium text-center flex items-center justify-center gap-3">
     <span data-i18n="topbar.badge" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#A8382B] text-white text-[10px] font-bold tracking-wider uppercase">
-      Vagas Abertas
+      {topbar.badge}
     </span>
     <span data-i18n="topbar.text">
-      Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis
+      {topbar.text}
     </span>
     <a
       href={whatsappLink}
@@ -21,7 +21,7 @@ const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponen
       data-i18n="topbar.cta"
       class="hidden sm:inline-flex items-center underline hover:text-[#C28D3F] transition ml-1 font-semibold"
     >
-      Garantir data →
+      {topbar.ctaText}
     </a>
   </div>
 

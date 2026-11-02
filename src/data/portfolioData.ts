@@ -430,6 +430,17 @@ function loadKeystaticOverrides(base: any) {
 
     const data = JSON.parse(JSON.stringify(base));
 
+    // Topbar singleton
+    const topbarFile = path.join(contentDir, "topbar.json");
+    if (fs.existsSync(topbarFile)) {
+      const tb = JSON.parse(fs.readFileSync(topbarFile, "utf-8"));
+      data.topbar = {
+        badge: tb.badge || "Vagas Abertas",
+        text: tb.text || "Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis",
+        ctaText: tb.ctaText || "Garantir data →",
+      };
+    }
+
     // General singleton
     const generalFile = path.join(contentDir, "general.json");
     if (fs.existsSync(generalFile)) {
@@ -442,6 +453,46 @@ function loadKeystaticOverrides(base: any) {
       }
       if (general.instagram) data.creator.instagram = general.instagram;
       if (general.tiktok) data.creator.tiktok = general.tiktok;
+      data.contactSection = {
+        badge: general.contactBadge || "Vamos Criar Juntos",
+        title: general.contactTitle || "Solicite uma Proposta",
+        subtitle: general.contactSubtitle || "resposta rápida em até 24 horas",
+        desc: general.contactDesc || "Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.",
+      };
+    }
+
+    // Services collection (Formatos de Trabalho)
+    const servicesDir = path.join(contentDir, "services");
+    if (fs.existsSync(servicesDir)) {
+      const serviceFiles = fs.readdirSync(servicesDir).filter((f) => f.endsWith(".json"));
+      if (serviceFiles.length > 0) {
+        data.services = serviceFiles.map((f, i) => {
+          const s = JSON.parse(fs.readFileSync(path.join(servicesDir, f), "utf-8"));
+          const rawDeliverables = s.deliverables ? s.deliverables.split(",").map((d: string) => d.trim()).filter(Boolean) : ["Formato nativo 9:16", "Legendas dinâmicas"];
+          return {
+            step: s.step || String(i + 1).padStart(2, "0"),
+            title: s.title || "Formato UGC",
+            shortDesc: s.shortDesc || "Produção autêntica focada em alta retenção e conversão.",
+            deliverables: rawDeliverables,
+            idealFor: s.idealFor || "Marcas e e-commerces.",
+          };
+        });
+      }
+    }
+
+    // Partner brands collection (Carrossel de marcas)
+    const brandsDir = path.join(contentDir, "brands");
+    if (fs.existsSync(brandsDir)) {
+      const brandFiles = fs.readdirSync(brandsDir).filter((f) => f.endsWith(".json"));
+      if (brandFiles.length > 0) {
+        data.partnerBrands = brandFiles.map((f, i) => {
+          const b = JSON.parse(fs.readFileSync(path.join(brandsDir, f), "utf-8"));
+          return {
+            id: `brand-${i + 1}`,
+            name: b.name || "Marca Parceira",
+          };
+        });
+      }
     }
 
     // Hero singleton
