@@ -44,7 +44,7 @@ export default config({
       label: 'Informações Gerais, Tema & Contato',
       path: 'src/content/general',
       format: 'json',
-      previewUrl: '/#contato',
+      previewUrl: '/',
       schema: {
         fullName: fields.text({ label: 'Nome Completo', defaultValue: 'Amanda Silveira' }),
         role: fields.text({ label: 'Cargo / Especialidade', defaultValue: 'Criadora de Conteúdo UGC & Estrategista de Criativos' }),
