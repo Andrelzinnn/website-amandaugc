@@ -160,10 +160,9 @@ const palettes = [
   pillBtn?.addEventListener("click", () => toggleDrawer());
   closeBtn?.addEventListener("click", () => toggleDrawer(false));
 
-  // Apply theme to document with solid colors
+  // Apply theme to document with solid colors (apenas na sessão/memória visual)
   const applyTheme = (themeId: string, color?: string) => {
     document.documentElement.setAttribute("data-theme", themeId);
-    localStorage.setItem("user_preview_theme", themeId);
 
     // Update active UI state
     options.forEach((opt) => {
@@ -191,13 +190,15 @@ const palettes = [
     });
   });
 
-  // Prioritize URL parameter (e.g. from admin iframe preview) then localStorage
+  // Limpa resíduos antigos de localStorage para não sequestrar o tema oficial
+  try {
+    localStorage.removeItem("user_preview_theme");
+  } catch {}
+
+  // Aplica query parameter apenas quando passado explicitamente (ex: iframe do admin)
   const urlTheme = new URLSearchParams(window.location.search).get("theme");
-  const saved = localStorage.getItem("user_preview_theme");
   if (urlTheme && ["terracotta", "rose", "monochrome", "olive", "mocha"].includes(urlTheme)) {
     applyTheme(urlTheme);
-  } else if (saved && ["terracotta", "rose", "monochrome", "olive", "mocha"].includes(saved)) {
-    applyTheme(saved);
   }
 
   // Hide preview pill when embedded inside admin studio iframe
