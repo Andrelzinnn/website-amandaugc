@@ -104,11 +104,26 @@ const palettes = [
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+      /* Custom modern scrollbars */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #171412;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #3D3630;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #C28D3F;
+      }
     </style>
   </head>
-  <body class="bg-[#12100E] text-[#FAF8F5] min-h-screen flex flex-col antialiased selection:bg-[#A8382B] selection:text-white">
+  <body class="bg-[#12100E] text-[#FAF8F5] min-h-screen flex flex-col antialiased selection:bg-[#A8382B] selection:text-white overflow-hidden">
     <!-- Top Studio Header -->
-    <header class="h-14 border-b border-[#2D2824] bg-[#1B1815] px-4 sm:px-6 flex items-center justify-between z-20 flex-shrink-0">
+    <header class="h-14 border-b border-[#2D2824] bg-[#1B1815] px-4 sm:px-6 flex items-center justify-between z-30 flex-shrink-0">
       <div class="flex items-center gap-3">
         <a href="/" class="flex items-center gap-2 group">
           <span class="w-8 h-8 rounded-lg bg-[#A8382B] text-white flex items-center justify-center font-bold text-sm shadow-md">
@@ -123,25 +138,43 @@ const palettes = [
         </span>
       </div>
 
-      <!-- Device View Controls -->
+      <!-- Device View Controls (Desktop, Laptop 1024, Tablet 768, Mobile 390) -->
       <div class="flex items-center gap-1 bg-[#12100E] p-1 rounded-xl border border-[#2D2824]">
         <button
           type="button"
-          id="btn-desktop"
-          class="device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]"
-          title="Visualizar em Desktop"
+          class="device-btn active px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]"
+          data-width="100%"
+          title="Desktop Fluido (100%)"
         >
           <EditorIcon name="desktop" class="w-3.5 h-3.5" />
           <span class="hidden md:inline">Desktop</span>
         </button>
         <button
           type="button"
-          id="btn-mobile"
-          class="device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent"
-          title="Visualizar em Celular (iPhone)"
+          class="device-btn px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent"
+          data-width="1024px"
+          title="Laptop / Notebook (1024px)"
+        >
+          <EditorIcon name="desktop" class="w-3.5 h-3.5" />
+          <span class="hidden md:inline">1024px</span>
+        </button>
+        <button
+          type="button"
+          class="device-btn px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent"
+          data-width="768px"
+          title="Tablet / iPad (768px)"
         >
           <EditorIcon name="phone" class="w-3.5 h-3.5" />
-          <span class="hidden md:inline">Celular (Mobile)</span>
+          <span class="hidden md:inline">Tablet</span>
+        </button>
+        <button
+          type="button"
+          class="device-btn px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent"
+          data-width="390px"
+          title="Celular (iPhone 390px)"
+        >
+          <EditorIcon name="phone" class="w-3.5 h-3.5" />
+          <span class="hidden md:inline">Celular</span>
         </button>
       </div>
 
@@ -165,607 +198,683 @@ const palettes = [
       </div>
     </header>
 
-    <!-- Main Workspace: Split View -->
-    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    <!-- Main Workspace: Split View with Resizable Splitter -->
+    <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative" id="workspace-container">
+      
       <!-- Left Sidebar: Visual Theme & Quick Settings -->
-      <aside class="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-[#2D2824] bg-[#1B1815] flex flex-col flex-shrink-0 overflow-y-auto max-h-80 lg:max-h-full">
-        <!-- Modular Studio Navigation Tabs -->
-        <div class="border-b border-[#2D2824] bg-[#171412] p-2 flex items-center gap-1 overflow-x-auto select-none flex-shrink-0 no-scrollbar">
+      <aside id="admin-sidebar" class="w-full lg:w-[410px] border-b lg:border-b-0 border-[#2D2824] bg-[#1B1815] flex flex-col flex-shrink-0 h-[45vh] lg:h-full relative overflow-hidden select-none">
+        
+        <!-- Modular Studio Navigation Tabs with Scroll Buttons -->
+        <div class="border-b border-[#2D2824] bg-[#171412] px-2 py-1.5 flex items-center gap-1 select-none flex-shrink-0 relative">
+          <!-- Left scroll arrow -->
           <button
             type="button"
-            class="module-tab active px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer bg-[#24201C] text-white border border-[#3D3630] whitespace-nowrap"
-            data-tab="theme"
+            id="tabs-scroll-left"
+            class="w-6 h-7 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[#9E968E] hover:text-white border border-[#2D2824] flex items-center justify-center flex-shrink-0 cursor-pointer text-xs transition"
+            title="Rolar abas para esquerda"
           >
-            <EditorIcon name="palette" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Cores</span>
+            ‹
           </button>
+
+          <!-- Tabs scroll area -->
+          <div id="tabs-scroll-container" class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar scroll-smooth py-0.5">
+            <button
+              type="button"
+              class="module-tab active px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer bg-[#24201C] text-white border border-[#3D3630] whitespace-nowrap flex-shrink-0"
+              data-tab="theme"
+            >
+              <EditorIcon name="palette" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Cores</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="topbar"
+              data-target-anchor=""
+            >
+              <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Aviso Topo</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="hero"
+              data-target-anchor="conteudo-principal"
+            >
+              <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Hero & Métricas</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="services"
+              data-target-anchor="servicos"
+            >
+              <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Serviços</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="brands"
+              data-target-anchor="marcas"
+            >
+              <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Marcas</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="cases"
+              data-target-anchor="cases"
+            >
+              <EditorIcon name="video" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Cases 3D</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="testimonials"
+              data-target-anchor="depoimentos"
+            >
+              <EditorIcon name="gift" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Depoimentos</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="contact"
+              data-target-anchor="contato"
+            >
+              <EditorIcon name="phone" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Contato</span>
+            </button>
+          </div>
+
+          <!-- Right scroll arrow -->
           <button
             type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
-            data-tab="topbar"
-            data-target-anchor=""
+            id="tabs-scroll-right"
+            class="w-6 h-7 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[#9E968E] hover:text-white border border-[#2D2824] flex items-center justify-center flex-shrink-0 cursor-pointer text-xs transition"
+            title="Rolar abas para direita"
           >
-            <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Aviso Topo</span>
-          </button>
-          <button
-            type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
-            data-tab="hero"
-            data-target-anchor="conteudo-principal"
-          >
-            <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Hero & Métricas</span>
-          </button>
-          <button
-            type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
-            data-tab="services"
-            data-target-anchor="servicos"
-          >
-            <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Serviços</span>
-          </button>
-          <button
-            type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
-            data-tab="brands"
-            data-target-anchor="marcas"
-          >
-            <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Marcas</span>
-          </button>
-          <button
-            type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
-            data-tab="cases"
-            data-target-anchor="cases"
-          >
-            <EditorIcon name="video" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Cases 3D</span>
-          </button>
-          <button
-            type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
-            data-tab="testimonials"
-            data-target-anchor="depoimentos"
-          >
-            <EditorIcon name="gift" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Depoimentos</span>
-          </button>
-          <button
-            type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
-            data-tab="contact"
-            data-target-anchor="contato"
-          >
-            <EditorIcon name="phone" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Contato</span>
+            ›
           </button>
         </div>
 
-        <!-- TAB PANEL 1: Paleta de Cores -->
-        <div id="panel-theme" class="tab-panel p-4 space-y-3">
-          <div class="pb-2 border-b border-[#2D2824]">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Paleta de Cores do Portfólio</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">Selecione para ver a mudança imediata no site.</p>
+        <!-- Scrollable Panels Container (Cards scroll smoothly here) -->
+        <div id="panels-container" class="flex-1 overflow-y-auto">
+
+          <!-- TAB PANEL 1: Paleta de Cores -->
+          <div id="panel-theme" class="tab-panel p-4 space-y-3">
+            <div class="pb-2 border-b border-[#2D2824]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Paleta de Cores do Portfólio</h3>
+              <p class="text-[11px] text-[#9E968E] mt-0.5">Selecione para ver a mudança imediata no site.</p>
+            </div>
+            <div class="space-y-2">
+              {palettes.map((p) => {
+                const isActive = p.id === currentTheme;
+                return (
+                  <button
+                    type="button"
+                    class={`palette-card w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                      isActive
+                        ? "border-[#A8382B] bg-[#361A16] active-card"
+                        : "border-[#2D2824] hover:border-[#3D3630] bg-[#24201C] hover:bg-[#2D2824]"
+                    }`}
+                    data-theme={p.id}
+                  >
+                    <div class="flex items-center gap-3">
+                      <div class="flex items-center -space-x-1.5 flex-shrink-0">
+                        <span
+                          class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
+                          style={`background-color: ${p.color1};`}
+                        ></span>
+                        <span
+                          class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
+                          style={`background-color: ${p.color2};`}
+                        ></span>
+                      </div>
+                      <div>
+                        <span class="block text-xs font-bold text-white">{p.name}</span>
+                        <span class="block text-[10px] text-[#9E968E]">{p.subtitle}</span>
+                      </div>
+                    </div>
+                    <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
+                      <EditorIcon name="check" class="w-3.5 h-3.5" />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-          <div class="space-y-2">
-            {palettes.map((p) => {
-              const isActive = p.id === currentTheme;
-              return (
+
+          <!-- TAB PANEL 2: Aviso Topo (Topbar) -->
+          <div id="panel-topbar" class="tab-panel hidden p-4 space-y-4">
+            <div class="pb-2 border-b border-[#2D2824]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Barra de Aviso Superior</h3>
+              <p class="text-[11px] text-[#9E968E] mt-0.5">Urgência, datas comemorativas e status de vagas.</p>
+            </div>
+
+            <!-- Presets Rápidos -->
+            <div>
+              <label class="block text-[10px] font-bold uppercase tracking-wider text-[#8A827B] mb-1.5">
+                Sugestões Rápidas (1-Clique)
+              </label>
+              <div class="grid grid-cols-2 gap-1.5">
                 <button
                   type="button"
-                  class={`palette-card w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                    isActive
-                      ? "border-[#A8382B] bg-[#361A16] active-card"
-                      : "border-[#2D2824] hover:border-[#3D3630] bg-[#24201C] hover:bg-[#2D2824]"
-                  }`}
-                  data-theme={p.id}
+                  class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
+                  data-badge="Vagas Abertas"
+                  data-text="Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis"
+                  data-cta="Garantir data →"
                 >
-                  <div class="flex items-center gap-3">
-                    <div class="flex items-center -space-x-1.5 flex-shrink-0">
-                      <span
-                        class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
-                        style={`background-color: ${p.color1};`}
-                      ></span>
-                      <span
-                        class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
-                        style={`background-color: ${p.color2};`}
-                      ></span>
-                    </div>
-                    <div>
-                      <span class="block text-xs font-bold text-white">{p.name}</span>
-                      <span class="block text-[10px] text-[#9E968E]">{p.subtitle}</span>
-                    </div>
-                  </div>
-                  <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
-                    <EditorIcon name="check" class="w-3.5 h-3.5" />
-                  </span>
+                  ✨ Vagas Abertas
                 </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <!-- TAB PANEL 2: Aviso Topo (Topbar) -->
-        <div id="panel-topbar" class="tab-panel hidden p-4 space-y-4">
-          <div class="pb-2 border-b border-[#2D2824]">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Barra de Aviso Superior</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">Urgência, datas comemorativas e status de vagas.</p>
-          </div>
-
-          <!-- Presets Rápidos -->
-          <div>
-            <label class="block text-[10px] font-bold uppercase tracking-wider text-[#8A827B] mb-1.5">
-              Sugestões Rápidas (1-Clique)
-            </label>
-            <div class="grid grid-cols-2 gap-1.5">
-              <button
-                type="button"
-                class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
-                data-badge="Vagas Abertas"
-                data-text="Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis"
-                data-cta="Garantir data →"
-              >
-                ✨ Vagas Abertas
-              </button>
-              <button
-                type="button"
-                class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
-                data-badge="Black Friday 🔥"
-                data-text="Campanhas de Black Friday abertas · Vagas limitadas para criativos de alta conversão"
-                data-cta="Reservar Campanha →"
-              >
-                🔥 Black Friday
-              </button>
-              <button
-                type="button"
-                class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
-                data-badge="Dia das Mães 🌸"
-                data-text="Criativos para a campanha do Dia das Mães · Produção acelerada para Meta Ads"
-                data-cta="Solicitar Roteiros →"
-              >
-                🌸 Dia das Mães
-              </button>
-              <button
-                type="button"
-                class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
-                data-badge="Últimas Vagas ⚡"
-                data-text="Agenda do mês quase encerrada · Apenas 2 vagas para novos contratos"
-                data-cta="Garantir agora →"
-              >
-                ⚡ Agenda Quase Cheia
-              </button>
-            </div>
-          </div>
-
-          <!-- Campos Form Topbar -->
-          <div class="space-y-3">
-            <div>
-              <label for="input-topbar-badge" class="block text-[11px] font-bold text-white mb-1">
-                Selo / Destaque
-              </label>
-              <input
-                type="text"
-                id="input-topbar-badge"
-                value={topbarData.badge}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
-                placeholder="Ex: Vagas Abertas"
-              />
-            </div>
-            <div>
-              <label for="input-topbar-text" class="block text-[11px] font-bold text-white mb-1">
-                Texto do Aviso
-              </label>
-              <textarea
-                id="input-topbar-text"
-                rows="2"
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition resize-none"
-                placeholder="Texto explicativo do banner..."
-              >{topbarData.text}</textarea>
-            </div>
-            <div>
-              <label for="input-topbar-cta" class="block text-[11px] font-bold text-white mb-1">
-                Texto do Link / Botão
-              </label>
-              <input
-                type="text"
-                id="input-topbar-cta"
-                value={topbarData.ctaText}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
-                placeholder="Ex: Garantir data →"
-              />
-            </div>
-          </div>
-        </div>
-
-        <!-- TAB PANEL 3: Hero & Métricas -->
-        <div id="panel-hero" class="tab-panel hidden p-4 space-y-4">
-          <div class="pb-2 border-b border-[#2D2824]">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Início / Proposta de Valor</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">Headline, subtítulo e números expressivos do Hero.</p>
-          </div>
-          <div class="space-y-3">
-            <div>
-              <label for="input-hero-headline" class="block text-[11px] font-bold text-white mb-1">
-                Título Principal (Caixa Alta)
-              </label>
-              <input
-                type="text"
-                id="input-hero-headline"
-                value={heroData.headline}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
-              />
-            </div>
-            <div>
-              <label for="input-hero-cursive" class="block text-[11px] font-bold text-white mb-1">
-                Destaque Cursivo
-              </label>
-              <input
-                type="text"
-                id="input-hero-cursive"
-                value={heroData.headlineCursive}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
-              />
-            </div>
-            <div>
-              <label for="input-hero-subheadline" class="block text-[11px] font-bold text-white mb-1">
-                Subtítulo Explicativo
-              </label>
-              <textarea
-                id="input-hero-subheadline"
-                rows="3"
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition resize-none"
-              >{heroData.subheadline}</textarea>
-            </div>
-
-            <!-- Números Expressivos (Hero) -->
-            <div class="pt-3 border-t border-[#2D2824] space-y-3">
-              <h4 class="text-[11px] font-bold uppercase tracking-wider text-[#C28D3F]">Números Expressivos (Hero)</h4>
-              
-              <!-- Métrica 1 -->
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label for="input-hero-m1-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 1 - Valor</label>
-                  <input
-                    type="text"
-                    id="input-hero-m1-val"
-                    value={heroData.metric1Value || "+350"}
-                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                  />
-                </div>
-                <div>
-                  <label for="input-hero-m1-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 1 - Texto</label>
-                  <input
-                    type="text"
-                    id="input-hero-m1-lbl"
-                    value={heroData.metric1Label || "Vídeos Entregues"}
-                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              <!-- Métrica 2 -->
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label for="input-hero-m2-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 2 - Valor</label>
-                  <input
-                    type="text"
-                    id="input-hero-m2-val"
-                    value={heroData.metric2Value || "+90"}
-                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                  />
-                </div>
-                <div>
-                  <label for="input-hero-m2-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 2 - Texto</label>
-                  <input
-                    type="text"
-                    id="input-hero-m2-lbl"
-                    value={heroData.metric2Label || "Marcas Atendidas"}
-                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                  />
-                </div>
-              </div>
-
-              <!-- Métrica 3 -->
-              <div class="grid grid-cols-2 gap-2">
-                <div>
-                  <label for="input-hero-m3-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 3 - Valor</label>
-                  <input
-                    type="text"
-                    id="input-hero-m3-val"
-                    value={heroData.metric3Value || "4.6x"}
-                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                  />
-                </div>
-                <div>
-                  <label for="input-hero-m3-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 3 - Texto</label>
-                  <input
-                    type="text"
-                    id="input-hero-m3-lbl"
-                    value={heroData.metric3Label || "ROAS Médio em Campanhas"}
-                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                  />
-                </div>
+                <button
+                  type="button"
+                  class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
+                  data-badge="Black Friday 🔥"
+                  data-text="Campanhas de Black Friday abertas · Vagas limitadas para criativos de alta conversão"
+                  data-cta="Reservar Campanha →"
+                >
+                  🔥 Black Friday
+                </button>
+                <button
+                  type="button"
+                  class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
+                  data-badge="Dia das Mães 🌸"
+                  data-text="Criativos para a campanha do Dia das Mães · Produção acelerada para Meta Ads"
+                  data-cta="Solicitar Roteiros →"
+                >
+                  🌸 Dia das Mães
+                </button>
+                <button
+                  type="button"
+                  class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
+                  data-badge="Últimas Vagas ⚡"
+                  data-text="Agenda do mês quase encerrada · Apenas 2 vagas para novos contratos"
+                  data-cta="Garantir agora →"
+                >
+                  ⚡ Agenda Quase Cheia
+                </button>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- TAB PANEL 4: Serviços / Formatos de Trabalho -->
-        <div id="panel-services" class="tab-panel hidden p-4 space-y-4">
-          <div class="pb-2 border-b border-[#2D2824]">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Formatos de Trabalho</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">Edite os serviços, entregáveis e diferenciais.</p>
-          </div>
-          <div class="space-y-4">
-            {servicesList.map((item, idx) => (
-              <div class="p-3 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-white flex items-center gap-2">
-                    <span class="px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">{item.data.step || `0${idx + 1}`}</span>
-                    <span class="truncate max-w-[200px]">{item.data.title}</span>
-                  </span>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Formato</label>
-                  <input
-                    type="text"
-                    class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                    data-path={item.path}
-                    data-field="title"
-                    value={item.data.title}
-                  />
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Breve Descrição</label>
-                  <textarea
-                    rows="2"
-                    class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
-                    data-path={item.path}
-                    data-field="shortDesc"
-                  >{item.data.shortDesc}</textarea>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">O que inclui (separe por vírgula)</label>
-                  <input
-                    type="text"
-                    class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                    data-path={item.path}
-                    data-field="deliverables"
-                    value={item.data.deliverables}
-                  />
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Ideal para</label>
-                  <input
-                    type="text"
-                    class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                    data-path={item.path}
-                    data-field="idealFor"
-                    value={item.data.idealFor}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <!-- TAB PANEL 5: Marcas Parceiras -->
-        <div id="panel-brands" class="tab-panel hidden p-4 space-y-4">
-          <div class="pb-2 border-b border-[#2D2824]">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Marcas Parceiras</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">Marcas exibidas no carrossel infinito do portfólio.</p>
-          </div>
-          <div class="space-y-2">
-            {brandsList.map((item) => (
-              <div class="p-2.5 rounded-xl bg-[#24201C] border border-[#2D2824] flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-[#C28D3F]"></span>
+            <!-- Campos Form Topbar -->
+            <div class="space-y-3">
+              <div>
+                <label for="input-topbar-badge" class="block text-[11px] font-bold text-white mb-1">
+                  Selo / Destaque
+                </label>
                 <input
                   type="text"
-                  class="brand-input flex-1 px-2.5 py-1 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                  data-path={item.path}
-                  data-field="name"
-                  value={item.data.name}
-                  placeholder="Nome da Marca"
+                  id="input-topbar-badge"
+                  value={topbarData.badge}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+                  placeholder="Ex: Vagas Abertas"
                 />
               </div>
-            ))}
+              <div>
+                <label for="input-topbar-text" class="block text-[11px] font-bold text-white mb-1">
+                  Texto do Aviso
+                </label>
+                <textarea
+                  id="input-topbar-text"
+                  rows="2"
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition resize-none"
+                  placeholder="Texto explicativo do banner..."
+                >{topbarData.text}</textarea>
+              </div>
+              <div>
+                <label for="input-topbar-cta" class="block text-[11px] font-bold text-white mb-1">
+                  Texto do Link / Botão
+                </label>
+                <input
+                  type="text"
+                  id="input-topbar-cta"
+                  value={topbarData.ctaText}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+                  placeholder="Ex: Garantir data →"
+                />
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- TAB PANEL 6: Cases 3D -->
-        <div id="panel-cases" class="tab-panel hidden p-4 space-y-4">
-          <div class="pb-2 border-b border-[#2D2824]">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Cases em Destaque (Deck 3D)</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">Campanhas e resultados de alto impacto.</p>
-          </div>
-          <div class="space-y-4">
-            {casesList.map((item) => (
-              <div class="p-3 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5">
-                <div class="flex items-center justify-between">
-                  <span class="text-xs font-bold text-white truncate">{item.data.brand}</span>
-                  <span class="text-[10px] px-2 py-0.5 rounded bg-[#1B1815] text-[#C28D3F] border border-[#2D2824] font-semibold">{item.data.stats}</span>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Título do Criativo / Case</label>
-                  <input
-                    type="text"
-                    class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                    data-path={item.path}
-                    data-field="title"
-                    value={item.data.title}
-                  />
-                </div>
+          <!-- TAB PANEL 3: Hero & Métricas -->
+          <div id="panel-hero" class="tab-panel hidden p-4 space-y-4">
+            <div class="pb-2 border-b border-[#2D2824]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Início / Proposta de Valor</h3>
+              <p class="text-[11px] text-[#9E968E] mt-0.5">Headline, subtítulo e números expressivos do Hero.</p>
+            </div>
+            <div class="space-y-3">
+              <div>
+                <label for="input-hero-headline" class="block text-[11px] font-bold text-white mb-1">
+                  Título Principal (Caixa Alta)
+                </label>
+                <input
+                  type="text"
+                  id="input-hero-headline"
+                  value={heroData.headline}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+                />
+              </div>
+              <div>
+                <label for="input-hero-cursive" class="block text-[11px] font-bold text-white mb-1">
+                  Destaque Cursivo
+                </label>
+                <input
+                  type="text"
+                  id="input-hero-cursive"
+                  value={heroData.headlineCursive}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+                />
+              </div>
+              <div>
+                <label for="input-hero-subheadline" class="block text-[11px] font-bold text-white mb-1">
+                  Subtítulo Explicativo
+                </label>
+                <textarea
+                  id="input-hero-subheadline"
+                  rows="3"
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition resize-none"
+                >{heroData.subheadline}</textarea>
+              </div>
+
+              <!-- Números Expressivos (Hero) -->
+              <div class="pt-3 border-t border-[#2D2824] space-y-3">
+                <h4 class="text-[11px] font-bold uppercase tracking-wider text-[#C28D3F]">Números Expressivos (Hero)</h4>
+                
+                <!-- Métrica 1 -->
                 <div class="grid grid-cols-2 gap-2">
                   <div>
-                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Número Destaque</label>
+                    <label for="input-hero-m1-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 1 - Valor</label>
+                    <input
+                      type="text"
+                      id="input-hero-m1-val"
+                      value={heroData.metric1Value || "+350"}
+                      class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label for="input-hero-m1-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 1 - Texto</label>
+                    <input
+                      type="text"
+                      id="input-hero-m1-lbl"
+                      value={heroData.metric1Label || "Vídeos Entregues"}
+                      class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    />
+                  </div>
+                </div>
+
+                <!-- Métrica 2 -->
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label for="input-hero-m2-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 2 - Valor</label>
+                    <input
+                      type="text"
+                      id="input-hero-m2-val"
+                      value={heroData.metric2Value || "+90"}
+                      class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label for="input-hero-m2-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 2 - Texto</label>
+                    <input
+                      type="text"
+                      id="input-hero-m2-lbl"
+                      value={heroData.metric2Label || "Marcas Atendidas"}
+                      class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    />
+                  </div>
+                </div>
+
+                <!-- Métrica 3 -->
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label for="input-hero-m3-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 3 - Valor</label>
+                    <input
+                      type="text"
+                      id="input-hero-m3-val"
+                      value={heroData.metric3Value || "4.6x"}
+                      class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    />
+                  </div>
+                  <div>
+                    <label for="input-hero-m3-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 3 - Texto</label>
+                    <input
+                      type="text"
+                      id="input-hero-m3-lbl"
+                      value={heroData.metric3Label || "ROAS Médio em Campanhas"}
+                      class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB PANEL 4: Serviços / Formatos de Trabalho -->
+          <div id="panel-services" class="tab-panel hidden p-4 space-y-4">
+            <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-white">Formatos de Trabalho</h3>
+                <p class="text-[11px] text-[#9E968E] mt-0.5">Edite os serviços, entregáveis e diferenciais.</p>
+              </div>
+            </div>
+
+            <!-- Quick Navigation Pills to jump to any service card -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
+              {servicesList.map((item, idx) => (
+                <button
+                  type="button"
+                  class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0"
+                  data-target={`card-service-${idx}`}
+                >
+                  {item.data.step || `0${idx + 1}`}
+                </button>
+              ))}
+            </div>
+
+            <div class="space-y-4">
+              {servicesList.map((item, idx) => (
+                <div id={`card-service-${idx}`} class="p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-white flex items-center gap-2">
+                      <span class="px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">{item.data.step || `0${idx + 1}`}</span>
+                      <span class="truncate max-w-[220px]">{item.data.title}</span>
+                    </span>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Formato</label>
+                    <input
+                      type="text"
+                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="title"
+                      value={item.data.title}
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Breve Descrição</label>
+                    <textarea
+                      rows="2"
+                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+                      data-path={item.path}
+                      data-field="shortDesc"
+                    >{item.data.shortDesc}</textarea>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">O que inclui (separe por vírgula)</label>
+                    <input
+                      type="text"
+                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="deliverables"
+                      value={item.data.deliverables}
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Ideal para</label>
+                    <input
+                      type="text"
+                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="idealFor"
+                      value={item.data.idealFor}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- TAB PANEL 5: Marcas Parceiras -->
+          <div id="panel-brands" class="tab-panel hidden p-4 space-y-4">
+            <div class="pb-2 border-b border-[#2D2824]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Marcas Parceiras</h3>
+              <p class="text-[11px] text-[#9E968E] mt-0.5">Marcas exibidas no carrossel infinito do portfólio.</p>
+            </div>
+            <div class="space-y-2">
+              {brandsList.map((item) => (
+                <div class="p-2.5 rounded-xl bg-[#24201C] border border-[#2D2824] flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-[#C28D3F]"></span>
+                  <input
+                    type="text"
+                    class="brand-input flex-1 px-2.5 py-1 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    data-path={item.path}
+                    data-field="name"
+                    value={item.data.name}
+                    placeholder="Nome da Marca"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- TAB PANEL 6: Cases 3D -->
+          <div id="panel-cases" class="tab-panel hidden p-4 space-y-4">
+            <div class="pb-2 border-b border-[#2D2824]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Cases em Destaque (Deck 3D)</h3>
+              <p class="text-[11px] text-[#9E968E] mt-0.5">Campanhas e resultados de alto impacto.</p>
+            </div>
+
+            <!-- Quick Navigation Pills to jump to any case card -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
+              {casesList.map((item, idx) => (
+                <button
+                  type="button"
+                  class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0"
+                  data-target={`card-case-${idx}`}
+                >
+                  Caso {idx + 1}
+                </button>
+              ))}
+            </div>
+
+            <div class="space-y-4">
+              {casesList.map((item, idx) => (
+                <div id={`card-case-${idx}`} class="p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-white truncate max-w-[200px]">{item.data.brand}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded bg-[#1B1815] text-[#C28D3F] border border-[#2D2824] font-semibold">{item.data.stats}</span>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Título do Criativo / Case</label>
                     <input
                       type="text"
                       class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
                       data-path={item.path}
-                      data-field="highlightMetric"
-                      value={item.data.highlightMetric}
+                      data-field="title"
+                      value={item.data.title}
                     />
                   </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Número Destaque</label>
+                      <input
+                        type="text"
+                        class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                        data-path={item.path}
+                        data-field="highlightMetric"
+                        value={item.data.highlightMetric}
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Descrição Métrica</label>
+                      <input
+                        type="text"
+                        class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                        data-path={item.path}
+                        data-field="metricLabel"
+                        value={item.data.metricLabel}
+                      />
+                    </div>
+                  </div>
                   <div>
-                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Descrição Métrica</label>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Depoimento da Marca</label>
+                    <textarea
+                      rows="2"
+                      class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+                      data-path={item.path}
+                      data-field="quote"
+                    >{item.data.quote}</textarea>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Autor do Depoimento</label>
                     <input
                       type="text"
                       class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
                       data-path={item.path}
-                      data-field="metricLabel"
-                      value={item.data.metricLabel}
+                      data-field="author"
+                      value={item.data.author}
                     />
                   </div>
                 </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Depoimento da Marca</label>
-                  <textarea
-                    rows="2"
-                    class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
-                    data-path={item.path}
-                    data-field="quote"
-                  >{item.data.quote}</textarea>
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Autor do Depoimento</label>
-                  <input
-                    type="text"
-                    class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                    data-path={item.path}
-                    data-field="author"
-                    value={item.data.author}
-                  />
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        <!-- TAB PANEL 7: Depoimentos -->
-        <div id="panel-testimonials" class="tab-panel hidden p-4 space-y-4">
-          <div class="pb-2 border-b border-[#2D2824]">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Depoimentos de Clientes</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">Avaliações das marcas parceiras.</p>
-          </div>
-          <div class="space-y-4">
-            {testimonialsList.map((item) => (
-              <div class="p-3 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5">
-                <div class="grid grid-cols-2 gap-2">
+          <!-- TAB PANEL 7: Depoimentos -->
+          <div id="panel-testimonials" class="tab-panel hidden p-4 space-y-4">
+            <div class="pb-2 border-b border-[#2D2824]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Depoimentos de Clientes</h3>
+              <p class="text-[11px] text-[#9E968E] mt-0.5">Avaliações das marcas parceiras.</p>
+            </div>
+
+            <!-- Quick Navigation Pills to jump to any testimonial card -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
+              {testimonialsList.map((item, idx) => (
+                <button
+                  type="button"
+                  class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0"
+                  data-target={`card-test-${idx}`}
+                >
+                  {item.data.clientName?.split(" ")[0] || `Depoimento ${idx + 1}`}
+                </button>
+              ))}
+            </div>
+
+            <div class="space-y-4">
+              {testimonialsList.map((item, idx) => (
+                <div id={`card-test-${idx}`} class="p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2">
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Cliente</label>
+                      <input
+                        type="text"
+                        class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                        data-path={item.path}
+                        data-field="clientName"
+                        value={item.data.clientName}
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Empresa / Marca</label>
+                      <input
+                        type="text"
+                        class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                        data-path={item.path}
+                        data-field="brand"
+                        value={item.data.brand}
+                      />
+                    </div>
+                  </div>
                   <div>
-                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Cliente</label>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Cargo</label>
                     <input
                       type="text"
                       class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
                       data-path={item.path}
-                      data-field="clientName"
-                      value={item.data.clientName}
+                      data-field="role"
+                      value={item.data.role}
                     />
                   </div>
                   <div>
-                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Empresa / Marca</label>
-                    <input
-                      type="text"
-                      class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Texto do Depoimento</label>
+                    <textarea
+                      rows="2"
+                      class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
                       data-path={item.path}
-                      data-field="brand"
-                      value={item.data.brand}
-                    />
+                      data-field="quote"
+                    >{item.data.quote}</textarea>
                   </div>
                 </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Cargo</label>
-                  <input
-                    type="text"
-                    class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                    data-path={item.path}
-                    data-field="role"
-                    value={item.data.role}
-                  />
-                </div>
-                <div>
-                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Texto do Depoimento</label>
-                  <textarea
-                    rows="2"
-                    class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
-                    data-path={item.path}
-                    data-field="quote"
-                  >{item.data.quote}</textarea>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
 
-        <!-- TAB PANEL 8: Contato & Redes -->
-        <div id="panel-contact" class="tab-panel hidden p-4 space-y-4">
-          <div class="pb-2 border-b border-[#2D2824]">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Canais de Contato & Redes</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">WhatsApp de recebimento de leads e perfis sociais.</p>
-          </div>
-          <div class="space-y-3">
-            <div>
-              <label for="input-contact-fullname" class="block text-[11px] font-bold text-white mb-1">
-                Nome da Criadora
-              </label>
-              <input
-                type="text"
-                id="input-contact-fullname"
-                value={generalData.fullName}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
-              />
+          <!-- TAB PANEL 8: Contato & Redes -->
+          <div id="panel-contact" class="tab-panel hidden p-4 space-y-4">
+            <div class="pb-2 border-b border-[#2D2824]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Canais de Contato & Redes</h3>
+              <p class="text-[11px] text-[#9E968E] mt-0.5">WhatsApp de recebimento de leads e perfis sociais.</p>
             </div>
-            <div>
-              <label for="input-contact-role" class="block text-[11px] font-bold text-white mb-1">
-                Especialidade / Cargo
-              </label>
-              <input
-                type="text"
-                id="input-contact-role"
-                value={generalData.role}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
-              />
-            </div>
-            <div>
-              <label for="input-contact-instagram" class="block text-[11px] font-bold text-white mb-1">
-                Instagram (@)
-              </label>
-              <input
-                type="text"
-                id="input-contact-instagram"
-                value={generalData.instagram}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
-              />
-            </div>
-            <div>
-              <label for="input-contact-tiktok" class="block text-[11px] font-bold text-white mb-1">
-                TikTok (@)
-              </label>
-              <input
-                type="text"
-                id="input-contact-tiktok"
-                value={generalData.tiktok}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
-              />
-            </div>
-            <div>
-              <label for="input-contact-whatsapp" class="block text-[11px] font-bold text-white mb-1">
-                WhatsApp (DDD + Número)
-              </label>
-              <input
-                type="text"
-                id="input-contact-whatsapp"
-                value={generalData.whatsappNumber}
-                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
-              />
+            <div class="space-y-3">
+              <div>
+                <label for="input-contact-fullname" class="block text-[11px] font-bold text-white mb-1">
+                  Nome da Criadora
+                </label>
+                <input
+                  type="text"
+                  id="input-contact-fullname"
+                  value={generalData.fullName}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+                />
+              </div>
+              <div>
+                <label for="input-contact-role" class="block text-[11px] font-bold text-white mb-1">
+                  Especialidade / Cargo
+                </label>
+                <input
+                  type="text"
+                  id="input-contact-role"
+                  value={generalData.role}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+                />
+              </div>
+              <div>
+                <label for="input-contact-instagram" class="block text-[11px] font-bold text-white mb-1">
+                  Instagram (@)
+                </label>
+                <input
+                  type="text"
+                  id="input-contact-instagram"
+                  value={generalData.instagram}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+                />
+              </div>
+              <div>
+                <label for="input-contact-tiktok" class="block text-[11px] font-bold text-white mb-1">
+                  TikTok (@)
+                </label>
+                <input
+                  type="text"
+                  id="input-contact-tiktok"
+                  value={generalData.tiktok}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+                />
+              </div>
+              <div>
+                <label for="input-contact-whatsapp" class="block text-[11px] font-bold text-white mb-1">
+                  WhatsApp (DDD + Número)
+                </label>
+                <input
+                  type="text"
+                  id="input-contact-whatsapp"
+                  value={generalData.whatsappNumber}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+                />
+              </div>
             </div>
           </div>
         </div>
 
         <!-- Sticky Bottom Save Area -->
-        <div class="mt-auto p-4 border-t border-[#2D2824] bg-[#171412] space-y-3 sticky bottom-0 z-10">
+        <div class="p-3 border-t border-[#2D2824] bg-[#171412] space-y-2 flex-shrink-0">
           <div id="pending-badge" class="hidden items-center justify-between text-[11px] text-[#C28D3F] bg-[#24201C] px-3 py-1.5 rounded-xl border border-[#C28D3F]/30 font-semibold">
             <span class="flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-[#C28D3F] animate-pulse"></span>
@@ -803,16 +912,44 @@ const palettes = [
         </div>
       </aside>
 
-      <!-- Right Main: Live Preview Frame -->
-      <main class="flex-1 bg-[#0D0B0A] relative flex flex-col items-center justify-center overflow-hidden p-2 sm:p-4">
-        <!-- Frame Container -->
-        <div id="preview-wrapper" class="w-full h-full transition-all duration-300 flex items-center justify-center">
+      <!-- Draggable Splitter Divider between Sidebar and Preview (Desktop) -->
+      <div
+        id="sidebar-splitter"
+        class="hidden lg:flex w-2 bg-[#12100E] hover:bg-[#A8382B] active:bg-[#A8382B] cursor-col-resize items-center justify-center border-r border-[#2D2824] transition-colors z-20 group select-none flex-shrink-0"
+        title="Arraste para redimensionar a largura do painel"
+      >
+        <div class="w-0.5 h-8 bg-[#3D3630] group-hover:bg-white rounded-full transition-colors"></div>
+      </div>
+
+      <!-- Right Main: Live Preview Frame with Resizable Width Handle -->
+      <main class="flex-1 bg-[#0D0B0A] relative flex flex-col items-center justify-center overflow-hidden p-2 sm:p-5 select-none min-w-0">
+        <!-- Floating Dimension & Scale Badge -->
+        <div class="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-[#1B1815]/90 border border-[#2D2824] px-3 py-1 rounded-full text-[11px] text-[#C4BDB5] shadow-lg backdrop-blur pointer-events-none select-none">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <span id="preview-dim-badge">100% Fluido</span>
+        </div>
+
+        <!-- Preview Wrapper Container with Drag Handle -->
+        <div id="preview-wrapper" class="relative max-w-full max-h-full flex items-center justify-center transition-all duration-150" style="width: 100%; height: 100%;">
           <iframe
             id="preview-frame"
             src={`/?theme=${currentTheme}`}
             class="w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border-2 border-[#2D2824]"
             title="Visualização ao Vivo do Portfólio"
           ></iframe>
+
+          <!-- Right Draggable Resize Handle -->
+          <div
+            id="iframe-resizer-right"
+            class="absolute -right-3.5 top-1/2 -translate-y-1/2 w-4 h-24 bg-[#24201C] hover:bg-[#A8382B] active:bg-[#A8382B] rounded-full border border-[#3D3630] flex items-center justify-center cursor-ew-resize transition-colors shadow-2xl z-30 group select-none"
+            title="Arraste para redimensionar a largura da tela"
+          >
+            <div class="flex flex-col gap-1 items-center pointer-events-none">
+              <span class="w-1 h-1 rounded-full bg-[#9E968E] group-hover:bg-white"></span>
+              <span class="w-1 h-1 rounded-full bg-[#9E968E] group-hover:bg-white"></span>
+              <span class="w-1 h-1 rounded-full bg-[#9E968E] group-hover:bg-white"></span>
+            </div>
+          </div>
         </div>
       </main>
     </div>
@@ -824,9 +961,12 @@ const palettes = [
       // Elements
       const iframe = document.getElementById("preview-frame") as HTMLIFrameElement;
       const wrapper = document.getElementById("preview-wrapper");
-      const btnDesktop = document.getElementById("btn-desktop");
-      const btnMobile = document.getElementById("btn-mobile");
+      const previewDimBadge = document.getElementById("preview-dim-badge");
+      const iframeResizer = document.getElementById("iframe-resizer-right");
+      const sidebarSplitter = document.getElementById("sidebar-splitter");
+      const adminSidebar = document.getElementById("admin-sidebar");
       const btnReload = document.getElementById("btn-reload");
+      const deviceBtns = document.querySelectorAll(".device-btn");
       const moduleTabs = document.querySelectorAll(".module-tab");
       const tabPanels = document.querySelectorAll(".tab-panel");
       const paletteCards = document.querySelectorAll(".palette-card");
@@ -838,6 +978,11 @@ const palettes = [
       const authStatusDot = document.getElementById("auth-status-dot");
       const authStatusText = document.getElementById("auth-status-text");
       const btnAuthAction = document.getElementById("btn-auth-action");
+
+      // Tabs scroll buttons
+      const tabsScrollContainer = document.getElementById("tabs-scroll-container");
+      const btnScrollLeft = document.getElementById("tabs-scroll-left");
+      const btnScrollRight = document.getElementById("tabs-scroll-right");
 
       // Inject server-rendered data into client memory
       const initialGeneral = { ...window.__INITIAL_GENERAL__ };
@@ -898,6 +1043,22 @@ const palettes = [
 
       updateAuthUI();
 
+      // Horizontal Tabs Scroll buttons & Wheel scroll
+      btnScrollLeft?.addEventListener("click", () => {
+        tabsScrollContainer?.scrollBy({ left: -140, behavior: "smooth" });
+      });
+
+      btnScrollRight?.addEventListener("click", () => {
+        tabsScrollContainer?.scrollBy({ left: 140, behavior: "smooth" });
+      });
+
+      tabsScrollContainer?.addEventListener("wheel", (e) => {
+        if (e.deltaY !== 0) {
+          e.preventDefault();
+          tabsScrollContainer.scrollLeft += e.deltaY;
+        }
+      }, { passive: false });
+
       // Tab Switching Handler & Auto Scroll in Iframe
       moduleTabs.forEach((tab) => {
         tab.addEventListener("click", () => {
@@ -927,6 +1088,22 @@ const palettes = [
               const el = iframe.contentWindow.document.getElementById(targetAnchor);
               if (el) el.scrollIntoView({ behavior: "smooth" });
             } catch (e) {}
+          }
+        });
+      });
+
+      // Quick Scroll to Card Buttons inside panels
+      document.querySelectorAll(".scroll-to-card-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-target");
+          if (!targetId) return;
+          const targetCard = document.getElementById(targetId);
+          if (targetCard) {
+            targetCard.scrollIntoView({ behavior: "smooth", block: "start" });
+            targetCard.classList.add("border-[#A8382B]", "ring-2", "ring-[#A8382B]/40");
+            setTimeout(() => {
+              targetCard.classList.remove("border-[#A8382B]", "ring-2", "ring-[#A8382B]/40");
+            }, 1500);
           }
         });
       });
@@ -1318,31 +1495,114 @@ const palettes = [
         }
       });
 
-      // Device Switcher with Solid Colors
-      btnDesktop?.addEventListener("click", () => {
-        btnDesktop.className = "device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]";
-        if (btnMobile) {
-          btnMobile.className = "device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent";
-        }
+      // --- DEVICE PRESETS HANDLER ---
+      deviceBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const width = btn.getAttribute("data-width") || "100%";
 
-        if (wrapper && iframe) {
-          wrapper.className = "w-full h-full transition-all duration-300 flex items-center justify-center";
-          iframe.className = "w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border-2 border-[#2D2824]";
-        }
+          deviceBtns.forEach((b) => {
+            b.classList.remove("active", "bg-[#2D2824]", "text-white", "border-[#3D3630]");
+            b.classList.add("text-[#9E968E]", "border-transparent");
+          });
+          btn.classList.remove("text-[#9E968E]", "border-transparent");
+          btn.classList.add("active", "bg-[#2D2824]", "text-white", "border-[#3D3630]");
+
+          if (wrapper && iframe) {
+            if (width === "100%") {
+              wrapper.style.width = "100%";
+              wrapper.style.height = "100%";
+              iframe.className = "w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border-2 border-[#2D2824]";
+              if (previewDimBadge) previewDimBadge.textContent = "100% Fluido";
+            } else if (width === "390px") {
+              wrapper.style.width = "390px";
+              wrapper.style.height = "844px";
+              iframe.className = "w-full h-full bg-[#FAF8F5] rounded-[44px] shadow-2xl transition-all duration-300 border-8 border-[#1B1815] ring-2 ring-[#2D2824]";
+              if (previewDimBadge) previewDimBadge.textContent = "390px × 844px (iPhone)";
+            } else {
+              wrapper.style.width = width;
+              wrapper.style.height = "92%";
+              iframe.className = "w-full h-full bg-[#FAF8F5] rounded-2xl shadow-2xl transition-all duration-300 border-4 border-[#2D2824]";
+              if (previewDimBadge) previewDimBadge.textContent = `${width} × ${Math.round(wrapper.offsetHeight)}px`;
+            }
+          }
+        });
       });
 
-      btnMobile?.addEventListener("click", () => {
-        btnMobile.className = "device-btn active px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]";
-        if (btnDesktop) {
-          btnDesktop.className = "device-btn px-3 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#1B1815] border border-transparent";
-        }
+      // --- DRAGGABLE IFRAME RESIZER (FREE DRAG WIDTH) ---
+      let isIframeDragging = false;
+      let iframeStartX = 0;
+      let iframeStartWidth = 0;
 
-        if (wrapper && iframe) {
-          wrapper.className = "w-full h-full transition-all duration-300 flex items-center justify-center p-4";
-          iframe.className = "w-[390px] h-[844px] bg-[#FAF8F5] rounded-[48px] shadow-2xl transition-all duration-300 border-8 border-[#1B1815] ring-2 ring-[#2D2824]";
-        }
+      iframeResizer?.addEventListener("pointerdown", (e) => {
+        isIframeDragging = true;
+        iframeStartX = e.clientX;
+        iframeStartWidth = wrapper?.offsetWidth || iframe.offsetWidth;
+
+        if (iframe) iframe.style.pointerEvents = "none";
+        document.body.style.cursor = "ew-resize";
+        document.body.style.userSelect = "none";
+        iframeResizer.setPointerCapture(e.pointerId);
       });
 
+      iframeResizer?.addEventListener("pointermove", (e) => {
+        if (!isIframeDragging || !wrapper) return;
+        const deltaX = (e.clientX - iframeStartX) * 2;
+        const newWidth = Math.max(320, Math.min(window.innerWidth - 100, iframeStartWidth + deltaX));
+
+        wrapper.style.width = `${newWidth}px`;
+        wrapper.style.maxWidth = "100%";
+
+        if (previewDimBadge) {
+          previewDimBadge.textContent = `${Math.round(newWidth)}px × ${Math.round(wrapper.offsetHeight)}px`;
+        }
+
+        // Unset device button active states when free-dragging
+        deviceBtns.forEach((b) => {
+          b.classList.remove("active", "bg-[#2D2824]", "text-white", "border-[#3D3630]");
+          b.classList.add("text-[#9E968E]", "border-transparent");
+        });
+      });
+
+      const stopIframeDrag = () => {
+        if (!isIframeDragging) return;
+        isIframeDragging = false;
+        if (iframe) iframe.style.pointerEvents = "auto";
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      };
+
+      iframeResizer?.addEventListener("pointerup", stopIframeDrag);
+      iframeResizer?.addEventListener("pointercancel", stopIframeDrag);
+
+      // --- DRAGGABLE SIDEBAR SPLITTER (DESKTOP) ---
+      let isSidebarDragging = false;
+
+      sidebarSplitter?.addEventListener("pointerdown", (e) => {
+        isSidebarDragging = true;
+        if (iframe) iframe.style.pointerEvents = "none";
+        document.body.style.cursor = "col-resize";
+        document.body.style.userSelect = "none";
+        sidebarSplitter.setPointerCapture(e.pointerId);
+      });
+
+      sidebarSplitter?.addEventListener("pointermove", (e) => {
+        if (!isSidebarDragging || !adminSidebar) return;
+        const newWidth = Math.max(320, Math.min(650, e.clientX));
+        adminSidebar.style.width = `${newWidth}px`;
+      });
+
+      const stopSidebarDrag = () => {
+        if (!isSidebarDragging) return;
+        isSidebarDragging = false;
+        if (iframe) iframe.style.pointerEvents = "auto";
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      };
+
+      sidebarSplitter?.addEventListener("pointerup", stopSidebarDrag);
+      sidebarSplitter?.addEventListener("pointercancel", stopSidebarDrag);
+
+      // --- RELOAD IFRAME ---
       btnReload?.addEventListener("click", () => {
         if (iframe) {
           iframe.src = `/?theme=${currentGeneral.theme || "terracotta"}`;
