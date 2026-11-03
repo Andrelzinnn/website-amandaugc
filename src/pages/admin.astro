@@ -341,14 +341,14 @@ const palettes = [
             <div class="flex-1 text-xs">
               <p class="font-bold text-amber-200">Modo de Pré-visualização</p>
               <p class="text-[11px] text-[#A89F95] mt-0.5 leading-relaxed">
-                Você pode testar e pré-visualizar qualquer alteração em tempo real. Para salvar e publicar no site oficial, faça login com o GitHub.
+                Você pode testar e pré-visualizar qualquer alteração em tempo real. Para salvar e publicar as edições no site, conecte sua conta.
               </p>
               <button
                 type="button"
                 id="banner-login-btn"
                 class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-xs font-bold uppercase tracking-wider transition shadow cursor-pointer border border-[#C28D3F]/30"
               >
-                <span>Fazer Login com GitHub</span>
+                <span>Conectar Conta / Fazer Login</span>
                 <EditorIcon name="external-link" class="w-3 h-3" />
               </button>
             </div>
@@ -1131,7 +1131,7 @@ const palettes = [
           if (authWarningBanner) authWarningBanner.classList.add("hidden");
         } else if (auth.isAuthenticated) {
           if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
-          if (authStatusText) authStatusText.textContent = "Conectado ao Keystatic Cloud";
+          if (authStatusText) authStatusText.textContent = "Conectado ao Studio";
           if (btnAuthAction) btnAuthAction.classList.add("hidden");
           if (headerLoginBtn) headerLoginBtn.classList.add("hidden");
           if (headerAuthBadge) {
@@ -1142,7 +1142,7 @@ const palettes = [
           if (authWarningBanner) authWarningBanner.classList.add("hidden");
         } else {
           if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
-          if (authStatusText) authStatusText.textContent = "Desconectado";
+          if (authStatusText) authStatusText.textContent = "Sessão Desconectada";
           if (btnAuthAction) {
             btnAuthAction.classList.remove("hidden");
             btnAuthAction.onclick = () => redirectToLogin();
@@ -1165,6 +1165,8 @@ const palettes = [
       }
 
       updateAuthUI();
+      window.addEventListener("storage", updateAuthUI);
+      window.addEventListener("focus", updateAuthUI);
 
       // Horizontal Tabs Scroll buttons & Wheel scroll
       btnScrollLeft?.addEventListener("click", () => {
@@ -1671,7 +1673,7 @@ const palettes = [
         if (!isDev && !auth.isAuthenticated) {
           if (saveFeedback) {
             saveFeedback.className = "text-center text-[11px] font-semibold py-2.5 px-3 rounded-xl bg-amber-950/90 border border-amber-700 text-amber-200 block";
-            saveFeedback.innerHTML = `<span>Você precisa se conectar para salvar alterações.<br><button type="button" id="feedback-login-btn" class="mt-2 inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white font-bold text-xs cursor-pointer shadow">Fazer Login no Keystatic ↗</button></span>`;
+            saveFeedback.innerHTML = `<span>Você precisa se conectar para salvar alterações.<br><button type="button" id="feedback-login-btn" class="mt-2 inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white font-bold text-xs cursor-pointer shadow">Fazer Login no Studio ↗</button></span>`;
             document.getElementById("feedback-login-btn")?.addEventListener("click", () => {
               redirectToLogin();
             });
@@ -1681,7 +1683,7 @@ const palettes = [
 
         btnSaveAll.disabled = true;
         btnSaveAll.className = "w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-wait border border-transparent";
-        if (saveBtnText) saveBtnText.textContent = "Publicando no GitHub...";
+        if (saveBtnText) saveBtnText.textContent = "Salvando no site...";
         if (saveFeedback) saveFeedback.classList.add("hidden");
 
         const filesToSave: { path: string; contents: string }[] = [];

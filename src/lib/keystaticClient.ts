@@ -36,6 +36,12 @@ export function toBase64(text: string): string {
   return btoa(binString);
 }
 
+function getCookie(name: string): string | null {
+  if (typeof document === "undefined") return null;
+  const match = document.cookie.match(new RegExp("(?:^|;\\s*)" + name + "=([^;]*)"));
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
 /**
  * Verifica o status de autenticação atual no navegador
  */
@@ -44,39 +50,100 @@ export function getKeystaticAuth(): AuthStatus {
     return { isLocal: false, isAuthenticated: false };
   }
 
-  // Verifica se está rodando localmente
+  // 1. Verifica se está rodando localmente
   const isLocal =
     window.location.hostname === "localhost" ||
-    window.location.hostname === "127.0.0.1";
+    window.location.hostname === "127.0.0.1" ||
+    window.location.hostname === "0.0.0.0";
 
   if (isLocal) {
     return { isLocal: true, isAuthenticated: true };
   }
 
-  // Em produção, lê a sessão gravada pelo Keystatic
-  const raw = localStorage.getItem("keystatic-cloud-access-token");
-  if (!raw) {
-    return { isLocal: false, isAuthenticated: false };
-  }
-
+  // 2. Lê sessão do Keystatic Cloud (localStorage ou sessionStorage)
   try {
-    const data = JSON.parse(raw);
-    const validUntil = new Date(data.validUntil);
-    const isExpired = validUntil.getTime() <= Date.now();
+    const raw =
+      localStorage.getItem("keystatic-cloud-access-token") ||
+      sessionStorage.getItem("keystatic-cloud-access-token");
 
-    if (isExpired || data.project !== PROJECT_ID) {
-      return { isLocal: false, isAuthenticated: false };
+    if (raw) {
+      const data = JSON.parse(raw);
+      const token = data.token || data.accessToken || data.access_token;
+      if (token) {
+        let isExpired = false;
+        if (data.validUntil) {
+          const exp =
+            typeof data.validUntil === "number"
+              ? data.validUntil < 10000000000
+                ? data.validUntil * 1000
+                : data.validUntil
+              : new Date(data.validUntil).getTime();
+          if (!isNaN(exp) && exp > 0 && exp <= Date.now()) {
+            isExpired = true;
+          }
+        }
+        if (!isExpired) {
+          return {
+            isLocal: false,
+            isAuthenticated: true,
+            token,
+            project: data.project || PROJECT_ID,
+          };
+        }
+      }
     }
+  } catch (err) {}
 
-    return {
-      isLocal: false,
-      isAuthenticated: true,
-      token: data.token,
-      project: data.project,
-    };
-  } catch (err) {
-    return { isLocal: false, isAuthenticated: false };
-  }
+  // 3. Lê cookie de autenticação do GitHub / Keystatic
+  try {
+    const ghCookie =
+      getCookie("keystatic-gh-access-token") ||
+      getCookie("keystatic-cloud-access-token") ||
+      getCookie("keystatic-token");
+    if (ghCookie) {
+      return {
+        isLocal: false,
+        isAuthenticated: true,
+        token: ghCookie,
+        project: PROJECT_ID,
+      };
+    }
+  } catch (err) {}
+
+  // 4. Varredura de fallback em localStorage por qualquer chave do Keystatic
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.toLowerCase().includes("keystatic") && key.toLowerCase().includes("token")) {
+        const val = localStorage.getItem(key);
+        if (val) {
+          try {
+            const parsed = JSON.parse(val);
+            const token = parsed.token || parsed.accessToken || parsed.access_token;
+            if (token) {
+              return {
+                isLocal: false,
+                isAuthenticated: true,
+                token,
+                project: parsed.project || PROJECT_ID,
+              };
+            }
+          } catch {
+            if (val.length > 20) {
+              return {
+                isLocal: false,
+                isAuthenticated: true,
+                token: val,
+                project: PROJECT_ID,
+              };
+            }
+          }
+        }
+      }
+    }
+  } catch (err) {}
+
+  return { isLocal: false, isAuthenticated: false };
 }
 
 /**
@@ -132,12 +199,19 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
   }
 
   try {
-    const graphqlEndpoint = `${KEYSTATIC_CLOUD_API_URL}/v1/github/graphql`;
-    const headers = {
+    const isCloudToken = !auth.token.startsWith("gho_") && !auth.token.startsWith("ghu_") && !auth.token.startsWith("ghp_");
+    const graphqlEndpoint = isCloudToken
+      ? `${KEYSTATIC_CLOUD_API_URL}/v1/github/graphql`
+      : `https://api.github.com/graphql`;
+
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${auth.token}`,
-      "x-keystatic-version": "0.6.9",
     };
+
+    if (isCloudToken) {
+      headers["x-keystatic-version"] = "0.6.9";
+    }
 
     // A. Busca o SHA do commit HEAD mais recente direto via GitHub API pública
     const refRes = await fetch(
@@ -146,24 +220,30 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
     );
 
     if (!refRes.ok) {
-      throw new Error(`Falha ao consultar GitHub ref: ${refRes.statusText}`);
+      throw new Error(`Falha ao consultar ref do repositório: ${refRes.statusText}`);
     }
 
     const refJson = await refRes.json();
     const headOid = refJson?.object?.sha;
 
     if (!headOid) {
-      throw new Error("Não foi possível obter o commit atual do repositório no GitHub.");
+      throw new Error("Não foi possível obter o commit atual do repositório.");
     }
 
-    // B. Envia a mutation CreateCommit usando a Persisted Query oficial da Keystatic Cloud
-    const payload = {
-      extensions: {
-        persistedQuery: {
-          sha256Hash: "8ba2a8aba30b21120c2339fad87e97fca51bdebf8d24ab2a2313f04962908829",
-          version: 1,
-        },
-      },
+    // B. Envia a mutation CreateCommit
+    const payload: any = {
+      query: `
+        mutation CreateCommit($input: CreateCommitOnBranchInput!) {
+          createCommitOnBranch(input: $input) {
+            ref {
+              id
+              target {
+                oid
+              }
+            }
+          }
+        }
+      `,
       operationName: "CreateCommit",
       variables: {
         input: {
@@ -185,6 +265,15 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
         },
       },
     };
+
+    if (isCloudToken) {
+      payload.extensions = {
+        persistedQuery: {
+          sha256Hash: "8ba2a8aba30b21120c2339fad87e97fca51bdebf8d24ab2a2313f04962908829",
+          version: 1,
+        },
+      };
+    }
 
     const commitRes = await fetch(graphqlEndpoint, {
       method: "POST",
