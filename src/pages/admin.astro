@@ -1066,35 +1066,70 @@ const palettes = [
         }
       }, { passive: false });
 
-      // Tab Switching Handler & Auto Scroll in Iframe
-      moduleTabs.forEach((tab) => {
-        tab.addEventListener("click", () => {
-          const targetTab = tab.getAttribute("data-tab");
-          const targetAnchor = tab.getAttribute("data-target-anchor");
+      // --- UNIFIED TAB ACTIVATION & BIDIRECTIONAL SCROLL-SPY ---
+      let isProgrammaticScroll = false;
+      let scrollTimeout: any = null;
+      let lastSpiedSection = "";
 
-          moduleTabs.forEach((t) => {
-            t.classList.remove("active", "bg-[#24201C]", "text-white", "border-[#3D3630]");
-            t.classList.add("text-[#9E968E]", "border-transparent");
-          });
+      const sectionToTabMap: Record<string, string> = {
+        hero: "hero",
+        marcas: "brands",
+        cases: "cases",
+        servicos: "services",
+        depoimentos: "testimonials",
+        contato: "contact",
+      };
 
-          tab.classList.remove("text-[#9E968E]", "border-transparent");
-          tab.classList.add("active", "bg-[#24201C]", "text-white", "border-[#3D3630]");
+      function activateTab(targetTab: string, scrollIframe: boolean = true) {
+        const targetBtn = document.querySelector(`.module-tab[data-tab="${targetTab}"]`);
+        if (!targetBtn) return;
 
-          tabPanels.forEach((panel) => {
-            panel.classList.add("hidden");
-          });
+        moduleTabs.forEach((t) => {
+          t.classList.remove("active", "bg-[#24201C]", "text-white", "border-[#3D3630]");
+          t.classList.add("text-[#9E968E]", "border-transparent");
+        });
 
-          const activePanel = document.getElementById(`panel-${targetTab}`);
-          if (activePanel) {
-            activePanel.classList.remove("hidden");
+        targetBtn.classList.remove("text-[#9E968E]", "border-transparent");
+        targetBtn.classList.add("active", "bg-[#24201C]", "text-white", "border-[#3D3630]");
+
+        // Ensure the active tab button is scrolled into view in the horizontal tabs bar
+        if (tabsScrollContainer) {
+          const btnEl = targetBtn as HTMLElement;
+          const containerLeft = tabsScrollContainer.scrollLeft;
+          const containerWidth = tabsScrollContainer.clientWidth;
+          const btnLeft = btnEl.offsetLeft;
+          const btnWidth = btnEl.offsetWidth;
+
+          if (btnLeft < containerLeft || btnLeft + btnWidth > containerLeft + containerWidth) {
+            tabsScrollContainer.scrollTo({
+              left: Math.max(0, btnLeft - 20),
+              behavior: "smooth",
+            });
           }
+        }
 
-          // Smooth scroll ONLY the internal iframe window (avoiding scrollIntoView which scrolls the parent editor page)
+        tabPanels.forEach((panel) => {
+          panel.classList.add("hidden");
+        });
+
+        const activePanel = document.getElementById(`panel-${targetTab}`);
+        if (activePanel) {
+          activePanel.classList.remove("hidden");
+        }
+
+        if (scrollIframe) {
+          const targetAnchor = targetBtn.getAttribute("data-target-anchor");
           if (targetAnchor && iframe && iframe.contentWindow) {
             try {
               const doc = iframe.contentWindow.document;
               const el = doc.getElementById(targetAnchor);
               if (el) {
+                isProgrammaticScroll = true;
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                  isProgrammaticScroll = false;
+                }, 900);
+
                 const elTop = el.getBoundingClientRect().top + iframe.contentWindow.scrollY;
                 iframe.contentWindow.scrollTo({
                   top: Math.max(0, elTop - 24),
@@ -1103,8 +1138,69 @@ const palettes = [
               }
             } catch (e) {}
           }
+        }
+      }
+
+      // User tab click
+      moduleTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const targetTab = tab.getAttribute("data-tab");
+          if (targetTab) activateTab(targetTab, true);
         });
       });
+
+      // Scroll Spy: Listening to Iframe Scroll to update active Editor Tab
+      function setupIframeScrollSpy() {
+        if (!iframe || !iframe.contentWindow) return;
+        try {
+          const iframeWin = iframe.contentWindow;
+          const iframeDoc = iframe.contentDocument;
+          if (!iframeDoc) return;
+
+          const sectionIds = ["hero", "marcas", "cases", "servicos", "depoimentos", "contato"];
+
+          const handleIframeScroll = () => {
+            if (isProgrammaticScroll) return;
+
+            const scrollY = iframeWin.scrollY;
+            if (scrollY < 60) {
+              if (lastSpiedSection !== "hero") {
+                lastSpiedSection = "hero";
+                activateTab("hero", false);
+              }
+              return;
+            }
+
+            const viewportAnchor = scrollY + (iframeWin.innerHeight * 0.35);
+            let matchedSection = "";
+
+            for (const sId of sectionIds) {
+              const el = iframeDoc.getElementById(sId);
+              if (!el) continue;
+              const top = el.offsetTop;
+              const bottom = top + el.offsetHeight;
+
+              if (viewportAnchor >= top && viewportAnchor < bottom) {
+                matchedSection = sId;
+                break;
+              }
+            }
+
+            if (matchedSection && matchedSection !== lastSpiedSection) {
+              lastSpiedSection = matchedSection;
+              const mappedTab = sectionToTabMap[matchedSection];
+              if (mappedTab) {
+                activateTab(mappedTab, false);
+              }
+            }
+          };
+
+          iframeWin.removeEventListener("scroll", handleIframeScroll);
+          iframeWin.addEventListener("scroll", handleIframeScroll, { passive: true });
+        } catch (e) {}
+      }
+
+      iframe.addEventListener("load", setupIframeScrollSpy);
 
       // Quick Scroll to Card Buttons inside panels (strictly scroll panels-container, never parent page)
       const panelsContainer = document.getElementById("panels-container");

@@ -6,7 +6,7 @@ const { partnerBrands } = portfolioData;
 const doubleBrands = [...partnerBrands, ...partnerBrands, ...partnerBrands];
 ---
 
-<section class="py-5 bg-[#1B1815] text-[#FAF8F5] overflow-hidden border-y border-black">
+<section id="marcas" class="py-5 bg-[#1B1815] text-[#FAF8F5] overflow-hidden border-y border-black">
   <div class="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
     <div class="animate-marquee-left flex items-center gap-10 whitespace-nowrap">
       {doubleBrands.map((brand) => (
