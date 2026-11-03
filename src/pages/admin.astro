@@ -632,10 +632,17 @@ const palettes = [
                 <h3 class="text-xs font-bold uppercase tracking-wider text-white">Formatos de Trabalho</h3>
                 <p class="text-[11px] text-[#9E968E] mt-0.5">Edite os serviços, entregáveis e diferenciais.</p>
               </div>
+              <button
+                type="button"
+                id="btn-add-service"
+                class="px-2.5 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm"
+              >
+                + Novo Formato
+              </button>
             </div>
 
             <!-- Quick Navigation Pills to jump to any service card -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <div id="services-pills-container" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
               <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
               {servicesList.map((item, idx) => (
                 <button
@@ -648,14 +655,24 @@ const palettes = [
               ))}
             </div>
 
-            <div class="space-y-4">
+            <div id="services-list-container" class="space-y-4">
               {servicesList.map((item, idx) => (
-                <div id={`card-service-${idx}`} class="p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2">
+                <div id={`card-service-${idx}`} class="service-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2" data-path={item.path}>
                   <div class="flex items-center justify-between">
                     <span class="text-xs font-bold text-white flex items-center gap-2">
-                      <span class="px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">{item.data.step || `0${idx + 1}`}</span>
-                      <span class="truncate max-w-[220px]">{item.data.title}</span>
+                      <span class="service-card-step px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">{item.data.step || `0${idx + 1}`}</span>
+                      <span class="service-card-title-text truncate max-w-[200px]">{item.data.title}</span>
                     </span>
+                    <button
+                      type="button"
+                      class="btn-delete-service p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+                      data-path={item.path}
+                      title="Excluir este formato"
+                    >
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
                   </div>
                   <div>
                     <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Formato</label>
@@ -703,13 +720,22 @@ const palettes = [
 
           <!-- TAB PANEL 5: Marcas Parceiras -->
           <div id="panel-brands" class="tab-panel hidden p-4 space-y-4">
-            <div class="pb-2 border-b border-[#2D2824]">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Marcas Parceiras</h3>
-              <p class="text-[11px] text-[#9E968E] mt-0.5">Marcas exibidas no carrossel infinito do portfólio.</p>
+            <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-white">Marcas Parceiras</h3>
+                <p class="text-[11px] text-[#9E968E] mt-0.5">Marcas exibidas no carrossel infinito do portfólio.</p>
+              </div>
+              <button
+                type="button"
+                id="btn-add-brand"
+                class="px-2.5 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm"
+              >
+                + Adicionar Marca
+              </button>
             </div>
-            <div class="space-y-2">
+            <div id="brands-list-container" class="space-y-2">
               {brandsList.map((item) => (
-                <div class="p-2.5 rounded-xl bg-[#24201C] border border-[#2D2824] flex items-center gap-2">
+                <div class="brand-item-row p-2.5 rounded-xl bg-[#24201C] border border-[#2D2824] flex items-center gap-2" data-path={item.path}>
                   <span class="w-2 h-2 rounded-full bg-[#C28D3F]"></span>
                   <input
                     type="text"
@@ -719,6 +745,16 @@ const palettes = [
                     value={item.data.name}
                     placeholder="Nome da Marca"
                   />
+                  <button
+                    type="button"
+                    class="btn-delete-brand p-1.5 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+                    data-path={item.path}
+                    title="Remover marca"
+                  >
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
                 </div>
               ))}
             </div>
@@ -726,13 +762,22 @@ const palettes = [
 
           <!-- TAB PANEL 6: Cases 3D -->
           <div id="panel-cases" class="tab-panel hidden p-4 space-y-4">
-            <div class="pb-2 border-b border-[#2D2824]">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Cases em Destaque (Deck 3D)</h3>
-              <p class="text-[11px] text-[#9E968E] mt-0.5">Campanhas e resultados de alto impacto.</p>
+            <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-white">Cases em Destaque (Deck 3D)</h3>
+                <p class="text-[11px] text-[#9E968E] mt-0.5">Campanhas e resultados de alto impacto.</p>
+              </div>
+              <button
+                type="button"
+                id="btn-add-case"
+                class="px-2.5 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm"
+              >
+                + Adicionar Case
+              </button>
             </div>
 
             <!-- Quick Navigation Pills to jump to any case card -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <div id="cases-pills-container" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
               <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
               {casesList.map((item, idx) => (
                 <button
@@ -745,12 +790,48 @@ const palettes = [
               ))}
             </div>
 
-            <div class="space-y-4">
+            <div id="cases-list-container" class="space-y-4">
               {casesList.map((item, idx) => (
-                <div id={`card-case-${idx}`} class="p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2">
+                <div id={`card-case-${idx}`} class="case-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2" data-path={item.path}>
                   <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-white truncate max-w-[200px]">{item.data.brand}</span>
-                    <span class="text-[10px] px-2 py-0.5 rounded bg-[#1B1815] text-[#C28D3F] border border-[#2D2824] font-semibold">{item.data.stats}</span>
+                    <span class="text-xs font-bold text-white truncate max-w-[200px] case-card-brand-display">{item.data.brand || "Novo Case"}</span>
+                    <div class="flex items-center gap-2">
+                      <span class="text-[10px] px-2 py-0.5 rounded bg-[#1B1815] text-[#C28D3F] border border-[#2D2824] font-semibold case-card-stats-display">{item.data.stats || "+0%"}</span>
+                      <button
+                        type="button"
+                        class="btn-delete-case p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+                        data-path={item.path}
+                        title="Excluir este case"
+                      >
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-2 gap-2">
+                    <div>
+                      <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Marca / Produto</label>
+                      <input
+                        type="text"
+                        class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                        data-path={item.path}
+                        data-field="brand"
+                        value={item.data.brand}
+                        placeholder="Ex: Lumière Cosméticos"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica Resumida (Badge)</label>
+                      <input
+                        type="text"
+                        class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                        data-path={item.path}
+                        data-field="stats"
+                        value={item.data.stats}
+                        placeholder="Ex: 450k views · Conversão +42%"
+                      />
+                    </div>
                   </div>
                   <div>
                     <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Título do Criativo / Case</label>
@@ -832,13 +913,22 @@ const palettes = [
 
           <!-- TAB PANEL 7: Depoimentos -->
           <div id="panel-testimonials" class="tab-panel hidden p-4 space-y-4">
-            <div class="pb-2 border-b border-[#2D2824]">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Depoimentos de Clientes</h3>
-              <p class="text-[11px] text-[#9E968E] mt-0.5">Avaliações das marcas parceiras.</p>
+            <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-white">Depoimentos de Clientes</h3>
+                <p class="text-[11px] text-[#9E968E] mt-0.5">Avaliações das marcas parceiras.</p>
+              </div>
+              <button
+                type="button"
+                id="btn-add-testimonial"
+                class="px-2.5 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm"
+              >
+                + Novo Depoimento
+              </button>
             </div>
 
             <!-- Quick Navigation Pills to jump to any testimonial card -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <div id="testimonials-pills-container" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
               <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
               {testimonialsList.map((item, idx) => (
                 <button
@@ -851,9 +941,22 @@ const palettes = [
               ))}
             </div>
 
-            <div class="space-y-4">
+            <div id="testimonials-list-container" class="space-y-4">
               {testimonialsList.map((item, idx) => (
-                <div id={`card-test-${idx}`} class="p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2">
+                <div id={`card-test-${idx}`} class="testimonial-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2" data-path={item.path}>
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-white truncate max-w-[200px] test-card-client-display">{item.data.clientName || "Novo Depoimento"}</span>
+                    <button
+                      type="button"
+                      class="btn-delete-testimonial p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+                      data-path={item.path}
+                      title="Excluir este depoimento"
+                    >
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
                   <div class="grid grid-cols-2 gap-2">
                     <div>
                       <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Cliente</label>
@@ -1084,12 +1187,23 @@ const palettes = [
       // Collections State Map: path -> data
       const initialCollections = new Map<string, any>();
       const currentCollections = new Map<string, any>();
+      const deletedCollections = new Set<string>();
 
       if (window.__COLLECTIONS__) {
         window.__COLLECTIONS__.forEach((item: { path: string; data: any }) => {
           initialCollections.set(item.path, JSON.parse(JSON.stringify(item.data)));
           currentCollections.set(item.path, JSON.parse(JSON.stringify(item.data)));
         });
+      }
+
+      function markCollectionDeleted(path: string) {
+        currentCollections.delete(path);
+        if (initialCollections.has(path)) {
+          deletedCollections.add(path);
+        } else {
+          deletedCollections.delete(path);
+        }
+        evaluateChanges();
       }
 
       // Live update helper in iframe
@@ -1349,13 +1463,14 @@ const palettes = [
         // Check collections
         let collectionsChanged = 0;
         currentCollections.forEach((currData, path) => {
+          if (deletedCollections.has(path)) return;
           const initData = initialCollections.get(path);
-          if (JSON.stringify(currData) !== JSON.stringify(initData)) {
+          if (!initData || JSON.stringify(currData) !== JSON.stringify(initData)) {
             collectionsChanged++;
           }
         });
 
-        const totalChanged = changedCount + collectionsChanged;
+        const totalChanged = changedCount + collectionsChanged + deletedCollections.size;
 
         if (totalChanged > 0) {
           if (pendingBadge) {
@@ -1559,25 +1674,190 @@ const palettes = [
         evaluateChanges();
       });
 
-      // --- MODULE 4: SERVICES INPUTS ---
-      document.querySelectorAll(".service-input").forEach((input) => {
-        input.addEventListener("input", (e) => {
-          const el = e.target as HTMLInputElement | HTMLTextAreaElement;
-          const path = el.getAttribute("data-path");
-          const field = el.getAttribute("data-field");
-          if (!path || !field) return;
-
-          const data = currentCollections.get(path);
-          if (data) {
-            data[field] = el.value;
-            evaluateChanges();
+      // --- DYNAMIC CARD PILLS UPDATERS & NAVIGATION ---
+      function setupScrollToCard(btn: Element) {
+        btn.addEventListener("click", () => {
+          const targetId = btn.getAttribute("data-target");
+          if (!targetId) return;
+          const targetCard = document.getElementById(targetId);
+          if (targetCard && panelsContainer) {
+            const cardTop = targetCard.offsetTop;
+            panelsContainer.scrollTo({
+              top: Math.max(0, cardTop - 12),
+              behavior: "smooth",
+            });
+            targetCard.classList.add("border-[#A8382B]", "ring-2", "ring-[#A8382B]/40");
+            setTimeout(() => {
+              targetCard.classList.remove("border-[#A8382B]", "ring-2", "ring-[#A8382B]/40");
+            }, 1500);
           }
         });
+      }
+
+      function updateServicePills() {
+        const pillsContainer = document.getElementById("services-pills-container");
+        if (!pillsContainer) return;
+        const cards = document.querySelectorAll("#services-list-container .service-card-item");
+        let html = '<span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>';
+        cards.forEach((card, idx) => {
+          const stepEl = card.querySelector(".service-card-step");
+          const stepText = stepEl?.textContent?.trim() || `0${idx + 1}`;
+          html += `<button type="button" class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0" data-target="${card.id}">${stepText}</button>`;
+        });
+        pillsContainer.innerHTML = html;
+        pillsContainer.querySelectorAll(".scroll-to-card-btn").forEach(setupScrollToCard);
+      }
+
+      function updateCasePills() {
+        const pillsContainer = document.getElementById("cases-pills-container");
+        if (!pillsContainer) return;
+        const cards = document.querySelectorAll("#cases-list-container .case-card-item");
+        let html = '<span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>';
+        cards.forEach((card, idx) => {
+          html += `<button type="button" class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0" data-target="${card.id}">Caso ${idx + 1}</button>`;
+        });
+        pillsContainer.innerHTML = html;
+        pillsContainer.querySelectorAll(".scroll-to-card-btn").forEach(setupScrollToCard);
+      }
+
+      function updateTestimonialPills() {
+        const pillsContainer = document.getElementById("testimonials-pills-container");
+        if (!pillsContainer) return;
+        const cards = document.querySelectorAll("#testimonials-list-container .testimonial-card-item");
+        let html = '<span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>';
+        cards.forEach((card, idx) => {
+          const displayEl = card.querySelector(".test-card-client-display");
+          const label = displayEl?.textContent?.trim().split(" ")[0] || `Depoimento ${idx + 1}`;
+          html += `<button type="button" class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0" data-target="${card.id}">${label}</button>`;
+        });
+        pillsContainer.innerHTML = html;
+        pillsContainer.querySelectorAll(".scroll-to-card-btn").forEach(setupScrollToCard);
+      }
+
+      // --- MODULE 4: SERVICES EVENT BINDINGS ---
+      function bindServiceCard(card: Element) {
+        card.querySelectorAll(".service-input").forEach((input) => {
+          input.addEventListener("input", (e) => {
+            const el = e.target as HTMLInputElement | HTMLTextAreaElement;
+            const path = el.getAttribute("data-path");
+            const field = el.getAttribute("data-field");
+            if (!path || !field) return;
+
+            const data = currentCollections.get(path);
+            if (data) {
+              data[field] = el.value;
+              if (field === "title") {
+                const titleEl = card.querySelector(".service-card-title-text");
+                if (titleEl) titleEl.textContent = el.value || "Novo Formato";
+              }
+              evaluateChanges();
+            }
+          });
+        });
+
+        const deleteBtn = card.querySelector(".btn-delete-service");
+        deleteBtn?.addEventListener("click", () => {
+          const path = card.getAttribute("data-path");
+          if (!path) return;
+          if (confirm("Deseja realmente remover este formato de trabalho?")) {
+            markCollectionDeleted(path);
+            card.remove();
+            updateServicePills();
+          }
+        });
+      }
+
+      // Add Service Button
+      const btnAddService = document.getElementById("btn-add-service");
+      btnAddService?.addEventListener("click", () => {
+        const container = document.getElementById("services-list-container");
+        if (!container) return;
+        const currentCount = container.querySelectorAll(".service-card-item").length;
+        const stepStr = String(currentCount + 1).padStart(2, "0");
+        const id = `formato-${Date.now()}`;
+        const path = `src/content/services/${id}.json`;
+        const newService = {
+          title: "Novo Formato de Vídeo",
+          step: stepStr,
+          shortDesc: "Descrição objetiva da proposta do formato e estilo.",
+          deliverables: "Entregável 1, Entregável 2",
+          idealFor: "Marcas que buscam alta conversão e diferenciação.",
+        };
+
+        currentCollections.set(path, newService);
+
+        const card = document.createElement("div");
+        card.id = `card-service-${currentCount}`;
+        card.className = "service-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2";
+        card.setAttribute("data-path", path);
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white flex items-center gap-2">
+              <span class="service-card-step px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">${stepStr}</span>
+              <span class="service-card-title-text truncate max-w-[200px]">${newService.title}</span>
+            </span>
+            <button
+              type="button"
+              class="btn-delete-service p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+              data-path="${path}"
+              title="Excluir este formato"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Formato</label>
+            <input
+              type="text"
+              class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+              data-path="${path}"
+              data-field="title"
+              value="${newService.title}"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Breve Descrição</label>
+            <textarea
+              rows="2"
+              class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+              data-path="${path}"
+              data-field="shortDesc"
+            >${newService.shortDesc}</textarea>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">O que inclui (separe por vírgula)</label>
+            <input
+              type="text"
+              class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+              data-path="${path}"
+              data-field="deliverables"
+              value="${newService.deliverables}"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Ideal para</label>
+            <input
+              type="text"
+              class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+              data-path="${path}"
+              data-field="idealFor"
+              value="${newService.idealFor}"
+            />
+          </div>
+        `;
+        container.appendChild(card);
+        bindServiceCard(card);
+        updateServicePills();
+        evaluateChanges();
+        card.scrollIntoView({ behavior: "smooth" });
       });
 
-      // --- MODULE 5: BRANDS INPUTS ---
-      document.querySelectorAll(".brand-input").forEach((input) => {
-        input.addEventListener("input", (e) => {
+      // --- MODULE 5: BRANDS EVENT BINDINGS ---
+      function bindBrandRow(row: Element) {
+        const input = row.querySelector(".brand-input");
+        input?.addEventListener("input", (e) => {
           const el = e.target as HTMLInputElement;
           const path = el.getAttribute("data-path");
           const field = el.getAttribute("data-field");
@@ -1589,39 +1869,368 @@ const palettes = [
             evaluateChanges();
           }
         });
-      });
 
-      // --- MODULE 6: CASES INPUTS ---
-      document.querySelectorAll(".case-input").forEach((input) => {
-        input.addEventListener("input", (e) => {
-          const el = e.target as HTMLInputElement | HTMLTextAreaElement;
-          const path = el.getAttribute("data-path");
-          const field = el.getAttribute("data-field");
-          if (!path || !field) return;
-
-          const data = currentCollections.get(path);
-          if (data) {
-            data[field] = el.value;
-            evaluateChanges();
+        const deleteBtn = row.querySelector(".btn-delete-brand");
+        deleteBtn?.addEventListener("click", () => {
+          const path = row.getAttribute("data-path");
+          if (!path) return;
+          if (confirm("Deseja realmente remover esta marca parceira?")) {
+            markCollectionDeleted(path);
+            row.remove();
           }
         });
+      }
+
+      // Add Brand Button
+      const btnAddBrand = document.getElementById("btn-add-brand");
+      btnAddBrand?.addEventListener("click", () => {
+        const container = document.getElementById("brands-list-container");
+        if (!container) return;
+        const id = `marca-${Date.now()}`;
+        const path = `src/content/brands/${id}.json`;
+        currentCollections.set(path, { name: "" });
+
+        const row = document.createElement("div");
+        row.className = "brand-item-row p-2.5 rounded-xl bg-[#24201C] border border-[#2D2824] flex items-center gap-2";
+        row.setAttribute("data-path", path);
+        row.innerHTML = `
+          <span class="w-2 h-2 rounded-full bg-[#C28D3F]"></span>
+          <input
+            type="text"
+            class="brand-input flex-1 px-2.5 py-1 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+            data-path="${path}"
+            data-field="name"
+            value=""
+            placeholder="Nome da Marca"
+          />
+          <button
+            type="button"
+            class="btn-delete-brand p-1.5 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+            data-path="${path}"
+            title="Remover marca"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        `;
+        container.appendChild(row);
+        bindBrandRow(row);
+        (row.querySelector(".brand-input") as HTMLInputElement)?.focus();
+        evaluateChanges();
       });
 
-      // --- MODULE 7: TESTIMONIALS INPUTS ---
-      document.querySelectorAll(".test-input").forEach((input) => {
-        input.addEventListener("input", (e) => {
-          const el = e.target as HTMLInputElement | HTMLTextAreaElement;
-          const path = el.getAttribute("data-path");
-          const field = el.getAttribute("data-field");
-          if (!path || !field) return;
+      // --- MODULE 6: CASES EVENT BINDINGS ---
+      function bindCaseCard(card: Element) {
+        card.querySelectorAll(".case-input").forEach((input) => {
+          input.addEventListener("input", (e) => {
+            const el = e.target as HTMLInputElement | HTMLTextAreaElement;
+            const path = el.getAttribute("data-path");
+            const field = el.getAttribute("data-field");
+            if (!path || !field) return;
 
-          const data = currentCollections.get(path);
-          if (data) {
-            data[field] = el.value;
-            evaluateChanges();
+            const data = currentCollections.get(path);
+            if (data) {
+              data[field] = el.value;
+              if (field === "brand") {
+                const brandDisplay = card.querySelector(".case-card-brand-display");
+                if (brandDisplay) brandDisplay.textContent = el.value || "Novo Case";
+              } else if (field === "stats") {
+                const statsDisplay = card.querySelector(".case-card-stats-display");
+                if (statsDisplay) statsDisplay.textContent = el.value || "+0%";
+              }
+              evaluateChanges();
+            }
+          });
+        });
+
+        const deleteBtn = card.querySelector(".btn-delete-case");
+        deleteBtn?.addEventListener("click", () => {
+          const path = card.getAttribute("data-path");
+          if (!path) return;
+          if (confirm("Deseja realmente remover este case de destaque?")) {
+            markCollectionDeleted(path);
+            card.remove();
+            updateCasePills();
           }
         });
+      }
+
+      // Add Case Button
+      const btnAddCase = document.getElementById("btn-add-case");
+      btnAddCase?.addEventListener("click", () => {
+        const container = document.getElementById("cases-list-container");
+        if (!container) return;
+        const currentCount = container.querySelectorAll(".case-card-item").length;
+        const id = `case-${Date.now()}`;
+        const path = `src/content/cases/${id}.json`;
+        const newCase = {
+          brand: "Nova Marca",
+          title: "Novo Criativo UGC",
+          badge: "Vídeo UGC",
+          thumbnail: "",
+          youtubeId: "",
+          stats: "+50% conversão",
+          highlightMetric: "+50%",
+          metricLabel: "Aumento na Taxa de Conversão",
+          pillar1: "Gancho visual forte",
+          pillar2: "Demonstração autêntica",
+          pillar3: "Chamada para ação clara",
+          quote: "Os vídeos geraram alto retorno sobre o investimento em nossos anúncios.",
+          author: "Head de Marketing",
+        };
+
+        currentCollections.set(path, newCase);
+
+        const card = document.createElement("div");
+        card.id = `card-case-${currentCount}`;
+        card.className = "case-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2";
+        card.setAttribute("data-path", path);
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white truncate max-w-[200px] case-card-brand-display">${newCase.brand}</span>
+            <div class="flex items-center gap-2">
+              <span class="text-[10px] px-2 py-0.5 rounded bg-[#1B1815] text-[#C28D3F] border border-[#2D2824] font-semibold case-card-stats-display">${newCase.stats}</span>
+              <button
+                type="button"
+                class="btn-delete-case p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+                data-path="${path}"
+                title="Excluir este case"
+              >
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Marca / Produto</label>
+              <input
+                type="text"
+                class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                data-path="${path}"
+                data-field="brand"
+                value="${newCase.brand}"
+                placeholder="Ex: Lumière Cosméticos"
+              />
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica Resumida (Badge)</label>
+              <input
+                type="text"
+                class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                data-path="${path}"
+                data-field="stats"
+                value="${newCase.stats}"
+                placeholder="Ex: 450k views · Conversão +42%"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Título do Criativo / Case</label>
+            <input
+              type="text"
+              class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+              data-path="${path}"
+              data-field="title"
+              value="${newCase.title}"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Número Destaque</label>
+              <input
+                type="text"
+                class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                data-path="${path}"
+                data-field="highlightMetric"
+                value="${newCase.highlightMetric}"
+              />
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Descrição Métrica</label>
+              <input
+                type="text"
+                class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                data-path="${path}"
+                data-field="metricLabel"
+                value="${newCase.metricLabel}"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Depoimento da Marca</label>
+            <textarea
+              rows="2"
+              class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+              data-path="${path}"
+              data-field="quote"
+            >${newCase.quote}</textarea>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Autor do Depoimento</label>
+            <input
+              type="text"
+              class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+              data-path="${path}"
+              data-field="author"
+              value="${newCase.author}"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Vídeo (Link Google Drive ou YouTube)</label>
+            <input
+              type="text"
+              class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B]"
+              data-path="${path}"
+              data-field="youtubeId"
+              value=""
+              placeholder="Ex: https://drive.google.com/file/d/... ou ID do YouTube"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Capa / Thumbnail (Link Google Drive ou Imagem)</label>
+            <input
+              type="text"
+              class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B]"
+              data-path="${path}"
+              data-field="thumbnail"
+              value=""
+              placeholder="Ex: https://drive.google.com/file/d/... ou link de imagem"
+            />
+          </div>
+        `;
+        container.appendChild(card);
+        bindCaseCard(card);
+        updateCasePills();
+        evaluateChanges();
+        card.scrollIntoView({ behavior: "smooth" });
       });
+
+      // --- MODULE 7: TESTIMONIALS EVENT BINDINGS ---
+      function bindTestimonialCard(card: Element) {
+        card.querySelectorAll(".test-input").forEach((input) => {
+          input.addEventListener("input", (e) => {
+            const el = e.target as HTMLInputElement | HTMLTextAreaElement;
+            const path = el.getAttribute("data-path");
+            const field = el.getAttribute("data-field");
+            if (!path || !field) return;
+
+            const data = currentCollections.get(path);
+            if (data) {
+              data[field] = el.value;
+              if (field === "clientName") {
+                const clientDisplay = card.querySelector(".test-card-client-display");
+                if (clientDisplay) clientDisplay.textContent = el.value || "Novo Depoimento";
+                updateTestimonialPills();
+              }
+              evaluateChanges();
+            }
+          });
+        });
+
+        const deleteBtn = card.querySelector(".btn-delete-testimonial");
+        deleteBtn?.addEventListener("click", () => {
+          const path = card.getAttribute("data-path");
+          if (!path) return;
+          if (confirm("Deseja realmente remover este depoimento?")) {
+            markCollectionDeleted(path);
+            card.remove();
+            updateTestimonialPills();
+          }
+        });
+      }
+
+      // Add Testimonial Button
+      const btnAddTestimonial = document.getElementById("btn-add-testimonial");
+      btnAddTestimonial?.addEventListener("click", () => {
+        const container = document.getElementById("testimonials-list-container");
+        if (!container) return;
+        const currentCount = container.querySelectorAll(".testimonial-card-item").length;
+        const id = `depoimento-${Date.now()}`;
+        const path = `src/content/testimonials/${id}.json`;
+        const newTest = {
+          clientName: "Novo Cliente",
+          brand: "Marca Parceira",
+          role: "Gestor(a)",
+          quote: "Excelente experiência trabalhando juntos. Conteúdo autêntico e de alto impacto para nossos resultados.",
+        };
+
+        currentCollections.set(path, newTest);
+
+        const card = document.createElement("div");
+        card.id = `card-test-${currentCount}`;
+        card.className = "testimonial-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2";
+        card.setAttribute("data-path", path);
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-white truncate max-w-[200px] test-card-client-display">${newTest.clientName}</span>
+            <button
+              type="button"
+              class="btn-delete-testimonial p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+              data-path="${path}"
+              title="Excluir este depoimento"
+            >
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Cliente</label>
+              <input
+                type="text"
+                class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                data-path="${path}"
+                data-field="clientName"
+                value="${newTest.clientName}"
+              />
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Empresa / Marca</label>
+              <input
+                type="text"
+                class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                data-path="${path}"
+                data-field="brand"
+                value="${newTest.brand}"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Cargo</label>
+            <input
+              type="text"
+              class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+              data-path="${path}"
+              data-field="role"
+              value="${newTest.role}"
+            />
+          </div>
+          <div>
+            <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Texto do Depoimento</label>
+            <textarea
+              rows="2"
+              class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+              data-path="${path}"
+              data-field="quote"
+            >${newTest.quote}</textarea>
+          </div>
+        `;
+        container.appendChild(card);
+        bindTestimonialCard(card);
+        updateTestimonialPills();
+        evaluateChanges();
+        card.scrollIntoView({ behavior: "smooth" });
+      });
+
+      // Bind all initial rendered items on page load
+      document.querySelectorAll(".service-card-item").forEach(bindServiceCard);
+      document.querySelectorAll(".brand-item-row").forEach(bindBrandRow);
+      document.querySelectorAll(".case-card-item").forEach(bindCaseCard);
+      document.querySelectorAll(".testimonial-card-item").forEach(bindTestimonialCard);
 
       // --- MODULE 8: CONTACT LIVE-BINDING ---
       const inputContactFullName = document.getElementById("input-contact-fullname") as HTMLInputElement;
@@ -1706,10 +2315,11 @@ const palettes = [
           commitParts.push("identidade e contato");
         }
 
-        // Add changed collection items
+        // Add changed or new collection items (excluding deleted)
         currentCollections.forEach((currData, path) => {
+          if (deletedCollections.has(path)) return;
           const initData = initialCollections.get(path);
-          if (JSON.stringify(currData) !== JSON.stringify(initData)) {
+          if (!initData || JSON.stringify(currData) !== JSON.stringify(initData)) {
             filesToSave.push({
               path,
               contents: JSON.stringify(currData, null, 2) + "\n",
@@ -1718,14 +2328,28 @@ const palettes = [
           }
         });
 
+        // Add deletions
+        const deletionsToSave = Array.from(deletedCollections).map((p) => {
+          commitParts.push(`remove ${p.split("/").pop()?.replace(".json", "") || "item"}`);
+          return { path: p };
+        });
+
         const commitMessage = `Atualiza ${commitParts.slice(0, 3).join(", ")}${commitParts.length > 3 ? "..." : ""} via Studio Admin`;
 
         const result = await saveContentFiles({
           message: commitMessage,
           files: filesToSave,
+          deletions: deletionsToSave.length > 0 ? deletionsToSave : undefined,
         });
 
         if (result.success) {
+          // Sync deleted collections
+          deletedCollections.forEach((p) => {
+            initialCollections.delete(p);
+            currentCollections.delete(p);
+          });
+          deletedCollections.clear();
+
           // Sync initial state with current state
           Object.assign(initialGeneral, currentGeneral);
           Object.assign(initialTopbar, currentTopbar);

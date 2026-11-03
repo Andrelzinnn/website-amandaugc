@@ -9,9 +9,14 @@ export interface FileAddition {
   contents: string; // Conteúdo em texto UTF-8 plano (ex: JSON stringificado)
 }
 
+export interface FileDeletion {
+  path: string;
+}
+
 export interface SaveOptions {
   message: string;
   files: FileAddition[];
+  deletions?: FileDeletion[];
 }
 
 export interface AuthStatus {
@@ -175,7 +180,7 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
             path: f.path,
             contents: toBase64(f.contents),
           })),
-          deletions: [],
+          deletions: (options.deletions || []).map((d) => ({ path: d.path })),
         }),
       });
 
@@ -257,7 +262,7 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
               path: f.path,
               contents: toBase64(f.contents),
             })),
-            deletions: [],
+            deletions: (options.deletions || []).map((d) => ({ path: d.path })),
           },
           message: {
             headline: options.message,

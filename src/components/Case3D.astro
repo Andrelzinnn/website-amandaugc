@@ -217,6 +217,8 @@ const { featuredCase } = portfolioData;
   const prevBtn = document.getElementById("prev-case-btn");
 
   const updateDeck = () => {
+    if (total === 0) return;
+
     cards.forEach((card, i) => {
       const el = card as HTMLElement;
       const diff = (i - activeIndex + total) % total;
@@ -226,16 +228,21 @@ const { featuredCase } = portfolioData;
         el.style.zIndex = "30";
         el.style.opacity = "1";
         el.style.pointerEvents = "auto";
-      } else if (diff === 1) {
+      } else if (diff === 1 && total > 1) {
         el.style.transform = "translate(14%, -3%) scale(0.94) rotate(6deg)";
         el.style.zIndex = "20";
         el.style.opacity = "0.55";
         el.style.pointerEvents = "auto";
-      } else {
+      } else if (total > 2 && diff === total - 1) {
         el.style.transform = "translate(-14%, -1%) scale(0.90) rotate(-6deg)";
         el.style.zIndex = "10";
         el.style.opacity = "0.45";
         el.style.pointerEvents = "auto";
+      } else {
+        el.style.transform = "translate(0, 15px) scale(0.82) rotate(0deg)";
+        el.style.zIndex = "5";
+        el.style.opacity = "0";
+        el.style.pointerEvents = "none";
       }
     });
 

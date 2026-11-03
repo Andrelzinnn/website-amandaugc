@@ -2,14 +2,16 @@
 import { portfolioData } from "../data/portfolioData";
 
 const { partnerBrands } = portfolioData;
-// Repeat array to ensure seamless infinite loop
-const doubleBrands = [...partnerBrands, ...partnerBrands, ...partnerBrands];
+const safeBrands = partnerBrands.length > 0 ? partnerBrands : [{ id: "default", name: "Marca Parceira" }];
+// Repeat array to ensure seamless infinite loop for any amount of items (minimum ~18 items)
+const repeatCount = Math.max(2, Math.ceil(18 / safeBrands.length));
+const marqueeBrands = Array.from({ length: repeatCount }, () => safeBrands).flat();
 ---
 
 <section id="marcas" class="py-5 bg-[#1B1815] text-[#FAF8F5] overflow-hidden border-y border-black">
   <div class="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
     <div class="animate-marquee-left flex items-center gap-10 whitespace-nowrap">
-      {doubleBrands.map((brand) => (
+      {marqueeBrands.map((brand) => (
         <div class="inline-flex items-center gap-10 text-xs sm:text-sm font-impact uppercase tracking-widest text-[#FAF8F5]/90 hover:text-[#C28D3F] transition-colors cursor-default">
           <span>{brand.name}</span>
           <span class="text-[#A8382B] text-xs font-serif">◆</span>
