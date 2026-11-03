@@ -1,0 +1,169 @@
+---
+import { portfolioData } from "../data/portfolioData";
+const { creator } = portfolioData;
+---
+
+<div
+  id="legal-modal"
+  class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-sm transition-opacity duration-300 select-text"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="legal-modal-title"
+>
+  <div
+    class="relative w-full max-w-2xl max-h-[85vh] bg-[#1B1815] text-[#FAF8F5] rounded-3xl border border-[#3D3630] shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+  >
+    <!-- Modal Header -->
+    <div class="flex items-center justify-between px-6 py-5 border-b border-[#2D2824] bg-[#24201C]/50 flex-shrink-0">
+      <div class="flex items-center gap-2.5">
+        <span class="w-2.5 h-2.5 rounded-full bg-[#C28D3F]"></span>
+        <h3 id="legal-modal-title" data-i18n="legal.modal.title" class="font-serif-editorial font-bold text-lg sm:text-xl text-white">
+          Termos de Uso & Política de Privacidade
+        </h3>
+      </div>
+      <button
+        type="button"
+        id="btn-close-legal-modal"
+        class="w-8 h-8 rounded-full bg-[#2D2824] hover:bg-[#3D3630] text-[#9E968E] hover:text-white flex items-center justify-center transition cursor-pointer"
+        aria-label="Fechar modal"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal Scrollable Content -->
+    <div class="p-6 sm:p-8 overflow-y-auto space-y-6 text-xs sm:text-sm text-[#C4BDB5] leading-relaxed no-scrollbar">
+      <!-- Section 1: Finalidade do Portfólio -->
+      <section class="space-y-2">
+        <h4 class="font-bold text-[#FAF8F5] uppercase tracking-wider text-xs flex items-center gap-2">
+          <span class="text-[#C28D3F]">01.</span>
+          <span>Finalidade do Portfólio & Caráter Ilustrativo</span>
+        </h4>
+        <p>
+          Este site é um portfólio profissional independente mantido por <strong class="text-white">{creator.fullName}</strong> com o objetivo exclusivo de apresentar habilidades criativas, produção audiovisual em formato UGC (<em>User Generated Content</em>), roteirização e estratégias de criativos para anúncios digitais.
+        </p>
+      </section>
+
+      <!-- Section 2: Marcas de Terceiros e Exemplos -->
+      <section class="space-y-2">
+        <h4 class="font-bold text-[#FAF8F5] uppercase tracking-wider text-xs flex items-center gap-2">
+          <span class="text-[#C28D3F]">02.</span>
+          <span>Marcas, Logotipos e Conteúdos de Terceiros</span>
+        </h4>
+        <p>
+          Todas as marcas comerciais, logotipos, produtos e nomes comerciais exibidos ou citados neste portfólio pertencem aos seus respectivos proprietários de direitos industriais e autorais.
+        </p>
+        <p class="p-3.5 rounded-xl bg-[#12100E] border border-[#2D2824] text-[#E0D9D1]">
+          <strong class="text-[#C28D3F]">Aviso Importante:</strong> A exibição de marcas neste portfólio possui finalidade <em>estritamente demonstrativa e ilustrativa</em> de formatos conceituais e capacidades de criação de conteúdo (nos termos do art. 132, inciso IV da Lei Federal nº 9.279/1996 - Lei da Propriedade Industrial), não configurando vínculo empregatício, parceria societária, patrocínio oficial ou endosso institucional direto por parte das respectivas empresas, salvo onde expressamente indicado por contrato.
+        </p>
+      </section>
+
+      <!-- Section 3: Métricas de Campanhas e Ausência de Garantia -->
+      <section class="space-y-2">
+        <h4 class="font-bold text-[#FAF8F5] uppercase tracking-wider text-xs flex items-center gap-2">
+          <span class="text-[#C28D3F]">03.</span>
+          <span>Métricas, Depoimentos e Resultados de Campanhas</span>
+        </h4>
+        <p>
+          Métricas de desempenho (como taxas de retenção, ROAS e visualizações) e depoimentos apresentados baseiam-se em amostras de criativos, estimativas de mercado ou desempenhos históricos de testes publicitários.
+        </p>
+        <p>
+          Em conformidade com as diretrizes do Código de Defesa do Consumidor e do CONAR, esclarece-se que os resultados de tráfego pago e marketing dependem de fatores alheios ao controle da criadora — incluindo, mas não se limitando a: investimento em mídia da marca contratante, público-alvo, qualidade da página de vendas, precificação e logística do anunciante. <em>Desempenhos passados não garantem faturamento futuro.</em>
+        </p>
+      </section>
+
+      <!-- Section 4: Privacidade e LGPD -->
+      <section class="space-y-2">
+        <h4 class="font-bold text-[#FAF8F5] uppercase tracking-wider text-xs flex items-center gap-2">
+          <span class="text-[#C28D3F]">04.</span>
+          <span>Privacidade e Proteção de Dados (LGPD - Lei nº 13.709/2018)</span>
+        </h4>
+        <p>
+          Respeitamos integralmente a sua privacidade e a legislação de proteção de dados:
+        </p>
+        <ul class="list-disc list-inside space-y-1.5 pl-2 text-[#9E968E]">
+          <li><strong class="text-white">Sem banco de dados de terceiros:</strong> Este site não comercializa, não aluga e não armazena dados de navegação para compartilhamento com terceiros.</li>
+          <li><strong class="text-white">Comunicação direta:</strong> As interações de contato são iniciadas por livre escolha do visitante via WhatsApp ou e-mail, onde os dados trocados destinam-se exclusivamente à formulação de briefings e orçamentos comerciais.</li>
+          <li><strong class="text-white">Cookies e Armazenamento Local:</strong> Empregamos recursos de armazenamento local (<em class="text-white">localStorage</em>) exclusivamente técnicos para preservar preferências de navegação (como idioma selecionado e tema de cores).</li>
+        </ul>
+      </section>
+
+      <!-- Section 5: Contato e Titularidade -->
+      <section class="space-y-2 pt-2 border-t border-[#2D2824]">
+        <h4 class="font-bold text-[#FAF8F5] uppercase tracking-wider text-xs flex items-center gap-2">
+          <span class="text-[#C28D3F]">05.</span>
+          <span>Identificação e Contato da Titular</span>
+        </h4>
+        <p>
+          Para solicitações comerciais, esclarecimentos de termos ou dúvidas de direitos autorais:
+        </p>
+        <p class="text-white font-medium">
+          {creator.fullName} · Criadora UGC & Estrategista de Conteúdo<br />
+          São Paulo - SP, Brasil · E-mail: <a href="mailto:contato@amandaugc.com.br" class="text-[#C28D3F] underline">contato@amandaugc.com.br</a>
+        </p>
+      </section>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="px-6 py-4 border-t border-[#2D2824] bg-[#24201C]/50 flex justify-end flex-shrink-0">
+      <button
+        type="button"
+        id="btn-confirm-legal-modal"
+        data-i18n="legal.modal.close"
+        class="px-5 py-2 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white font-bold text-xs uppercase tracking-wider transition cursor-pointer shadow-md"
+      >
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupLegalModal() {
+    const modal = document.getElementById("legal-modal");
+    const btnClose = document.getElementById("btn-close-legal-modal");
+    const btnConfirm = document.getElementById("btn-confirm-legal-modal");
+    const openBtns = document.querySelectorAll("[data-open-legal-modal]");
+
+    const openModal = () => {
+      if (modal) {
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        document.body.style.overflow = "hidden";
+      }
+    };
+
+    const closeModal = () => {
+      if (modal) {
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+        document.body.style.overflow = "";
+      }
+    };
+
+    openBtns.forEach((btn) => btn.addEventListener("click", (e) => {
+      e.preventDefault();
+      openModal();
+    }));
+
+    btnClose?.addEventListener("click", closeModal);
+    btnConfirm?.addEventListener("click", closeModal);
+
+    modal?.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal && !modal.classList.contains("hidden")) {
+        closeModal();
+      }
+    });
+
+    // Expose globally if needed
+    (window as any).openLegalModal = openModal;
+  }
+
+  setupLegalModal();
+</script>

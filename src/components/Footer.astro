@@ -31,6 +31,20 @@ const { faq, creator } = portfolioData;
       </div>
     </div>
 
+    <!-- Legal Notice & Demonstrative Disclaimers (Brands & Metrics) -->
+    <div class="mb-10 p-5 rounded-2xl bg-white/[0.03] border border-white/10 text-[11px] sm:text-xs text-[#9E968E] space-y-2 leading-relaxed">
+      <div class="flex items-center gap-2 text-white/90 font-bold uppercase tracking-wider text-[10px]">
+        <span class="w-1.5 h-1.5 rounded-full bg-[#C28D3F]"></span>
+        <span data-i18n="legal.disclaimer.title">Aviso Legal & Termos Demonstrativos</span>
+      </div>
+      <p data-i18n="legal.disclaimer.brands">
+        Marcas e Logotipos: Todas as marcas, logotipos e nomes comerciais exibidos neste portfólio possuem caráter puramente ilustrativo/demonstrativo de formatos e capacidades criativas de produção UGC (User Generated Content), pertencendo aos seus respectivos titulares de direitos e não implicando patrocínio, endosso oficial ou vínculo institucional direto.
+      </p>
+      <p data-i18n="legal.disclaimer.metrics">
+        Métricas e Desempenho: Dados de campanhas e métricas apresentadas refletem amostras de formatos ou estimativas de criativos. Os resultados práticos variam conforme produto, investimento de mídia e estratégia de cada anunciante. Resultados passados não garantem retornos futuros.
+      </p>
+    </div>
+
     <!-- Bottom Footer -->
     <div class="flex flex-col sm:flex-row items-center justify-between gap-6 text-xs text-[#FAF8F5]/60">
       <div class="flex items-center gap-2">
@@ -38,11 +52,19 @@ const { faq, creator } = portfolioData;
         <span>· <span data-i18n="footer.rights">Todos os direitos reservados ©</span> {new Date().getFullYear()}</span>
       </div>
 
-      <div class="flex items-center gap-6 font-semibold uppercase tracking-wider text-[11px]">
+      <div class="flex items-center flex-wrap gap-4 sm:gap-6 font-semibold uppercase tracking-wider text-[11px]">
         <a href="#sobre" data-i18n="nav.about" class="hover:text-white transition">Sobre</a>
         <a href="#cases" data-i18n="nav.results" class="hover:text-white transition">Resultados</a>
         <a href="#portfolio" data-i18n="nav.portfolio" class="hover:text-white transition">Portfólio</a>
         <a href="#contato" data-i18n="nav.contact" class="hover:text-white transition">Contato</a>
+        <button
+          type="button"
+          data-open-legal-modal
+          data-i18n="legal.terms.link"
+          class="hover:text-white transition cursor-pointer text-[#C28D3F]"
+        >
+          Termos & Privacidade
+        </button>
         <a href="/admin" data-admin-only class="hidden hover:text-white/90 text-white/40 transition">Admin 🔒</a>
       </div>
     </div>

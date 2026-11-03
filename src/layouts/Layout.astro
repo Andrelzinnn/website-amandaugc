@@ -2,6 +2,8 @@
 import "../styles/global.css";
 import { portfolioData } from "../data/portfolioData";
 import ThemePreviewer from "../components/ThemePreviewer.astro";
+import LegalModal from "../components/LegalModal.astro";
+import CookieBanner from "../components/CookieBanner.astro";
 
 interface Props {
   title?: string;
@@ -101,6 +103,8 @@ const schemaOrgPerson = {
     <slot />
 
     <ThemePreviewer />
+    <LegalModal />
+    <CookieBanner />
 
     <!-- Global Video Lightbox Modal Component -->
     <div

@@ -1,0 +1,70 @@
+---
+// Minimalist, accessible Cookie & Privacy Banner
+---
+
+<div
+  id="cookie-banner"
+  class="fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-40 hidden flex-col gap-3 p-4 rounded-2xl bg-[#1B1815]/95 text-[#FAF8F5] border border-[#3D3630] shadow-2xl backdrop-blur-md animate-in slide-in-from-bottom-5 duration-300 select-none"
+  role="region"
+  aria-label="Aviso de Cookies e Privacidade"
+>
+  <div class="flex items-start gap-3">
+    <div class="w-8 h-8 rounded-xl bg-[#24201C] border border-[#3D3630] flex items-center justify-center flex-shrink-0 text-base">
+      🍪
+    </div>
+    <div class="flex-1 text-xs text-[#C4BDB5] leading-relaxed">
+      <span data-i18n="cookies.banner.text">
+        Utilizamos cookies técnicos e armazenamento local apenas para salvar suas preferências de idioma e tema.
+      </span>
+      <button
+        type="button"
+        data-open-legal-modal
+        data-i18n="cookies.banner.policy"
+        class="inline-block ml-1 font-semibold text-[#C28D3F] hover:text-white underline cursor-pointer"
+      >
+        Ver Termos
+      </button>
+    </div>
+  </div>
+
+  <div class="flex items-center justify-end gap-2 pt-1 border-t border-[#2D2824]">
+    <button
+      type="button"
+      id="btn-accept-cookies"
+      data-i18n="cookies.banner.accept"
+      class="px-4 py-1.5 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white font-bold text-xs uppercase tracking-wider transition cursor-pointer shadow-md"
+    >
+      Entendido
+    </button>
+  </div>
+</div>
+
+<script>
+  function setupCookieBanner() {
+    const banner = document.getElementById("cookie-banner");
+    const btnAccept = document.getElementById("btn-accept-cookies");
+
+    try {
+      const consent = localStorage.getItem("cookie_consent");
+      if (!consent && banner) {
+        // Show after a brief non-intrusive delay
+        setTimeout(() => {
+          banner.classList.remove("hidden");
+          banner.classList.add("flex");
+        }, 1200);
+      }
+    } catch {}
+
+    btnAccept?.addEventListener("click", () => {
+      try {
+        localStorage.setItem("cookie_consent", "accepted");
+      } catch {}
+      if (banner) {
+        banner.classList.add("hidden");
+        banner.classList.remove("flex");
+      }
+    });
+  }
+
+  setupCookieBanner();
+</script>
