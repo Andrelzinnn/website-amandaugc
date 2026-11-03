@@ -1,8 +1,9 @@
 ---
 import { portfolioData } from "../data/portfolioData";
 import EditorIcon from "../components/icons/EditorIcon.astro";
+import generalData from "../content/general.json";
 
-const currentTheme = portfolioData.theme || "terracotta";
+const currentTheme = generalData.theme || portfolioData.theme || "terracotta";
 
 const palettes = [
   {
@@ -183,15 +184,43 @@ const palettes = [
           })}
         </div>
 
-        <!-- How to Save Notice -->
-        <div class="p-4 mx-4 mb-4 rounded-xl bg-[#24201C] border border-[#2D2824] text-xs text-[#C4BDB5]">
-          <div class="flex items-center gap-1.5 font-semibold text-white mb-1">
-            <EditorIcon name="lightbulb" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Como salvar permanentemente:</span>
+        <!-- Action & Publish Box -->
+        <div
+          id="publish-card"
+          class="p-4 mx-4 mb-4 rounded-2xl bg-[#24201C] border border-[#2D2824] flex flex-col gap-3"
+          data-general={JSON.stringify(generalData)}
+          data-saved-theme={currentTheme}
+        >
+          <!-- Connection Status Line -->
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="text-[#9E968E] flex items-center gap-1.5 font-medium">
+              <span id="auth-status-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <span id="auth-status-text">Verificando conexão...</span>
+            </span>
+            <button
+              type="button"
+              id="btn-auth-action"
+              class="hidden text-[#C28D3F] hover:text-white underline font-bold cursor-pointer transition text-[10px]"
+            >
+              Conectar
+            </button>
           </div>
-          <p class="leading-relaxed text-[11px] text-[#9E968E]">
-            Para aplicar a cor escolhida a todos os visitantes, abra o <a href="/keystatic/branch/main/singleton/general" class="text-[#C28D3F] underline font-bold hover:text-white transition">Editor de Informações Gerais</a>, escolha a mesma paleta e clique em <strong>Save</strong>.
-          </p>
+
+          <!-- Save Button -->
+          <button
+            type="button"
+            id="btn-save-theme"
+            disabled
+            class="w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-[#8A827B] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-transparent select-none"
+          >
+            <span id="save-btn-icon">
+              <EditorIcon name="check" class="w-3.5 h-3.5" />
+            </span>
+            <span id="save-btn-text">Paleta Atual Ativa</span>
+          </button>
+
+          <!-- Toast Message Feedback -->
+          <div id="save-feedback" class="hidden text-center text-[11px] font-semibold py-1.5 px-2.5 rounded-lg transition-all"></div>
         </div>
 
         <!-- Quick Shortcuts -->
@@ -248,6 +277,8 @@ const palettes = [
 
     <!-- Client-side script for interactive Studio live preview -->
     <script>
+      import { getKeystaticAuth, saveContentFiles, redirectToLogin } from "../lib/keystaticClient";
+
       const iframe = document.getElementById("site-iframe") as HTMLIFrameElement;
       const wrapper = document.getElementById("preview-wrapper");
       const btnDesktop = document.getElementById("btn-desktop");
@@ -255,13 +286,63 @@ const palettes = [
       const btnReload = document.getElementById("btn-reload");
       const paletteCards = document.querySelectorAll(".palette-card");
 
-      let currentTheme = iframe?.getAttribute("data-initial-theme") || "terracotta";
+      const publishCard = document.getElementById("publish-card");
+      const authStatusDot = document.getElementById("auth-status-dot");
+      const authStatusText = document.getElementById("auth-status-text");
+      const btnAuthAction = document.getElementById("btn-auth-action");
+      const btnSaveTheme = document.getElementById("btn-save-theme") as HTMLButtonElement;
+      const saveBtnText = document.getElementById("save-btn-text");
+      const saveFeedback = document.getElementById("save-feedback");
+
+      let currentGeneralData = publishCard?.dataset.general ? JSON.parse(publishCard.dataset.general) : {};
+      let savedTheme = publishCard?.dataset.savedTheme || "terracotta";
+      let selectedTheme = savedTheme;
+
+      // Check Authentication Status
+      function updateAuthUI() {
+        const auth = getKeystaticAuth();
+        if (auth.isLocal) {
+          if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
+          if (authStatusText) authStatusText.textContent = "Modo Local (Gravação Direta)";
+          if (btnAuthAction) btnAuthAction.classList.add("hidden");
+        } else if (auth.isAuthenticated) {
+          if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
+          if (authStatusText) authStatusText.textContent = "Conectado ao Keystatic Cloud";
+          if (btnAuthAction) btnAuthAction.classList.add("hidden");
+        } else {
+          if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
+          if (authStatusText) authStatusText.textContent = "Desconectado da Nuvem";
+          if (btnAuthAction) {
+            btnAuthAction.classList.remove("hidden");
+            btnAuthAction.textContent = "Conectar";
+            btnAuthAction.onclick = () => redirectToLogin();
+          }
+        }
+      }
+
+      updateAuthUI();
+
+      // Update Save Button State
+      function updateSaveButtonState() {
+        if (!btnSaveTheme || !saveBtnText) return;
+        const hasChanged = selectedTheme !== savedTheme;
+
+        if (hasChanged) {
+          btnSaveTheme.disabled = false;
+          btnSaveTheme.className = "w-full py-2.5 px-4 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#A8382B]/20 border border-[#C28D3F]/40";
+          saveBtnText.textContent = "Salvar e Publicar no Site";
+        } else {
+          btnSaveTheme.disabled = true;
+          btnSaveTheme.className = "w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-[#8A827B] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-transparent select-none";
+          saveBtnText.textContent = "Paleta Atual Ativa";
+        }
+      }
 
       // Palette Card Selection & Live Iframe Theme Update
       paletteCards.forEach((card) => {
         card.addEventListener("click", () => {
           const theme = card.getAttribute("data-theme") || "terracotta";
-          currentTheme = theme;
+          selectedTheme = theme;
 
           paletteCards.forEach((c) => {
             c.classList.remove("border-[#A8382B]", "bg-[#361A16]", "active-card");
@@ -275,6 +356,8 @@ const palettes = [
           const check = card.querySelector(".check-icon");
           if (check) check.classList.remove("hidden");
 
+          updateSaveButtonState();
+
           // Directly message the iframe or update its location query
           if (iframe && iframe.contentWindow) {
             try {
@@ -284,6 +367,51 @@ const palettes = [
             }
           }
         });
+      });
+
+      // Save Theme Handler
+      btnSaveTheme?.addEventListener("click", async () => {
+        if (selectedTheme === savedTheme) return;
+
+        btnSaveTheme.disabled = true;
+        btnSaveTheme.className = "w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-wait border border-transparent";
+        if (saveBtnText) saveBtnText.textContent = "Publicando no GitHub...";
+        if (saveFeedback) saveFeedback.classList.add("hidden");
+
+        const updatedGeneral = {
+          ...currentGeneralData,
+          theme: selectedTheme,
+        };
+
+        const result = await saveContentFiles({
+          message: `Atualiza paleta de cores para ${selectedTheme}`,
+          files: [
+            {
+              path: "src/content/general.json",
+              contents: JSON.stringify(updatedGeneral, null, 2) + "\n",
+            },
+          ],
+        });
+
+        if (result.success) {
+          savedTheme = selectedTheme;
+          currentGeneralData = updatedGeneral;
+          updateSaveButtonState();
+
+          if (saveFeedback) {
+            saveFeedback.className = "text-center text-[11px] font-semibold py-1.5 px-2.5 rounded-lg bg-emerald-950/80 border border-emerald-800 text-emerald-300 block";
+            saveFeedback.textContent = "✓ Paleta salva com sucesso!";
+            setTimeout(() => {
+              saveFeedback.classList.add("hidden");
+            }, 4000);
+          }
+        } else {
+          updateSaveButtonState();
+          if (saveFeedback) {
+            saveFeedback.className = "text-center text-[11px] font-semibold py-1.5 px-2.5 rounded-lg bg-red-950/80 border border-red-800 text-red-300 block";
+            saveFeedback.textContent = `Erro: ${result.error || "Falha ao salvar"}`;
+          }
+        }
       });
 
       // Device Switcher with Solid Colors
@@ -313,7 +441,7 @@ const palettes = [
 
       btnReload?.addEventListener("click", () => {
         if (iframe) {
-          iframe.src = `/?theme=${currentTheme}`;
+          iframe.src = `/?theme=${selectedTheme}`;
         }
       });
     </script>
