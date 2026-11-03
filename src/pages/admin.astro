@@ -199,7 +199,8 @@ const palettes = [
         <!-- Connected indicator badge in header -->
         <span
           id="header-auth-badge"
-          class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#171412] border border-emerald-900/60 text-emerald-400 text-xs font-semibold select-none"
+          style="display: none;"
+          class="items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#171412] border border-emerald-900/60 text-emerald-400 text-xs font-semibold select-none"
         >
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
           <span>Conectado</span>
@@ -209,8 +210,9 @@ const palettes = [
         <button
           type="button"
           id="header-login-btn"
-          class="hidden inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white text-xs font-bold uppercase tracking-wider transition shadow-lg cursor-pointer border border-[#C28D3F]/40"
-          title="Fazer login no Keystatic para salvar alterações"
+          style="display: none;"
+          class="items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white text-xs font-bold uppercase tracking-wider transition shadow-lg cursor-pointer border border-[#C28D3F]/40"
+          title="Fazer login no Studio para salvar alterações"
         >
           <EditorIcon name="lock" class="w-3.5 h-3.5 text-[#C28D3F]" />
           <span>Fazer Login</span>
@@ -335,7 +337,7 @@ const palettes = [
         </div>
 
         <!-- Unauthenticated Session Notice Banner -->
-        <div id="auth-warning-banner" class="hidden m-3 p-3.5 rounded-xl bg-[#221C16] border border-amber-600/40 text-amber-100 flex-shrink-0">
+        <div id="auth-warning-banner" style="display: none;" class="m-3 p-3.5 rounded-xl bg-[#221C16] border border-amber-600/40 text-amber-100 flex-shrink-0">
           <div class="flex items-start gap-2.5">
             <span class="text-base select-none">🔒</span>
             <div class="flex-1 text-xs">
@@ -1014,12 +1016,6 @@ const palettes = [
 
       <!-- Right Main: Live Preview Frame with Resizable Width Handle -->
       <main class="flex-1 bg-[#0D0B0A] relative flex flex-col items-center justify-center overflow-hidden p-2 sm:p-5 select-none min-w-0">
-        <!-- Floating Dimension & Scale Badge -->
-        <div class="absolute top-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-[#1B1815]/90 border border-[#2D2824] px-3 py-1 rounded-full text-[11px] text-[#C4BDB5] shadow-lg backdrop-blur pointer-events-none select-none">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          <span id="preview-dim-badge">100% Fluido</span>
-        </div>
-
         <!-- Preview Wrapper Container with Drag Handle -->
         <div id="preview-wrapper" class="relative max-w-full max-h-full flex items-center justify-center transition-all duration-150" style="width: 100%; height: 100%;">
           <iframe
@@ -1121,42 +1117,39 @@ const palettes = [
         if (isDev) {
           if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
           if (authStatusText) authStatusText.textContent = "Modo Local (Dev)";
-          if (btnAuthAction) btnAuthAction.classList.add("hidden");
-          if (headerLoginBtn) headerLoginBtn.classList.add("hidden");
+          if (btnAuthAction) btnAuthAction.style.display = "none";
+          if (headerLoginBtn) headerLoginBtn.style.display = "none";
           if (headerAuthBadge) {
-            headerAuthBadge.classList.remove("hidden");
-            headerAuthBadge.classList.add("inline-flex");
+            headerAuthBadge.style.display = "inline-flex";
             headerAuthBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Modo Local</span>';
           }
-          if (authWarningBanner) authWarningBanner.classList.add("hidden");
+          if (authWarningBanner) authWarningBanner.style.display = "none";
         } else if (auth.isAuthenticated) {
           if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
           if (authStatusText) authStatusText.textContent = "Conectado ao Studio";
-          if (btnAuthAction) btnAuthAction.classList.add("hidden");
-          if (headerLoginBtn) headerLoginBtn.classList.add("hidden");
+          if (btnAuthAction) btnAuthAction.style.display = "none";
+          if (headerLoginBtn) headerLoginBtn.style.display = "none";
           if (headerAuthBadge) {
-            headerAuthBadge.classList.remove("hidden");
-            headerAuthBadge.classList.add("inline-flex");
+            headerAuthBadge.style.display = "inline-flex";
             headerAuthBadge.innerHTML = '<span class="w-2 h-2 rounded-full bg-emerald-500"></span><span>Conectado</span>';
           }
-          if (authWarningBanner) authWarningBanner.classList.add("hidden");
+          if (authWarningBanner) authWarningBanner.style.display = "none";
         } else {
           if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-amber-500 animate-pulse";
           if (authStatusText) authStatusText.textContent = "Sessão Desconectada";
           if (btnAuthAction) {
-            btnAuthAction.classList.remove("hidden");
+            btnAuthAction.style.display = "inline-block";
             btnAuthAction.onclick = () => redirectToLogin();
           }
           if (headerLoginBtn) {
-            headerLoginBtn.classList.remove("hidden");
+            headerLoginBtn.style.display = "inline-flex";
             headerLoginBtn.onclick = () => redirectToLogin();
           }
           if (headerAuthBadge) {
-            headerAuthBadge.classList.add("hidden");
-            headerAuthBadge.classList.remove("inline-flex");
+            headerAuthBadge.style.display = "none";
           }
           if (authWarningBanner) {
-            authWarningBanner.classList.remove("hidden");
+            authWarningBanner.style.display = "block";
             if (bannerLoginBtn) {
               bannerLoginBtn.onclick = () => redirectToLogin();
             }
