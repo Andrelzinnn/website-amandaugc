@@ -91,6 +91,13 @@ const palettes = [
     />
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+      }
       body {
         font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       }
@@ -1082,24 +1089,36 @@ const palettes = [
             activePanel.classList.remove("hidden");
           }
 
-          // Smooth scroll iframe to section if target exists
+          // Smooth scroll ONLY the internal iframe window (avoiding scrollIntoView which scrolls the parent editor page)
           if (targetAnchor && iframe && iframe.contentWindow) {
             try {
-              const el = iframe.contentWindow.document.getElementById(targetAnchor);
-              if (el) el.scrollIntoView({ behavior: "smooth" });
+              const doc = iframe.contentWindow.document;
+              const el = doc.getElementById(targetAnchor);
+              if (el) {
+                const elTop = el.getBoundingClientRect().top + iframe.contentWindow.scrollY;
+                iframe.contentWindow.scrollTo({
+                  top: Math.max(0, elTop - 24),
+                  behavior: "smooth",
+                });
+              }
             } catch (e) {}
           }
         });
       });
 
-      // Quick Scroll to Card Buttons inside panels
+      // Quick Scroll to Card Buttons inside panels (strictly scroll panels-container, never parent page)
+      const panelsContainer = document.getElementById("panels-container");
       document.querySelectorAll(".scroll-to-card-btn").forEach((btn) => {
         btn.addEventListener("click", () => {
           const targetId = btn.getAttribute("data-target");
           if (!targetId) return;
           const targetCard = document.getElementById(targetId);
-          if (targetCard) {
-            targetCard.scrollIntoView({ behavior: "smooth", block: "start" });
+          if (targetCard && panelsContainer) {
+            const cardTop = targetCard.offsetTop;
+            panelsContainer.scrollTo({
+              top: Math.max(0, cardTop - 12),
+              behavior: "smooth",
+            });
             targetCard.classList.add("border-[#A8382B]", "ring-2", "ring-[#A8382B]/40");
             setTimeout(() => {
               targetCard.classList.remove("border-[#A8382B]", "ring-2", "ring-[#A8382B]/40");
