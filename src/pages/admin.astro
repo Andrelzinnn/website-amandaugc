@@ -628,6 +628,52 @@ const palettes = [
                 + Adicionar Marca
               </button>
             </div>
+
+            <!-- Controles Jurídicos & de Visibilidade das Marcas -->
+            <div class="p-3.5 rounded-2xl bg-[#1B1815] border border-[#2D2824] space-y-3">
+              <!-- Switch 1: Exibir / Ocultar Seção de Marcas -->
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex-1">
+                  <label for="toggle-show-brands" class="text-xs font-bold text-white flex items-center gap-2 cursor-pointer">
+                    <span>Exibir Carrossel de Marcas (#marcas)</span>
+                    <span id="badge-brands-status" class={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${generalData.showBrandsSection !== false ? "bg-emerald-950 text-emerald-400 border border-emerald-800/60" : "bg-zinc-800 text-zinc-400 border border-zinc-700"}`}>
+                      {generalData.showBrandsSection !== false ? "Ativo" : "Oculto no Site"}
+                    </span>
+                  </label>
+                  <p class="text-[10px] text-[#9E968E] mt-0.5">Mostra ou oculta a seção inteira de marcas parceiras da página inicial.</p>
+                </div>
+                <input
+                  type="checkbox"
+                  id="toggle-show-brands"
+                  checked={generalData.showBrandsSection !== false}
+                  class="w-4 h-4 accent-[#A8382B] rounded cursor-pointer"
+                />
+              </div>
+
+              <!-- Divider -->
+              <div class="border-t border-[#24201C]"></div>
+
+              <!-- Switch 2: Modo Teste/Exemplo vs Modo Oficial -->
+              <div class="flex items-center justify-between gap-3">
+                <div class="flex-1">
+                  <label for="toggle-illustrative-notice" class="text-xs font-bold text-white flex items-center gap-2 cursor-pointer">
+                    <span>Aviso de Marcas Ilustrativas</span>
+                    <span id="badge-notice-status" class={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${generalData.illustrativeBrandsNotice !== false ? "bg-amber-950 text-amber-300 border border-amber-800/60" : "bg-emerald-950 text-emerald-400 border border-emerald-800/60"}`}>
+                      {generalData.illustrativeBrandsNotice !== false ? "Modo Teste / Exemplo" : "Modo Oficial Verificado"}
+                    </span>
+                  </label>
+                  <p class="text-[10px] text-[#9E968E] mt-0.5">
+                    Exibe no rodapé o aviso de que as marcas citadas são apenas demonstrativas. Desmarque quando Amanda já tiver cadastrado marcas reais.
+                  </p>
+                </div>
+                <input
+                  type="checkbox"
+                  id="toggle-illustrative-notice"
+                  checked={generalData.illustrativeBrandsNotice !== false}
+                  class="w-4 h-4 accent-[#A8382B] rounded cursor-pointer"
+                />
+              </div>
+            </div>
             <div id="brands-list-container" class="space-y-2">
               {brandsList.map((item) => (
                 <div class="brand-item-row p-2.5 rounded-xl bg-[#24201C] border border-[#2D2824] flex items-center gap-2" data-path={item.path}>
@@ -1451,6 +1497,24 @@ const palettes = [
               });
             }
           }
+
+          if (updateData.legalUpdate) {
+            const { illustrativeBrandsNotice, showBrandsSection } = updateData.legalUpdate;
+            if (typeof showBrandsSection === "boolean") {
+              const marcasEl = doc.getElementById("marcas");
+              if (marcasEl) {
+                if (showBrandsSection) marcasEl.classList.remove("hidden");
+                else marcasEl.classList.add("hidden");
+              }
+            }
+            if (typeof illustrativeBrandsNotice === "boolean") {
+              const noticeEl = doc.getElementById("footer-illustrative-brands-notice");
+              if (noticeEl) {
+                if (illustrativeBrandsNotice) noticeEl.classList.remove("hidden");
+                else noticeEl.classList.add("hidden");
+              }
+            }
+          }
         } catch (e) {}
       }
 
@@ -2129,6 +2193,43 @@ const palettes = [
       });
 
       // --- MODULE 5: BRANDS EVENT BINDINGS ---
+      const toggleShowBrands = document.getElementById("toggle-show-brands") as HTMLInputElement;
+      const toggleIllustrativeNotice = document.getElementById("toggle-illustrative-notice") as HTMLInputElement;
+      const badgeBrandsStatus = document.getElementById("badge-brands-status");
+      const badgeNoticeStatus = document.getElementById("badge-notice-status");
+
+      toggleShowBrands?.addEventListener("change", (e) => {
+        const isChecked = (e.target as HTMLInputElement).checked;
+        currentGeneral.showBrandsSection = isChecked;
+        if (badgeBrandsStatus) {
+          if (isChecked) {
+            badgeBrandsStatus.textContent = "Ativo";
+            badgeBrandsStatus.className = "px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-950 text-emerald-400 border border-emerald-800/60";
+          } else {
+            badgeBrandsStatus.textContent = "Oculto no Site";
+            badgeBrandsStatus.className = "px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-zinc-800 text-zinc-400 border border-zinc-700";
+          }
+        }
+        sendLivePreviewUpdate({ legalUpdate: { showBrandsSection: isChecked } });
+        evaluateChanges();
+      });
+
+      toggleIllustrativeNotice?.addEventListener("change", (e) => {
+        const isChecked = (e.target as HTMLInputElement).checked;
+        currentGeneral.illustrativeBrandsNotice = isChecked;
+        if (badgeNoticeStatus) {
+          if (isChecked) {
+            badgeNoticeStatus.textContent = "Modo Teste / Exemplo";
+            badgeNoticeStatus.className = "px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-amber-950 text-amber-300 border border-amber-800/60";
+          } else {
+            badgeNoticeStatus.textContent = "Modo Oficial Verificado";
+            badgeNoticeStatus.className = "px-1.5 py-0.5 rounded text-[9px] font-bold uppercase bg-emerald-950 text-emerald-400 border border-emerald-800/60";
+          }
+        }
+        sendLivePreviewUpdate({ legalUpdate: { illustrativeBrandsNotice: isChecked } });
+        evaluateChanges();
+      });
+
       function updateBrandsLivePreview() {
         const brandsList: { name: string }[] = [];
         const rows = document.querySelectorAll("#brands-list-container .brand-item-row");

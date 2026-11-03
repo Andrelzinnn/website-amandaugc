@@ -59,6 +59,11 @@ const rawPortfolioData = {
     { id: "10", name: "Live Run" },
   ],
 
+  legalSettings: {
+    illustrativeBrandsNotice: true,
+    showBrandsSection: true,
+  },
+
   featuredCase: {
     title: "Case em Destaque",
     subtitle: "Campanha de Escala para Tráfego Pago",
@@ -471,6 +476,10 @@ function loadKeystaticOverrides(base: any) {
         title: general.contactTitle || "Solicite uma Proposta",
         subtitle: general.contactSubtitle || "resposta rápida em até 24 horas",
         desc: general.contactDesc || "Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.",
+      };
+      data.legalSettings = {
+        illustrativeBrandsNotice: general.illustrativeBrandsNotice !== false,
+        showBrandsSection: general.showBrandsSection !== false,
       };
     }
 

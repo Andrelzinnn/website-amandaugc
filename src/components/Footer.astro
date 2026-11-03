@@ -1,7 +1,8 @@
 ---
 import { portfolioData } from "../data/portfolioData";
 
-const { faq, creator } = portfolioData;
+const { faq, creator, legalSettings } = portfolioData;
+const showIllustrativeNotice = legalSettings?.illustrativeBrandsNotice !== false;
 ---
 
 <footer class="bg-[#1B1815] text-[#FAF8F5]/80 pt-16 pb-12 border-t border-black">
@@ -37,7 +38,7 @@ const { faq, creator } = portfolioData;
         <span class="w-1.5 h-1.5 rounded-full bg-[#C28D3F]"></span>
         <span data-i18n="legal.disclaimer.title">Aviso Legal & Termos Demonstrativos</span>
       </div>
-      <p data-i18n="legal.disclaimer.brands">
+      <p id="footer-illustrative-brands-notice" data-i18n="legal.disclaimer.brands" class={showIllustrativeNotice ? "" : "hidden"}>
         Marcas e Logotipos: Todas as marcas, logotipos e nomes comerciais exibidos neste portfólio possuem caráter puramente ilustrativo/demonstrativo de formatos e capacidades criativas de produção UGC (User Generated Content), pertencendo aos seus respectivos titulares de direitos e não implicando patrocínio, endosso oficial ou vínculo institucional direto.
       </p>
       <p data-i18n="legal.disclaimer.metrics">

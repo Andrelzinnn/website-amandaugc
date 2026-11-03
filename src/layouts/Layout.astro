@@ -431,6 +431,31 @@ const schemaOrgPerson = {
             });
           }
         }
+
+        // 9. Legal & Brand visibility updates
+        if (data.legalUpdate) {
+          const { illustrativeBrandsNotice, showBrandsSection } = data.legalUpdate;
+          if (typeof showBrandsSection === "boolean") {
+            const marcasEl = document.getElementById("marcas");
+            if (marcasEl) {
+              if (showBrandsSection) {
+                marcasEl.classList.remove("hidden");
+              } else {
+                marcasEl.classList.add("hidden");
+              }
+            }
+          }
+          if (typeof illustrativeBrandsNotice === "boolean") {
+            const noticeEl = document.getElementById("footer-illustrative-brands-notice");
+            if (noticeEl) {
+              if (illustrativeBrandsNotice) {
+                noticeEl.classList.remove("hidden");
+              } else {
+                noticeEl.classList.add("hidden");
+              }
+            }
+          }
+        }
       });
     </script>
   </body>

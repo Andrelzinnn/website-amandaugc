@@ -87,6 +87,16 @@ export default config({
           multiline: true,
           defaultValue: 'Preencha os dados do projeto para receber um orçamento detalhado com opções de pacotes, prazos de envio e direcionamento de criativos.',
         }),
+        showBrandsSection: fields.checkbox({
+          label: 'Exibir Carrossel de Marcas Parceiras (#marcas)',
+          description: 'Desmarque caso deseje ocultar a seção inteira de marcas da página inicial.',
+          defaultValue: true,
+        }),
+        illustrativeBrandsNotice: fields.checkbox({
+          label: 'Aviso de Marcas Ilustrativas (Modo Teste / Exemplo)',
+          description: 'Quando ativado, exibe no rodapé o aviso legal de que as marcas citadas são apenas demonstrativas. Desmarque quando Amanda já tiver cadastrado marcas reais.',
+          defaultValue: true,
+        }),
       },
     }),
     hero: singleton({
