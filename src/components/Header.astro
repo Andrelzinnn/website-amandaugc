@@ -305,18 +305,12 @@ const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponen
     });
   });
 
-  // No iframe de preview/admin, NUNCA executa troca automática nem lê localStorage
-  const isInIframe = window.self !== window.top;
-  if (isInIframe) {
-    syncButtons("pt");
-  } else {
-    const savedLang = localStorage.getItem("user_lang");
-    // Apenas se o usuário tiver explicitamente escolhido inglês aplicamos a tradução.
-    // Se for 'pt' ou nulo, mantemos o HTML renderizado pelo servidor (CMS) 100% intacto!
-    if (savedLang === "en") {
-      applyLanguage("en");
-    } else {
-      syncButtons("pt");
-    }
-  }
+  // Limpa resíduos antigos de localStorage para nunca sobrescrever o texto oficial do servidor
+  try {
+    localStorage.removeItem("user_lang");
+  } catch {}
+
+  // No carregamento da página, NUNCA executa applyLanguage.
+  // O HTML renderizado pelo servidor (Vercel/CMS) permanece 100% canônico e intocado.
+  syncButtons("pt");
 </script>
