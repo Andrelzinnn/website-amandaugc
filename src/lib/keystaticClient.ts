@@ -136,8 +136,13 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
     const headers = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${auth.token}`,
-      "x-keystatic-version": "0.5.0",
+      "x-keystatic-version": "0.6.9",
     };
+
+    // Keystatic Cloud exige literais 'repo-owner' e 'repo-name' pois o proxy
+    // mapeia o repositório real no backend via token da sessão
+    const CLOUD_REPO_OWNER = "repo-owner";
+    const CLOUD_REPO_NAME = "repo-name";
 
     // A. Busca o OID (SHA) atual do HEAD da branch
     const refQuery = `
@@ -158,14 +163,18 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
       body: JSON.stringify({
         query: refQuery,
         variables: {
-          owner: REPO_OWNER,
-          name: REPO_NAME,
+          owner: CLOUD_REPO_OWNER,
+          name: CLOUD_REPO_NAME,
           ref: `refs/heads/${BRANCH_NAME}`,
         },
       }),
     });
 
     const refJson = await refRes.json();
+    if (refJson.errors && refJson.errors.length > 0) {
+      throw new Error(refJson.errors[0]?.message || "Erro ao consultar referência do repositório");
+    }
+
     const headOid = refJson?.data?.repository?.ref?.target?.oid;
 
     if (!headOid) {
@@ -193,7 +202,7 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
         variables: {
           input: {
             branch: {
-              repositoryNameWithOwner: `${REPO_OWNER}/${REPO_NAME}`,
+              repositoryNameWithOwner: `${CLOUD_REPO_OWNER}/${CLOUD_REPO_NAME}`,
               branchName: BRANCH_NAME,
             },
             expectedHeadOid: headOid,
