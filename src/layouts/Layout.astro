@@ -251,6 +251,7 @@ const schemaOrgPerson = {
           const els = document.querySelectorAll(data.selector);
           els.forEach((el) => {
             el.textContent = data.text;
+            el.setAttribute("data-pt-text", data.text);
           });
         }
 
@@ -295,7 +296,10 @@ const schemaOrgPerson = {
           if (narr) {
             if (badge) {
               const bBadge = narr.querySelector(`[data-i18n="case.${index + 1}.badge"]`) || narr.querySelector(".rounded-full span");
-              if (bBadge) bBadge.textContent = badge;
+              if (bBadge) {
+                bBadge.textContent = badge;
+                bBadge.setAttribute("data-pt-text", badge);
+              }
             }
             if (brand) {
               const h3 = narr.querySelector("h3");
@@ -307,15 +311,26 @@ const schemaOrgPerson = {
             }
             if (metricLabel) {
               const mLbl = narr.querySelector(`[data-i18n="case.${index + 1}.metricLabel"]`) || narr.querySelector(".text-lg.font-bold.text-\\[\\#1B1815\\]");
-              if (mLbl) mLbl.textContent = metricLabel;
+              if (mLbl) {
+                mLbl.textContent = metricLabel;
+                mLbl.setAttribute("data-pt-text", metricLabel);
+              }
             }
             if (quote) {
               const qEl = narr.querySelector(`[data-i18n="case.${index + 1}.quote"]`) || narr.querySelector("blockquote p, blockquote, .italic span");
-              if (qEl) qEl.textContent = quote.startsWith('"') ? quote : `"${quote}"`;
+              if (qEl) {
+                const formattedQuote = quote.startsWith('"') ? quote : `"${quote}"`;
+                qEl.textContent = formattedQuote;
+                qEl.setAttribute("data-pt-text", formattedQuote);
+              }
             }
             if (author) {
               const aEl = narr.querySelector(`[data-i18n="case.${index + 1}.author"]`) || narr.querySelector("cite, .not-italic");
-              if (aEl) aEl.textContent = author.startsWith("—") ? author : `— ${author}`;
+              if (aEl) {
+                const formattedAuthor = author.startsWith("—") ? author : `— ${author}`;
+                aEl.textContent = formattedAuthor;
+                aEl.setAttribute("data-pt-text", formattedAuthor);
+              }
             }
           }
         }

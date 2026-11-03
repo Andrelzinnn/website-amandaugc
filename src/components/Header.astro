@@ -217,14 +217,26 @@ const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponen
   // --- LANGUAGE SWITCHER LOGIC ---
   let currentLang = "pt";
 
-  const applyLanguage = (lang: string) => {
-    const dict = translations[lang];
-    if (!dict) return;
+  // Captura e armazena os textos canônicos em português renderizados pelo servidor (CMS)
+  // antes de qualquer manipulação, para garantir que nunca sejam perdidos ou sobrescritos.
+  const initCanonicalPtTexts = () => {
+    document.querySelectorAll("[data-i18n]").forEach((el) => {
+      if (!el.hasAttribute("data-pt-text")) {
+        el.setAttribute("data-pt-text", el.textContent || "");
+      }
+    });
 
-    currentLang = lang;
-    localStorage.setItem("user_lang", lang);
+    document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+      const input = el as HTMLInputElement | HTMLTextAreaElement;
+      if (!el.hasAttribute("data-pt-placeholder")) {
+        el.setAttribute("data-pt-placeholder", input.placeholder || "");
+      }
+    });
+  };
 
-    // Update buttons UI
+  initCanonicalPtTexts();
+
+  const syncButtons = (lang: string) => {
     document.querySelectorAll(".lang-btn").forEach((b) => {
       const isTarget = b.getAttribute("data-lang") === lang;
       b.setAttribute("aria-pressed", isTarget ? "true" : "false");
@@ -234,11 +246,33 @@ const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponen
         b.className = "lang-btn px-2.5 py-1 text-[11px] font-bold rounded-full transition-all cursor-pointer text-[#57524C] hover:text-[#1B1815]";
       }
     });
+  };
+
+  const applyLanguage = (lang: string) => {
+    const dict = translations[lang];
+    if (!dict) return;
+
+    currentLang = lang;
+    try {
+      localStorage.setItem("user_lang", lang);
+    } catch {}
+
+    syncButtons(lang);
 
     // Update all elements with data-i18n
     document.querySelectorAll("[data-i18n]").forEach((el) => {
       const key = el.getAttribute("data-i18n");
-      if (key && dict[key]) {
+      if (!key) return;
+
+      if (lang === "pt") {
+        // Restaura o texto canônico do CMS vindo do SSR, nunca o dicionário estático
+        const originalText = el.getAttribute("data-pt-text");
+        if (originalText !== null && originalText !== undefined) {
+          el.textContent = originalText;
+        } else if (dict[key]) {
+          el.textContent = dict[key];
+        }
+      } else if (dict[key]) {
         el.textContent = dict[key];
       }
     });
@@ -246,8 +280,18 @@ const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponen
     // Update form placeholders with data-i18n-placeholder
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
       const key = el.getAttribute("data-i18n-placeholder");
-      if (key && dict[key]) {
-        (el as HTMLInputElement | HTMLTextAreaElement).placeholder = dict[key];
+      if (!key) return;
+
+      const input = el as HTMLInputElement | HTMLTextAreaElement;
+      if (lang === "pt") {
+        const origPlaceholder = el.getAttribute("data-pt-placeholder");
+        if (origPlaceholder !== null && origPlaceholder !== undefined) {
+          input.placeholder = origPlaceholder;
+        } else if (dict[key]) {
+          input.placeholder = dict[key];
+        }
+      } else if (dict[key]) {
+        input.placeholder = dict[key];
       }
     });
 
@@ -261,9 +305,18 @@ const whatsappLink = `https://wa.me/${creator.whatsapp}?text=${encodeURIComponen
     });
   });
 
-  // Check saved or browser language
-  const savedLang = localStorage.getItem("user_lang");
-  if (savedLang && (savedLang === "pt" || savedLang === "en")) {
-    applyLanguage(savedLang);
+  // No iframe de preview/admin, NUNCA executa troca automática nem lê localStorage
+  const isInIframe = window.self !== window.top;
+  if (isInIframe) {
+    syncButtons("pt");
+  } else {
+    const savedLang = localStorage.getItem("user_lang");
+    // Apenas se o usuário tiver explicitamente escolhido inglês aplicamos a tradução.
+    // Se for 'pt' ou nulo, mantemos o HTML renderizado pelo servidor (CMS) 100% intacto!
+    if (savedLang === "en") {
+      applyLanguage("en");
+    } else {
+      syncButtons("pt");
+    }
   }
 </script>

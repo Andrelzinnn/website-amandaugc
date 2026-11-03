@@ -1231,6 +1231,7 @@ const palettes = [
             const els = doc.querySelectorAll(updateData.selector);
             els.forEach((el) => {
               el.textContent = updateData.text;
+              el.setAttribute("data-pt-text", updateData.text);
             });
           }
           if (updateData.imageSelector && typeof updateData.imageUrl === "string") {
