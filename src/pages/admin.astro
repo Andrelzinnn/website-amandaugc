@@ -126,12 +126,22 @@ const palettes = [
       ::-webkit-scrollbar-thumb:hover {
         background: #C28D3F;
       }
+      /* Previne zoom automático indesejado no Safari iOS (inputs < 16px acionam auto-zoom) */
+      @media (max-width: 768px) {
+        input[type="text"],
+        input[type="number"],
+        input[type="url"],
+        textarea,
+        select {
+          font-size: 16px !important;
+        }
+      }
     </style>
   </head>
   <body class="bg-[#12100E] text-[#FAF8F5] min-h-screen flex flex-col antialiased selection:bg-[#A8382B] selection:text-white overflow-hidden">
     <!-- Top Studio Header -->
-    <header class="h-14 border-b border-[#2D2824] bg-[#1B1815] px-4 sm:px-6 flex items-center justify-between z-30 flex-shrink-0">
-      <div class="flex items-center gap-3">
+    <header class="h-14 border-b border-[#2D2824] bg-[#1B1815] px-3 sm:px-6 flex items-center justify-between z-30 flex-shrink-0 gap-2">
+      <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
         <a href="/" class="flex items-center gap-2 group">
           <span class="w-8 h-8 rounded-lg bg-[#A8382B] text-white flex items-center justify-center font-bold text-sm shadow-md">
             AL
@@ -140,13 +150,36 @@ const palettes = [
             Amanda Lopes
           </span>
         </a>
-        <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#24201C] text-[#C4BDB5] border border-[#2D2824] font-semibold tracking-wider uppercase text-[10px]">
-          Studio Admin & Live Preview
+        <span class="text-xs px-2.5 py-0.5 rounded-full bg-[#24201C] text-[#C4BDB5] border border-[#2D2824] font-semibold tracking-wider uppercase text-[10px] hidden md:inline-flex">
+          Studio Admin
         </span>
       </div>
 
-      <!-- Device View Controls (Desktop, Laptop 1024, Tablet 768, Mobile 390) -->
-      <div class="flex items-center gap-1 bg-[#12100E] p-1 rounded-xl border border-[#2D2824]">
+      <!-- Mobile / Tablet View Switcher Toggle (Visible only below lg) -->
+      <div class="flex lg:hidden items-center bg-[#12100E] p-0.5 rounded-xl border border-[#2D2824]" id="mobile-view-toggle">
+        <button
+          type="button"
+          id="mobile-tab-editor"
+          class="mobile-view-btn active px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]"
+          data-view="editor"
+        >
+          <EditorIcon name="pencil" class="w-3.5 h-3.5 text-[#C28D3F]" />
+          <span>Editor</span>
+        </button>
+        <button
+          type="button"
+          id="mobile-tab-preview"
+          class="mobile-view-btn px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white border border-transparent"
+          data-view="preview"
+        >
+          <EditorIcon name="eye" class="w-3.5 h-3.5" />
+          <span>Prévia</span>
+          <span id="mobile-preview-badge" class="w-2 h-2 rounded-full bg-[#A8382B] hidden"></span>
+        </button>
+      </div>
+
+      <!-- Device View Controls (Desktop, Laptop 1024, Tablet 768, Mobile 390) - Only visible on Desktop (lg:) -->
+      <div class="hidden lg:flex items-center gap-1 bg-[#12100E] p-1 rounded-xl border border-[#2D2824]">
         <button
           type="button"
           class="device-btn active px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]"
@@ -186,7 +219,7 @@ const palettes = [
       </div>
 
       <!-- Action Links -->
-      <div class="flex items-center gap-2 sm:gap-3">
+      <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0">
         <button
           type="button"
           id="btn-reload"
@@ -200,7 +233,7 @@ const palettes = [
         <span
           id="header-auth-badge"
           style="display: none;"
-          class="items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#171412] border border-emerald-900/60 text-emerald-400 text-xs font-semibold select-none"
+          class="items-center gap-1.5 px-2.5 py-1.5 rounded-xl bg-[#171412] border border-emerald-900/60 text-emerald-400 text-xs font-semibold select-none hidden sm:inline-flex"
         >
           <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
           <span>Conectado</span>
@@ -215,28 +248,27 @@ const palettes = [
           title="Fazer login no Studio para salvar alterações"
         >
           <EditorIcon name="lock" class="w-3.5 h-3.5 text-[#C28D3F]" />
-          <span>Fazer Login</span>
+          <span>Login</span>
         </button>
 
         <a
           href="/keystatic"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#24201C] hover:bg-[#2D2824] text-[#C4BDB5] hover:text-white border border-[#2D2824] text-xs font-medium transition cursor-pointer"
+          class="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#24201C] hover:bg-[#2D2824] text-[#C4BDB5] hover:text-white border border-[#2D2824] text-xs font-medium transition cursor-pointer"
           title="Abrir painel Keystatic CMS em nova aba"
         >
-          <span class="hidden sm:inline">Keystatic Base</span>
-          <span class="sm:hidden">CMS</span>
+          <span class="hidden sm:inline">CMS</span>
           <EditorIcon name="external-link" class="w-3 h-3" />
         </a>
       </div>
     </header>
 
-    <!-- Main Workspace: Split View with Resizable Splitter -->
+    <!-- Main Workspace: Split View with Resizable Splitter on Desktop, Full View on Mobile/Tablet via Toggle -->
     <div class="flex-1 flex flex-col lg:flex-row overflow-hidden relative" id="workspace-container">
       
       <!-- Left Sidebar: Visual Theme & Quick Settings -->
-      <aside id="admin-sidebar" class="w-full lg:w-[410px] border-b lg:border-b-0 border-[#2D2824] bg-[#1B1815] flex flex-col flex-shrink-0 h-[45vh] lg:h-full relative overflow-hidden select-none">
+      <aside id="admin-sidebar" class="w-full lg:w-[410px] border-b lg:border-b-0 border-[#2D2824] bg-[#1B1815] flex flex-col flex-shrink-0 h-full relative overflow-hidden select-none">
         
         <!-- Modular Studio Navigation Tabs with Scroll Buttons -->
         <div class="border-b border-[#2D2824] bg-[#171412] px-2 py-1.5 flex items-center gap-1 select-none flex-shrink-0 relative">
@@ -1070,7 +1102,20 @@ const palettes = [
         </div>
 
         <!-- Sticky Bottom Save Area -->
-        <div class="p-3 border-t border-[#2D2824] bg-[#171412] space-y-2 flex-shrink-0">
+        <div class="p-3 border-t border-[#2D2824] bg-[#171412] space-y-2 flex-shrink-0 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+          <!-- Mobile Quick Preview Link -->
+          <div class="flex items-center justify-between lg:hidden pb-1 pt-0.5">
+            <span class="text-[11px] text-[#9E968E]">Edição em tela cheia</span>
+            <button
+              type="button"
+              id="mobile-switch-to-preview-btn"
+              class="text-[11px] font-bold text-[#C28D3F] hover:text-white flex items-center gap-1.5 transition cursor-pointer py-1 px-2.5 rounded-lg bg-[#24201C] border border-[#3D3630]"
+            >
+              <EditorIcon name="eye" class="w-3.5 h-3.5" />
+              <span>Ver no Site ↗</span>
+            </button>
+          </div>
+
           <div id="pending-badge" class="hidden items-center justify-between text-[11px] text-[#C28D3F] bg-[#24201C] px-3 py-1.5 rounded-xl border border-[#C28D3F]/30 font-semibold">
             <span class="flex items-center gap-1.5">
               <span class="w-2 h-2 rounded-full bg-[#C28D3F] animate-pulse"></span>
@@ -1093,6 +1138,16 @@ const palettes = [
               Fazer Login ↗
             </button>
           </div>
+
+          <!-- Mobile Quick Switch to Preview Button (Only on < lg) -->
+          <button
+            type="button"
+            id="mobile-switch-to-preview-btn"
+            class="lg:hidden w-full py-2 px-3 rounded-xl bg-[#24201C] hover:bg-[#2D2824] text-white font-semibold text-xs transition-all flex items-center justify-center gap-2 cursor-pointer border border-[#3D3630]"
+          >
+            <EditorIcon name="eye" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Ver Prévia ao Vivo</span>
+          </button>
 
           <!-- Save Button with Solid State -->
           <button
@@ -1118,7 +1173,7 @@ const palettes = [
       </div>
 
       <!-- Right Main: Live Preview Frame with Resizable Width Handle -->
-      <main class="flex-1 bg-[#0D0B0A] relative flex flex-col items-center justify-center overflow-hidden p-2 sm:p-5 select-none min-w-0">
+      <main id="preview-main" class="flex-1 bg-[#0D0B0A] relative hidden lg:flex flex-col items-center justify-center overflow-hidden p-1 sm:p-5 select-none min-w-0 h-full">
         <!-- Preview Wrapper Container with Drag Handle -->
         <div id="preview-wrapper" class="relative max-w-full max-h-full flex items-center justify-center transition-all duration-150" style="width: 100%; height: 100%;">
           <iframe
@@ -1128,10 +1183,10 @@ const palettes = [
             title="Visualização ao Vivo do Portfólio"
           ></iframe>
 
-          <!-- Right Draggable Resize Handle -->
+          <!-- Right Draggable Resize Handle (Only visible on Desktop lg:) -->
           <div
             id="iframe-resizer-right"
-            class="absolute -right-3.5 top-1/2 -translate-y-1/2 w-4 h-24 bg-[#24201C] hover:bg-[#A8382B] active:bg-[#A8382B] rounded-full border border-[#3D3630] flex items-center justify-center cursor-ew-resize transition-colors shadow-2xl z-30 group select-none"
+            class="hidden lg:flex absolute -right-3.5 top-1/2 -translate-y-1/2 w-4 h-24 bg-[#24201C] hover:bg-[#A8382B] active:bg-[#A8382B] rounded-full border border-[#3D3630] items-center justify-center cursor-ew-resize transition-colors shadow-2xl z-30 group select-none"
             title="Arraste para redimensionar a largura da tela"
           >
             <div class="flex flex-col gap-1 items-center pointer-events-none">
@@ -1141,6 +1196,17 @@ const palettes = [
             </div>
           </div>
         </div>
+
+        <!-- Floating Button on Mobile Preview to Return to Editor -->
+        <button
+          type="button"
+          id="mobile-back-to-editor-btn"
+          style="display: none;"
+          class="lg:hidden fixed bottom-5 right-5 z-40 px-4 py-2.5 rounded-full bg-[#1B1815]/95 hover:bg-[#24201C] text-white border border-[#3D3630] shadow-2xl flex items-center gap-2 text-xs font-bold transition hover:scale-105 active:scale-95 cursor-pointer backdrop-blur-md"
+        >
+          <EditorIcon name="pencil" class="w-3.5 h-3.5 text-[#C28D3F]" />
+          <span>Voltar ao Editor</span>
+        </button>
       </main>
     </div>
 
@@ -1168,6 +1234,7 @@ const palettes = [
       const authStatusDot = document.getElementById("auth-status-dot");
       const authStatusText = document.getElementById("auth-status-text");
       const btnAuthAction = document.getElementById("btn-auth-action");
+      const mobilePreviewBadge = document.getElementById("mobile-preview-badge");
 
       // Tabs scroll buttons
       const tabsScrollContainer = document.getElementById("tabs-scroll-container");
@@ -1672,6 +1739,9 @@ const palettes = [
           if (pendingCount) {
             pendingCount.textContent = `${totalChanged} item${totalChanged > 1 ? "ns" : ""} modificado${totalChanged > 1 ? "s" : ""}`;
           }
+          if (mobilePreviewBadge) {
+            mobilePreviewBadge.classList.remove("hidden");
+          }
 
           if (btnSaveAll && saveBtnText) {
             btnSaveAll.disabled = false;
@@ -1682,6 +1752,9 @@ const palettes = [
           if (pendingBadge) {
             pendingBadge.classList.add("hidden");
             pendingBadge.classList.remove("flex");
+          }
+          if (mobilePreviewBadge) {
+            mobilePreviewBadge.classList.add("hidden");
           }
 
           if (btnSaveAll && saveBtnText) {
@@ -2770,6 +2843,85 @@ const palettes = [
           iframe.src = `/?theme=${currentGeneral.theme || "terracotta"}`;
         }
       });
+
+      // --- MOBILE / TABLET VIEW SWITCHER LOGIC (< 1024px) ---
+      const mobileTabEditor = document.getElementById("mobile-tab-editor");
+      const mobileTabPreview = document.getElementById("mobile-tab-preview");
+      const mobileSwitchToPreviewBtn = document.getElementById("mobile-switch-to-preview-btn");
+      const mobileBackToEditorBtn = document.getElementById("mobile-back-to-editor-btn");
+      const previewMain = document.getElementById("preview-main");
+
+      let currentMobileView: "editor" | "preview" = "editor";
+
+      function setMobileView(view: "editor" | "preview") {
+        currentMobileView = view;
+        const isDesktop = window.innerWidth >= 1024;
+
+        if (isDesktop) {
+          // On desktop (lg+), always show both editor and preview side-by-side
+          if (adminSidebar) {
+            adminSidebar.classList.remove("hidden");
+          }
+          if (previewMain) {
+            previewMain.classList.remove("hidden");
+            previewMain.classList.add("flex");
+          }
+          if (mobileBackToEditorBtn) {
+            mobileBackToEditorBtn.style.display = "none";
+          }
+          return;
+        }
+
+        // On mobile / tablet (< 1024px)
+        if (adminSidebar) {
+          adminSidebar.style.width = ""; // Reset inline width from desktop drag
+        }
+
+        if (view === "editor") {
+          if (adminSidebar) adminSidebar.classList.remove("hidden");
+          if (previewMain) {
+            previewMain.classList.add("hidden");
+            previewMain.classList.remove("flex");
+          }
+          if (mobileTabEditor) {
+            mobileTabEditor.className = "mobile-view-btn active px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]";
+          }
+          if (mobileTabPreview) {
+            mobileTabPreview.className = "mobile-view-btn px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white border border-transparent";
+          }
+          if (mobileBackToEditorBtn) {
+            mobileBackToEditorBtn.style.display = "none";
+          }
+        } else {
+          // view === "preview"
+          if (adminSidebar) adminSidebar.classList.add("hidden");
+          if (previewMain) {
+            previewMain.classList.remove("hidden");
+            previewMain.classList.add("flex");
+          }
+          if (mobileTabPreview) {
+            mobileTabPreview.className = "mobile-view-btn active px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition cursor-pointer bg-[#2D2824] text-white border border-[#3D3630]";
+          }
+          if (mobileTabEditor) {
+            mobileTabEditor.className = "mobile-view-btn px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer text-[#9E968E] hover:text-white border border-transparent";
+          }
+          if (mobileBackToEditorBtn) {
+            mobileBackToEditorBtn.style.display = "flex";
+          }
+        }
+      }
+
+      mobileTabEditor?.addEventListener("click", () => setMobileView("editor"));
+      mobileTabPreview?.addEventListener("click", () => setMobileView("preview"));
+      mobileSwitchToPreviewBtn?.addEventListener("click", () => setMobileView("preview"));
+      mobileBackToEditorBtn?.addEventListener("click", () => setMobileView("editor"));
+
+      window.addEventListener("resize", () => {
+        setMobileView(currentMobileView);
+      });
+
+      // Initial layout setup for current viewport
+      setMobileView("editor");
     </script>
 
     <!-- Global State Injection for Hydration -->
