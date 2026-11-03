@@ -505,6 +505,12 @@ function loadKeystaticOverrides(base: any) {
       if (hero.headlineCursive) data.hero.headlineCursive = hero.headlineCursive;
       if (hero.subheadline) data.hero.subheadline = hero.subheadline;
       if (hero.photoUrl) data.hero.photoUrl = hero.photoUrl;
+      if (hero.metric1Value) data.hero.metrics[0].value = hero.metric1Value;
+      if (hero.metric1Label) data.hero.metrics[0].label = hero.metric1Label;
+      if (hero.metric2Value) data.hero.metrics[1].value = hero.metric2Value;
+      if (hero.metric2Label) data.hero.metrics[1].label = hero.metric2Label;
+      if (hero.metric3Value) data.hero.metrics[2].value = hero.metric3Value;
+      if (hero.metric3Label) data.hero.metrics[2].label = hero.metric3Label;
     }
 
     // Cases collection

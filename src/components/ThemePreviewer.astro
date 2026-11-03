@@ -43,8 +43,8 @@ const palettes = [
 ];
 ---
 
-<!-- Floating Theme Previewer Pill (Bottom Left) -->
-<aside class="fixed left-4 sm:left-6 bottom-5 z-40 select-none font-sans" aria-label="Provador de Cores do Portfólio">
+<!-- Floating Theme Previewer Pill (Bottom Left) - Apenas visível para usuários autenticados -->
+<aside data-admin-only class="hidden fixed left-4 sm:left-6 bottom-5 z-40 select-none font-sans" aria-label="Provador de Cores do Portfólio">
   <!-- Trigger Button -->
   <button
     type="button"

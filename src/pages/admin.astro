@@ -5,6 +5,32 @@ import generalData from "../content/general.json";
 import topbarData from "../content/topbar.json";
 import heroData from "../content/hero.json";
 
+// Dynamic collections import
+const serviceModules = import.meta.glob<{ default: any }>("../content/services/*.json", { eager: true });
+const brandModules = import.meta.glob<{ default: any }>("../content/brands/*.json", { eager: true });
+const testimonialModules = import.meta.glob<{ default: any }>("../content/testimonials/*.json", { eager: true });
+const caseModules = import.meta.glob<{ default: any }>("../content/cases/*.json", { eager: true });
+
+const servicesList = Object.entries(serviceModules).map(([file, mod]) => ({
+  path: file.replace("../", "src/"),
+  data: mod.default || mod,
+})).sort((a, b) => (a.data.step || "00").localeCompare(b.data.step || "00"));
+
+const brandsList = Object.entries(brandModules).map(([file, mod]) => ({
+  path: file.replace("../", "src/"),
+  data: mod.default || mod,
+})).sort((a, b) => (a.data.name || "").localeCompare(b.data.name || ""));
+
+const testimonialsList = Object.entries(testimonialModules).map(([file, mod]) => ({
+  path: file.replace("../", "src/"),
+  data: mod.default || mod,
+}));
+
+const casesList = Object.entries(caseModules).map(([file, mod]) => ({
+  path: file.replace("../", "src/"),
+  data: mod.default || mod,
+}));
+
 const currentTheme = generalData.theme || portfolioData.theme || "terracotta";
 
 const palettes = [
@@ -71,6 +97,13 @@ const palettes = [
       .font-serif-editorial {
         font-family: 'Fraunces', serif;
       }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+      .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+      }
     </style>
   </head>
   <body class="bg-[#12100E] text-[#FAF8F5] min-h-screen flex flex-col antialiased selection:bg-[#A8382B] selection:text-white">
@@ -126,7 +159,7 @@ const palettes = [
           href="/keystatic"
           class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white text-xs font-bold uppercase tracking-wider transition shadow-lg cursor-pointer"
         >
-          <span>Editor de Conteúdo</span>
+          <span>Keystatic Base</span>
           <EditorIcon name="external-link" class="w-3 h-3" />
         </a>
       </div>
@@ -135,12 +168,12 @@ const palettes = [
     <!-- Main Workspace: Split View -->
     <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
       <!-- Left Sidebar: Visual Theme & Quick Settings -->
-      <aside class="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-[#2D2824] bg-[#1B1815] flex flex-col flex-shrink-0 overflow-y-auto max-h-72 lg:max-h-full">
+      <aside class="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-[#2D2824] bg-[#1B1815] flex flex-col flex-shrink-0 overflow-y-auto max-h-80 lg:max-h-full">
         <!-- Modular Studio Navigation Tabs -->
-        <div class="border-b border-[#2D2824] bg-[#171412] p-2 flex items-center gap-1 overflow-x-auto select-none flex-shrink-0">
+        <div class="border-b border-[#2D2824] bg-[#171412] p-2 flex items-center gap-1 overflow-x-auto select-none flex-shrink-0 no-scrollbar">
           <button
             type="button"
-            class="module-tab active px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer bg-[#24201C] text-white border border-[#3D3630]"
+            class="module-tab active px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer bg-[#24201C] text-white border border-[#3D3630] whitespace-nowrap"
             data-tab="theme"
           >
             <EditorIcon name="palette" class="w-3.5 h-3.5 text-[#C28D3F]" />
@@ -148,24 +181,63 @@ const palettes = [
           </button>
           <button
             type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
             data-tab="topbar"
+            data-target-anchor=""
           >
             <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
             <span>Aviso Topo</span>
           </button>
           <button
             type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
             data-tab="hero"
+            data-target-anchor="conteudo-principal"
           >
             <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Hero</span>
+            <span>Hero & Métricas</span>
           </button>
           <button
             type="button"
-            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
+            data-tab="services"
+            data-target-anchor="servicos"
+          >
+            <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Serviços</span>
+          </button>
+          <button
+            type="button"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
+            data-tab="brands"
+            data-target-anchor="marcas"
+          >
+            <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Marcas</span>
+          </button>
+          <button
+            type="button"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
+            data-tab="cases"
+            data-target-anchor="cases"
+          >
+            <EditorIcon name="video" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Cases 3D</span>
+          </button>
+          <button
+            type="button"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
+            data-tab="testimonials"
+            data-target-anchor="depoimentos"
+          >
+            <EditorIcon name="gift" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Depoimentos</span>
+          </button>
+          <button
+            type="button"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap"
             data-tab="contact"
+            data-target-anchor="contato"
           >
             <EditorIcon name="phone" class="w-3.5 h-3.5 text-[#C28D3F]" />
             <span>Contato</span>
@@ -247,6 +319,24 @@ const palettes = [
               >
                 🔥 Black Friday
               </button>
+              <button
+                type="button"
+                class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
+                data-badge="Dia das Mães 🌸"
+                data-text="Criativos para a campanha do Dia das Mães · Produção acelerada para Meta Ads"
+                data-cta="Solicitar Roteiros →"
+              >
+                🌸 Dia das Mães
+              </button>
+              <button
+                type="button"
+                class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
+                data-badge="Últimas Vagas ⚡"
+                data-text="Agenda do mês quase encerrada · Apenas 2 vagas para novos contratos"
+                data-cta="Garantir agora →"
+              >
+                ⚡ Agenda Quase Cheia
+              </button>
             </div>
           </div>
 
@@ -290,11 +380,11 @@ const palettes = [
           </div>
         </div>
 
-        <!-- TAB PANEL 3: Hero (Início) -->
+        <!-- TAB PANEL 3: Hero & Métricas -->
         <div id="panel-hero" class="tab-panel hidden p-4 space-y-4">
           <div class="pb-2 border-b border-[#2D2824]">
             <h3 class="text-xs font-bold uppercase tracking-wider text-white">Início / Proposta de Valor</h3>
-            <p class="text-[11px] text-[#9E968E] mt-0.5">Headline e subtítulo visíveis ao abrir o site.</p>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">Headline, subtítulo e números expressivos do Hero.</p>
           </div>
           <div class="space-y-3">
             <div>
@@ -329,10 +419,287 @@ const palettes = [
                 class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition resize-none"
               >{heroData.subheadline}</textarea>
             </div>
+
+            <!-- Números Expressivos (Hero) -->
+            <div class="pt-3 border-t border-[#2D2824] space-y-3">
+              <h4 class="text-[11px] font-bold uppercase tracking-wider text-[#C28D3F]">Números Expressivos (Hero)</h4>
+              
+              <!-- Métrica 1 -->
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label for="input-hero-m1-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 1 - Valor</label>
+                  <input
+                    type="text"
+                    id="input-hero-m1-val"
+                    value={heroData.metric1Value || "+350"}
+                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label for="input-hero-m1-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 1 - Texto</label>
+                  <input
+                    type="text"
+                    id="input-hero-m1-lbl"
+                    value={heroData.metric1Label || "Vídeos Entregues"}
+                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              <!-- Métrica 2 -->
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label for="input-hero-m2-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 2 - Valor</label>
+                  <input
+                    type="text"
+                    id="input-hero-m2-val"
+                    value={heroData.metric2Value || "+90"}
+                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label for="input-hero-m2-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 2 - Texto</label>
+                  <input
+                    type="text"
+                    id="input-hero-m2-lbl"
+                    value={heroData.metric2Label || "Marcas Atendidas"}
+                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                  />
+                </div>
+              </div>
+
+              <!-- Métrica 3 -->
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label for="input-hero-m3-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 3 - Valor</label>
+                  <input
+                    type="text"
+                    id="input-hero-m3-val"
+                    value={heroData.metric3Value || "4.6x"}
+                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                  />
+                </div>
+                <div>
+                  <label for="input-hero-m3-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 3 - Texto</label>
+                  <input
+                    type="text"
+                    id="input-hero-m3-lbl"
+                    value={heroData.metric3Label || "ROAS Médio em Campanhas"}
+                    class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- TAB PANEL 4: Contato & Redes -->
+        <!-- TAB PANEL 4: Serviços / Formatos de Trabalho -->
+        <div id="panel-services" class="tab-panel hidden p-4 space-y-4">
+          <div class="pb-2 border-b border-[#2D2824]">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Formatos de Trabalho</h3>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">Edite os serviços, entregáveis e diferenciais.</p>
+          </div>
+          <div class="space-y-4">
+            {servicesList.map((item, idx) => (
+              <div class="p-3 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-white flex items-center gap-2">
+                    <span class="px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">{item.data.step || `0${idx + 1}`}</span>
+                    <span class="truncate max-w-[200px]">{item.data.title}</span>
+                  </span>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Formato</label>
+                  <input
+                    type="text"
+                    class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    data-path={item.path}
+                    data-field="title"
+                    value={item.data.title}
+                  />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Breve Descrição</label>
+                  <textarea
+                    rows="2"
+                    class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+                    data-path={item.path}
+                    data-field="shortDesc"
+                  >{item.data.shortDesc}</textarea>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">O que inclui (separe por vírgula)</label>
+                  <input
+                    type="text"
+                    class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    data-path={item.path}
+                    data-field="deliverables"
+                    value={item.data.deliverables}
+                  />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Ideal para</label>
+                  <input
+                    type="text"
+                    class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    data-path={item.path}
+                    data-field="idealFor"
+                    value={item.data.idealFor}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- TAB PANEL 5: Marcas Parceiras -->
+        <div id="panel-brands" class="tab-panel hidden p-4 space-y-4">
+          <div class="pb-2 border-b border-[#2D2824]">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Marcas Parceiras</h3>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">Marcas exibidas no carrossel infinito do portfólio.</p>
+          </div>
+          <div class="space-y-2">
+            {brandsList.map((item) => (
+              <div class="p-2.5 rounded-xl bg-[#24201C] border border-[#2D2824] flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-[#C28D3F]"></span>
+                <input
+                  type="text"
+                  class="brand-input flex-1 px-2.5 py-1 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                  data-path={item.path}
+                  data-field="name"
+                  value={item.data.name}
+                  placeholder="Nome da Marca"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- TAB PANEL 6: Cases 3D -->
+        <div id="panel-cases" class="tab-panel hidden p-4 space-y-4">
+          <div class="pb-2 border-b border-[#2D2824]">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Cases em Destaque (Deck 3D)</h3>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">Campanhas e resultados de alto impacto.</p>
+          </div>
+          <div class="space-y-4">
+            {casesList.map((item) => (
+              <div class="p-3 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-white truncate">{item.data.brand}</span>
+                  <span class="text-[10px] px-2 py-0.5 rounded bg-[#1B1815] text-[#C28D3F] border border-[#2D2824] font-semibold">{item.data.stats}</span>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Título do Criativo / Case</label>
+                  <input
+                    type="text"
+                    class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    data-path={item.path}
+                    data-field="title"
+                    value={item.data.title}
+                  />
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Número Destaque</label>
+                    <input
+                      type="text"
+                      class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="highlightMetric"
+                      value={item.data.highlightMetric}
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Descrição Métrica</label>
+                    <input
+                      type="text"
+                      class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="metricLabel"
+                      value={item.data.metricLabel}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Depoimento da Marca</label>
+                  <textarea
+                    rows="2"
+                    class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+                    data-path={item.path}
+                    data-field="quote"
+                  >{item.data.quote}</textarea>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Autor do Depoimento</label>
+                  <input
+                    type="text"
+                    class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    data-path={item.path}
+                    data-field="author"
+                    value={item.data.author}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- TAB PANEL 7: Depoimentos -->
+        <div id="panel-testimonials" class="tab-panel hidden p-4 space-y-4">
+          <div class="pb-2 border-b border-[#2D2824]">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Depoimentos de Clientes</h3>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">Avaliações das marcas parceiras.</p>
+          </div>
+          <div class="space-y-4">
+            {testimonialsList.map((item) => (
+              <div class="p-3 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5">
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Cliente</label>
+                    <input
+                      type="text"
+                      class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="clientName"
+                      value={item.data.clientName}
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Empresa / Marca</label>
+                    <input
+                      type="text"
+                      class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="brand"
+                      value={item.data.brand}
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Cargo</label>
+                  <input
+                    type="text"
+                    class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                    data-path={item.path}
+                    data-field="role"
+                    value={item.data.role}
+                  />
+                </div>
+                <div>
+                  <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Texto do Depoimento</label>
+                  <textarea
+                    rows="2"
+                    class="test-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+                    data-path={item.path}
+                    data-field="quote"
+                  >{item.data.quote}</textarea>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- TAB PANEL 8: Contato & Redes -->
         <div id="panel-contact" class="tab-panel hidden p-4 space-y-4">
           <div class="pb-2 border-b border-[#2D2824]">
             <h3 class="text-xs font-bold uppercase tracking-wider text-white">Canais de Contato & Redes</h3>
@@ -383,158 +750,136 @@ const palettes = [
                 class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
               />
             </div>
+            <div>
+              <label for="input-contact-whatsapp" class="block text-[11px] font-bold text-white mb-1">
+                WhatsApp (DDD + Número)
+              </label>
+              <input
+                type="text"
+                id="input-contact-whatsapp"
+                value={generalData.whatsappNumber}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+              />
+            </div>
           </div>
         </div>
 
-        <!-- Universal Action & Publish Box -->
-        <div
-          id="publish-card"
-          class="p-4 mx-4 mb-4 rounded-2xl bg-[#24201C] border border-[#2D2824] flex flex-col gap-3 mt-auto"
-          data-general={JSON.stringify(generalData)}
-          data-topbar={JSON.stringify(topbarData)}
-          data-hero={JSON.stringify(heroData)}
-          data-saved-theme={currentTheme}
-        >
-          <!-- Connection Status Line -->
-          <div class="flex items-center justify-between text-[11px]">
-            <span class="text-[#9E968E] flex items-center gap-1.5 font-medium">
-              <span id="auth-status-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span id="auth-status-text">Verificando conexão...</span>
+        <!-- Sticky Bottom Save Area -->
+        <div class="mt-auto p-4 border-t border-[#2D2824] bg-[#171412] space-y-3 sticky bottom-0 z-10">
+          <div id="pending-badge" class="hidden items-center justify-between text-[11px] text-[#C28D3F] bg-[#24201C] px-3 py-1.5 rounded-xl border border-[#C28D3F]/30 font-semibold">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#C28D3F] animate-pulse"></span>
+              <span id="pending-count">1 módulo modificado</span>
+            </span>
+            <span class="text-[10px] text-[#9E968E]">Pendente</span>
+          </div>
+
+          <!-- Auth Status Indicator -->
+          <div id="auth-status-container" class="flex items-center justify-between text-[10px] text-[#9E968E] px-1">
+            <span class="flex items-center gap-1.5">
+              <span id="auth-status-dot" class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <span id="auth-status-text">Verificando sessão...</span>
             </span>
             <button
               type="button"
               id="btn-auth-action"
-              class="hidden text-[#C28D3F] hover:text-white underline font-bold cursor-pointer transition text-[10px]"
+              class="hidden text-[10px] font-bold text-[#A8382B] hover:text-[#C28D3F] underline cursor-pointer"
             >
               Conectar
             </button>
           </div>
 
-          <!-- Pending changes indicator -->
-          <div id="pending-changes-badge" class="hidden items-center justify-between text-[11px] px-2 py-1 rounded-lg bg-[#2D2824] text-[#C28D3F]">
-            <span id="pending-changes-count">1 alteração pendente</span>
-            <span class="text-[10px] text-[#9E968E]">Não publicado</span>
-          </div>
-
-          <!-- Save Button -->
+          <!-- Save Button with Solid State -->
           <button
             type="button"
             id="btn-save-all"
             disabled
             class="w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-[#8A827B] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-transparent select-none"
           >
-            <span id="save-btn-icon">
-              <EditorIcon name="check" class="w-3.5 h-3.5" />
-            </span>
             <span id="save-btn-text">Nenhuma Alteração</span>
           </button>
 
-          <!-- Toast Message Feedback -->
-          <div id="save-feedback" class="hidden text-center text-[11px] font-semibold py-1.5 px-2.5 rounded-lg transition-all"></div>
-        </div>
-
-        <!-- Quick Shortcuts -->
-        <div class="mt-auto p-4 border-t border-[#2D2824]">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-[#8A827B] block mb-2">
-            Atalhos Rápidos de Edição
-          </span>
-          <div class="grid grid-cols-2 gap-2 text-[11px]">
-            <a href="/keystatic/branch/main/singleton/topbar" class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] hover:border-[#3D3630] transition block font-medium text-[#E8E2D9]">
-              <span class="flex items-center gap-1.5">
-                <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
-                <span>Aviso Topo</span>
-              </span>
-            </a>
-            <a href="/keystatic/branch/main/collection/cases" class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] hover:border-[#3D3630] transition block font-medium text-[#E8E2D9]">
-              <span class="flex items-center gap-1.5">
-                <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
-                <span>Cases 3D</span>
-              </span>
-            </a>
-            <a href="/keystatic/branch/main/collection/portfolioVideos" class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] hover:border-[#3D3630] transition block font-medium text-[#E8E2D9]">
-              <span class="flex items-center gap-1.5">
-                <EditorIcon name="video" class="w-3.5 h-3.5 text-[#C28D3F]" />
-                <span>Vídeos Nichos</span>
-              </span>
-            </a>
-            <a href="/keystatic/branch/main/collection/photos" class="p-2 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] hover:border-[#3D3630] transition block font-medium text-[#E8E2D9]">
-              <span class="flex items-center gap-1.5">
-                <EditorIcon name="camera" class="w-3.5 h-3.5 text-[#C28D3F]" />
-                <span>Fotos UGC</span>
-              </span>
-            </a>
-          </div>
+          <div id="save-feedback" class="hidden text-center text-[11px] font-semibold py-1.5 px-2.5 rounded-lg"></div>
         </div>
       </aside>
 
-      <!-- Right Main: Live Website Preview Canvas -->
-      <main class="flex-1 bg-[#0D0B0A] relative flex items-center justify-center p-2 sm:p-6 overflow-hidden">
+      <!-- Right Main: Live Preview Frame -->
+      <main class="flex-1 bg-[#0D0B0A] relative flex flex-col items-center justify-center overflow-hidden p-2 sm:p-4">
         <!-- Frame Container -->
-        <div
-          id="preview-wrapper"
-          class="w-full h-full transition-all duration-300 flex items-center justify-center"
-        >
+        <div id="preview-wrapper" class="w-full h-full transition-all duration-300 flex items-center justify-center">
           <iframe
-            id="site-iframe"
-            data-initial-theme={currentTheme}
+            id="preview-frame"
             src={`/?theme=${currentTheme}`}
             class="w-full h-full bg-[#FAF8F5] rounded-xl shadow-2xl transition-all duration-300 border-2 border-[#2D2824]"
-            title="Pré-visualização do site"
+            title="Visualização ao Vivo do Portfólio"
           ></iframe>
         </div>
       </main>
     </div>
 
-    <!-- Client-side script for interactive Studio live preview -->
+    <!-- Client-Side Script with Solid State Management -->
     <script>
-      import { getKeystaticAuth, saveContentFiles, redirectToLogin } from "../lib/keystaticClient";
+      import { saveContentFiles, getKeystaticAuth, redirectToLogin } from "../lib/keystaticClient";
 
-      const iframe = document.getElementById("site-iframe") as HTMLIFrameElement;
+      // Elements
+      const iframe = document.getElementById("preview-frame") as HTMLIFrameElement;
       const wrapper = document.getElementById("preview-wrapper");
       const btnDesktop = document.getElementById("btn-desktop");
       const btnMobile = document.getElementById("btn-mobile");
       const btnReload = document.getElementById("btn-reload");
+      const moduleTabs = document.querySelectorAll(".module-tab");
+      const tabPanels = document.querySelectorAll(".tab-panel");
       const paletteCards = document.querySelectorAll(".palette-card");
-
-      const publishCard = document.getElementById("publish-card");
+      const btnSaveAll = document.getElementById("btn-save-all") as HTMLButtonElement;
+      const saveBtnText = document.getElementById("save-btn-text");
+      const pendingBadge = document.getElementById("pending-badge");
+      const pendingCount = document.getElementById("pending-count");
+      const saveFeedback = document.getElementById("save-feedback");
       const authStatusDot = document.getElementById("auth-status-dot");
       const authStatusText = document.getElementById("auth-status-text");
       const btnAuthAction = document.getElementById("btn-auth-action");
-      const btnSaveAll = document.getElementById("btn-save-all") as HTMLButtonElement;
-      const saveBtnText = document.getElementById("save-btn-text");
-      const saveFeedback = document.getElementById("save-feedback");
-      const pendingBadge = document.getElementById("pending-changes-badge");
-      const pendingCount = document.getElementById("pending-changes-count");
 
-      // Tab switcher elements
-      const moduleTabs = document.querySelectorAll(".module-tab");
-      const tabPanels = document.querySelectorAll(".tab-panel");
+      // Inject server-rendered data into client memory
+      const initialGeneral = { ...window.__INITIAL_GENERAL__ };
+      const currentGeneral = { ...initialGeneral };
 
-      // Initial saved state from Astro data attributes
-      const initialGeneral = publishCard?.dataset.general ? JSON.parse(publishCard.dataset.general) : {};
-      const initialTopbar = publishCard?.dataset.topbar ? JSON.parse(publishCard.dataset.topbar) : {};
-      const initialHero = publishCard?.dataset.hero ? JSON.parse(publishCard.dataset.hero) : {};
+      const initialTopbar = { ...window.__INITIAL_TOPBAR__ };
+      const currentTopbar = { ...initialTopbar };
 
-      // Working copies (mutable)
-      let currentGeneral = { ...initialGeneral };
-      let currentTopbar = { ...initialTopbar };
-      let currentHero = { ...initialHero };
+      const initialHero = { ...window.__INITIAL_HERO__ };
+      const currentHero = { ...initialHero };
 
-      // Helper to update text safely inside the iframe document
-      function updateIframeText(selector: string, text: string) {
-        if (!iframe || !iframe.contentDocument) return;
-        const target = iframe.contentDocument.querySelector(selector);
-        if (target) {
-          target.textContent = text;
-        }
+      // Collections State Map: path -> data
+      const initialCollections = new Map<string, any>();
+      const currentCollections = new Map<string, any>();
+
+      if (window.__COLLECTIONS__) {
+        window.__COLLECTIONS__.forEach((item: { path: string; data: any }) => {
+          initialCollections.set(item.path, JSON.parse(JSON.stringify(item.data)));
+          currentCollections.set(item.path, JSON.parse(JSON.stringify(item.data)));
+        });
       }
 
-      // Check Authentication Status
+      // Live update helper in iframe
+      function updateIframeText(selector: string, text: string) {
+        if (!iframe || !iframe.contentWindow) return;
+        try {
+          const doc = iframe.contentWindow.document;
+          const els = doc.querySelectorAll(selector);
+          els.forEach((el) => {
+            el.textContent = text;
+          });
+        } catch (e) {}
+      }
+
+      // Auth UI Setup
       function updateAuthUI() {
         const auth = getKeystaticAuth();
-        if (auth.isLocal) {
+        const isDev = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+
+        if (isDev) {
           if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
-          if (authStatusText) authStatusText.textContent = "Modo Local (Gravação Direta)";
+          if (authStatusText) authStatusText.textContent = "Modo Local (Dev)";
           if (btnAuthAction) btnAuthAction.classList.add("hidden");
         } else if (auth.isAuthenticated) {
           if (authStatusDot) authStatusDot.className = "w-2 h-2 rounded-full bg-emerald-500";
@@ -553,10 +898,11 @@ const palettes = [
 
       updateAuthUI();
 
-      // Tab Switching Handler
+      // Tab Switching Handler & Auto Scroll in Iframe
       moduleTabs.forEach((tab) => {
         tab.addEventListener("click", () => {
           const targetTab = tab.getAttribute("data-tab");
+          const targetAnchor = tab.getAttribute("data-target-anchor");
 
           moduleTabs.forEach((t) => {
             t.classList.remove("active", "bg-[#24201C]", "text-white", "border-[#3D3630]");
@@ -574,6 +920,14 @@ const palettes = [
           if (activePanel) {
             activePanel.classList.remove("hidden");
           }
+
+          // Smooth scroll iframe to section if target exists
+          if (targetAnchor && iframe && iframe.contentWindow) {
+            try {
+              const el = iframe.contentWindow.document.getElementById(targetAnchor);
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            } catch (e) {}
+          }
         });
       });
 
@@ -589,13 +943,24 @@ const palettes = [
         if (isTopbarChanged) changedCount++;
         if (isHeroChanged) changedCount++;
 
-        if (changedCount > 0) {
+        // Check collections
+        let collectionsChanged = 0;
+        currentCollections.forEach((currData, path) => {
+          const initData = initialCollections.get(path);
+          if (JSON.stringify(currData) !== JSON.stringify(initData)) {
+            collectionsChanged++;
+          }
+        });
+
+        const totalChanged = changedCount + collectionsChanged;
+
+        if (totalChanged > 0) {
           if (pendingBadge) {
             pendingBadge.classList.remove("hidden");
             pendingBadge.classList.add("flex");
           }
           if (pendingCount) {
-            pendingCount.textContent = `${changedCount} módulo${changedCount > 1 ? "s" : ""} modificado${changedCount > 1 ? "s" : ""}`;
+            pendingCount.textContent = `${totalChanged} item${totalChanged > 1 ? "ns" : ""} modificado${totalChanged > 1 ? "s" : ""}`;
           }
 
           if (btnSaveAll && saveBtnText) {
@@ -616,7 +981,7 @@ const palettes = [
           }
         }
 
-        return { isGeneralChanged, isTopbarChanged, isHeroChanged, changedCount };
+        return { isGeneralChanged, isTopbarChanged, isHeroChanged, totalChanged };
       }
 
       // --- MODULE 1: PALETTE SWATCHES ---
@@ -703,6 +1068,12 @@ const palettes = [
       const inputHeroHeadline = document.getElementById("input-hero-headline") as HTMLInputElement;
       const inputHeroCursive = document.getElementById("input-hero-cursive") as HTMLInputElement;
       const inputHeroSubheadline = document.getElementById("input-hero-subheadline") as HTMLTextAreaElement;
+      const inputHeroM1Val = document.getElementById("input-hero-m1-val") as HTMLInputElement;
+      const inputHeroM1Lbl = document.getElementById("input-hero-m1-lbl") as HTMLInputElement;
+      const inputHeroM2Val = document.getElementById("input-hero-m2-val") as HTMLInputElement;
+      const inputHeroM2Lbl = document.getElementById("input-hero-m2-lbl") as HTMLInputElement;
+      const inputHeroM3Val = document.getElementById("input-hero-m3-val") as HTMLInputElement;
+      const inputHeroM3Lbl = document.getElementById("input-hero-m3-lbl") as HTMLInputElement;
 
       inputHeroHeadline?.addEventListener("input", (e) => {
         const val = (e.target as HTMLInputElement).value;
@@ -725,11 +1096,118 @@ const palettes = [
         evaluateChanges();
       });
 
-      // --- MODULE 4: CONTACT LIVE-BINDING ---
+      inputHeroM1Val?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.metric1Value = val;
+        updateIframeText('[data-i18n="hero.metric1.value"]', val);
+        evaluateChanges();
+      });
+
+      inputHeroM1Lbl?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.metric1Label = val;
+        updateIframeText('[data-i18n="hero.metric1.label"]', val);
+        evaluateChanges();
+      });
+
+      inputHeroM2Val?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.metric2Value = val;
+        updateIframeText('[data-i18n="hero.metric2.value"]', val);
+        evaluateChanges();
+      });
+
+      inputHeroM2Lbl?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.metric2Label = val;
+        updateIframeText('[data-i18n="hero.metric2.label"]', val);
+        evaluateChanges();
+      });
+
+      inputHeroM3Val?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.metric3Value = val;
+        updateIframeText('[data-i18n="hero.metric3.value"]', val);
+        evaluateChanges();
+      });
+
+      inputHeroM3Lbl?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.metric3Label = val;
+        updateIframeText('[data-i18n="hero.metric3.label"]', val);
+        evaluateChanges();
+      });
+
+      // --- MODULE 4: SERVICES INPUTS ---
+      document.querySelectorAll(".service-input").forEach((input) => {
+        input.addEventListener("input", (e) => {
+          const el = e.target as HTMLInputElement | HTMLTextAreaElement;
+          const path = el.getAttribute("data-path");
+          const field = el.getAttribute("data-field");
+          if (!path || !field) return;
+
+          const data = currentCollections.get(path);
+          if (data) {
+            data[field] = el.value;
+            evaluateChanges();
+          }
+        });
+      });
+
+      // --- MODULE 5: BRANDS INPUTS ---
+      document.querySelectorAll(".brand-input").forEach((input) => {
+        input.addEventListener("input", (e) => {
+          const el = e.target as HTMLInputElement;
+          const path = el.getAttribute("data-path");
+          const field = el.getAttribute("data-field");
+          if (!path || !field) return;
+
+          const data = currentCollections.get(path);
+          if (data) {
+            data[field] = el.value;
+            evaluateChanges();
+          }
+        });
+      });
+
+      // --- MODULE 6: CASES INPUTS ---
+      document.querySelectorAll(".case-input").forEach((input) => {
+        input.addEventListener("input", (e) => {
+          const el = e.target as HTMLInputElement | HTMLTextAreaElement;
+          const path = el.getAttribute("data-path");
+          const field = el.getAttribute("data-field");
+          if (!path || !field) return;
+
+          const data = currentCollections.get(path);
+          if (data) {
+            data[field] = el.value;
+            evaluateChanges();
+          }
+        });
+      });
+
+      // --- MODULE 7: TESTIMONIALS INPUTS ---
+      document.querySelectorAll(".test-input").forEach((input) => {
+        input.addEventListener("input", (e) => {
+          const el = e.target as HTMLInputElement | HTMLTextAreaElement;
+          const path = el.getAttribute("data-path");
+          const field = el.getAttribute("data-field");
+          if (!path || !field) return;
+
+          const data = currentCollections.get(path);
+          if (data) {
+            data[field] = el.value;
+            evaluateChanges();
+          }
+        });
+      });
+
+      // --- MODULE 8: CONTACT LIVE-BINDING ---
       const inputContactFullName = document.getElementById("input-contact-fullname") as HTMLInputElement;
       const inputContactRole = document.getElementById("input-contact-role") as HTMLInputElement;
       const inputContactInstagram = document.getElementById("input-contact-instagram") as HTMLInputElement;
       const inputContactTiktok = document.getElementById("input-contact-tiktok") as HTMLInputElement;
+      const inputContactWhatsapp = document.getElementById("input-contact-whatsapp") as HTMLInputElement;
 
       inputContactFullName?.addEventListener("input", (e) => {
         currentGeneral.fullName = (e.target as HTMLInputElement).value;
@@ -751,10 +1229,15 @@ const palettes = [
         evaluateChanges();
       });
 
+      inputContactWhatsapp?.addEventListener("input", (e) => {
+        currentGeneral.whatsappNumber = (e.target as HTMLInputElement).value;
+        evaluateChanges();
+      });
+
       // --- ATOMIC MULTI-FILE SAVE HANDLER ---
       btnSaveAll?.addEventListener("click", async () => {
-        const { isGeneralChanged, isTopbarChanged, isHeroChanged, changedCount } = evaluateChanges();
-        if (changedCount === 0) return;
+        const { isGeneralChanged, isTopbarChanged, isHeroChanged, totalChanged } = evaluateChanges();
+        if (totalChanged === 0) return;
 
         btnSaveAll.disabled = true;
         btnSaveAll.className = "w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-wait border border-transparent";
@@ -785,10 +1268,22 @@ const palettes = [
             path: "src/content/general.json",
             contents: JSON.stringify(currentGeneral, null, 2) + "\n",
           });
-          commitParts.push("identidade e cores");
+          commitParts.push("identidade e contato");
         }
 
-        const commitMessage = `Atualiza ${commitParts.join(", ")} via Studio Admin`;
+        // Add changed collection items
+        currentCollections.forEach((currData, path) => {
+          const initData = initialCollections.get(path);
+          if (JSON.stringify(currData) !== JSON.stringify(initData)) {
+            filesToSave.push({
+              path,
+              contents: JSON.stringify(currData, null, 2) + "\n",
+            });
+            commitParts.push(path.split("/").pop()?.replace(".json", "") || "conteúdo");
+          }
+        });
+
+        const commitMessage = `Atualiza ${commitParts.slice(0, 3).join(", ")}${commitParts.length > 3 ? "..." : ""} via Studio Admin`;
 
         const result = await saveContentFiles({
           message: commitMessage,
@@ -800,6 +1295,10 @@ const palettes = [
           Object.assign(initialGeneral, currentGeneral);
           Object.assign(initialTopbar, currentTopbar);
           Object.assign(initialHero, currentHero);
+
+          currentCollections.forEach((currData, path) => {
+            initialCollections.set(path, JSON.parse(JSON.stringify(currData)));
+          });
 
           evaluateChanges();
 
@@ -849,6 +1348,19 @@ const palettes = [
           iframe.src = `/?theme=${currentGeneral.theme || "terracotta"}`;
         }
       });
+    </script>
+
+    <!-- Global State Injection for Hydration -->
+    <script define:vars={{
+      generalData,
+      topbarData,
+      heroData,
+      allCollections: [...servicesList, ...brandsList, ...casesList, ...testimonialsList]
+    }}>
+      window.__INITIAL_GENERAL__ = generalData;
+      window.__INITIAL_TOPBAR__ = topbarData;
+      window.__INITIAL_HERO__ = heroData;
+      window.__COLLECTIONS__ = allCollections;
     </script>
   </body>
 </html>

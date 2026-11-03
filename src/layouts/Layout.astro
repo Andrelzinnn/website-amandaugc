@@ -190,6 +190,30 @@ const schemaOrgPerson = {
       if (previewTheme && validThemes.includes(previewTheme)) {
         document.documentElement.setAttribute("data-theme", previewTheme);
       }
+
+      // Check Keystatic authentication to reveal admin-only elements
+      function checkAdminAuth() {
+        const isDev = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1";
+        let isAuthed = isDev;
+        try {
+          const raw = localStorage.getItem("keystatic-cloud-access-token");
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed.token && (!parsed.validUntil || parsed.validUntil > Date.now())) {
+              isAuthed = true;
+            }
+          }
+        } catch {}
+
+        if (isAuthed) {
+          document.querySelectorAll("[data-admin-only]").forEach((el) => {
+            el.classList.remove("hidden");
+          });
+        }
+      }
+
+      checkAdminAuth();
+      window.addEventListener("storage", checkAdminAuth);
     </script>
   </body>
 </html>
