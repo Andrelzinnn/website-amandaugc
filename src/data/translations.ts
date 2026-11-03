@@ -94,7 +94,7 @@ export const translations: Record<string, Record<string, string>> = {
 
     // About
     "about.badge": "Bastidores & Trajetória",
-    "about.title": "Prazer, sou a Amanda Silveira",
+    "about.title": "Prazer, sou a Amanda Lopes",
     "about.subtitle": "e eu crio conexões reais para a sua marca",
     "about.p1": "Depois de anos acompanhando o mercado de publicidade digital, percebi que o consumidor moderno não tolera mais propagandas engessadas com cara de comercial de TV. As pessoas compram de pessoas reais, em quem confiam.",
     "about.p2": "Meu trabalho une a espontaneidade do criador de conteúdo nativo com o rigor da estratégia de tráfego pago: ganchos visuais para parar o scroll, storytelling conciso e chamada para ação focada em clique e compra.",
@@ -228,7 +228,7 @@ export const translations: Record<string, Record<string, string>> = {
 
     // About
     "about.badge": "Background & Vision",
-    "about.title": "Hello, I'm Amanda Silveira",
+    "about.title": "Hello, I'm Amanda Lopes",
     "about.subtitle": "building real human connections for your brand",
     "about.p1": "Consumers today quickly tune out polished traditional TV-style commercials. They trust and buy from genuine people who share real experiences.",
     "about.p2": "My approach combines the relatable authenticity of native social creators with performance-driven ad frameworks: scroll-stopping hooks, tight storytelling, and clear purchasing incentives.",

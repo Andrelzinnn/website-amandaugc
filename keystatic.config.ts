@@ -11,7 +11,7 @@ export default config({
   },
   ui: {
     brand: {
-      name: 'Amanda Silveira · UGC Studio Admin',
+      name: 'Amanda Lopes · UGC Studio Admin',
     },
     navigation: {
       '🎨 Identidade Visual & Avisos': ['general', 'topbar', 'hero'],
@@ -46,11 +46,11 @@ export default config({
       format: 'json',
       previewUrl: '/admin',
       schema: {
-        fullName: fields.text({ label: 'Nome Completo', defaultValue: 'Amanda Silveira' }),
+        fullName: fields.text({ label: 'Nome Completo', defaultValue: 'Amanda Lopes' }),
         role: fields.text({ label: 'Cargo / Especialidade', defaultValue: 'Criadora de Conteúdo UGC & Estrategista de Criativos' }),
         whatsappNumber: fields.text({ label: 'Número WhatsApp (apenas números com DDD)', defaultValue: '5511999998888' }),
-        instagram: fields.text({ label: 'Instagram', defaultValue: '@amandasilveira.ugc' }),
-        tiktok: fields.text({ label: 'TikTok', defaultValue: '@amandasilveiraugc' }),
+        instagram: fields.text({ label: 'Instagram', defaultValue: '@a_lopes' }),
+        tiktok: fields.text({ label: 'TikTok', defaultValue: '@a_lopes' }),
         theme: fields.select({
           label: '🎨 Paleta Visual & Cor de Destaque do Site',
           description: 'Muda instantaneamente os botões, selos, destaques cursivos e métricas do portfólio.',

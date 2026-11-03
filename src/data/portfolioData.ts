@@ -3,13 +3,13 @@ import { PortfolioConfigSchema, type PortfolioConfig } from "../schemas/portfoli
 const rawPortfolioData = {
   creator: {
     firstName: "Amanda",
-    lastName: "Silveira",
-    fullName: "Amanda Silveira",
+    lastName: "Lopes",
+    fullName: "Amanda Lopes",
     role: "Criadora de Conteúdo UGC & Estrategista de Criativos",
     email: "contato@amandaugc.com.br",
     whatsapp: "5511999998888",
-    instagram: "@amandasilveiraugc",
-    tiktok: "@amandasilveira.ugc",
+    instagram: "@a_lopes",
+    tiktok: "@a_lopes",
     city: "São Paulo, SP · Atendimento Nacional & Internacional",
   },
 
@@ -43,7 +43,7 @@ const rawPortfolioData = {
       },
     ],
     photoUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=900&q=80",
-    photoAlt: "Amanda Silveira, criadora UGC sorrindo de forma acolhedora para a câmera",
+    photoAlt: "Amanda Lopes, criadora UGC sorrindo de forma acolhedora para a câmera",
   },
 
   partnerBrands: [

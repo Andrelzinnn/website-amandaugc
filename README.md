@@ -1,4 +1,4 @@
-# 🌟 Portfólio UGC - Amanda Silveira
+# 🌟 Portfólio UGC - Amanda Lopes
 
 Protótipo e MVP de alta conversão desenvolvido para criadora de conteúdo UGC, com foco em estética editorial, retenção e geração de leads para marcas.
 
