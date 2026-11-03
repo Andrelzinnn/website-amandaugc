@@ -14,9 +14,10 @@ export default config({
       name: 'Amanda Lopes · UGC Studio Admin',
     },
     navigation: {
-      '🎨 Identidade Visual & Avisos': ['general', 'topbar', 'hero'],
-      '🎬 Criativos & Portfólio': ['cases', 'portfolioVideos', 'photos'],
-      '💼 Serviços & Prova Social': ['services', 'partnerBrands', 'testimonials'],
+      '📢 Topo & Início': ['topbar', 'hero'],
+      '🎬 Marcas & Cases': ['partnerBrands', 'cases', 'portfolioVideos', 'photos'],
+      '💼 Serviços & Prova Social': ['services', 'testimonials'],
+      '🎨 Identidade & Cores': ['general'],
     },
   },
   singletons: {

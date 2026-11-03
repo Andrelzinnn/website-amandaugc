@@ -255,16 +255,8 @@ const palettes = [
             <button
               type="button"
               class="module-tab active px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer bg-[#24201C] text-white border border-[#3D3630] whitespace-nowrap flex-shrink-0"
-              data-tab="theme"
-            >
-              <EditorIcon name="palette" class="w-3.5 h-3.5 text-[#C28D3F]" />
-              <span>Cores</span>
-            </button>
-            <button
-              type="button"
-              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
               data-tab="topbar"
-              data-target-anchor=""
+              data-target-anchor="top"
             >
               <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
               <span>Aviso Topo</span>
@@ -277,15 +269,6 @@ const palettes = [
             >
               <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
               <span>Hero & Métricas</span>
-            </button>
-            <button
-              type="button"
-              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
-              data-tab="services"
-              data-target-anchor="servicos"
-            >
-              <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
-              <span>Serviços</span>
             </button>
             <button
               type="button"
@@ -308,6 +291,15 @@ const palettes = [
             <button
               type="button"
               class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="services"
+              data-target-anchor="servicos"
+            >
+              <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Serviços</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
               data-tab="testimonials"
               data-target-anchor="depoimentos"
             >
@@ -322,6 +314,14 @@ const palettes = [
             >
               <EditorIcon name="phone" class="w-3.5 h-3.5 text-[#C28D3F]" />
               <span>Contato</span>
+            </button>
+            <button
+              type="button"
+              class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+              data-tab="theme"
+            >
+              <EditorIcon name="palette" class="w-3.5 h-3.5 text-[#C28D3F]" />
+              <span>Cores</span>
             </button>
           </div>
 
@@ -360,52 +360,8 @@ const palettes = [
         <!-- Scrollable Panels Container (Cards scroll smoothly here) -->
         <div id="panels-container" class="flex-1 overflow-y-auto">
 
-          <!-- TAB PANEL 1: Paleta de Cores -->
-          <div id="panel-theme" class="tab-panel p-4 space-y-3">
-            <div class="pb-2 border-b border-[#2D2824]">
-              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Paleta de Cores do Portfólio</h3>
-              <p class="text-[11px] text-[#9E968E] mt-0.5">Selecione para ver a mudança imediata no site.</p>
-            </div>
-            <div class="space-y-2">
-              {palettes.map((p) => {
-                const isActive = p.id === currentTheme;
-                return (
-                  <button
-                    type="button"
-                    class={`palette-card w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                      isActive
-                        ? "border-[#A8382B] bg-[#361A16] active-card"
-                        : "border-[#2D2824] hover:border-[#3D3630] bg-[#24201C] hover:bg-[#2D2824]"
-                    }`}
-                    data-theme={p.id}
-                  >
-                    <div class="flex items-center gap-3">
-                      <div class="flex items-center -space-x-1.5 flex-shrink-0">
-                        <span
-                          class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
-                          style={`background-color: ${p.color1};`}
-                        ></span>
-                        <span
-                          class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
-                          style={`background-color: ${p.color2};`}
-                        ></span>
-                      </div>
-                      <div>
-                        <span class="block text-xs font-bold text-white">{p.name}</span>
-                        <span class="block text-[10px] text-[#9E968E]">{p.subtitle}</span>
-                      </div>
-                    </div>
-                    <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
-                      <EditorIcon name="check" class="w-3.5 h-3.5" />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <!-- TAB PANEL 2: Aviso Topo (Topbar) -->
-          <div id="panel-topbar" class="tab-panel hidden p-4 space-y-4">
+          <!-- TAB PANEL 1: Aviso Topo (Topbar) -->
+          <div id="panel-topbar" class="tab-panel p-4 space-y-4">
             <div class="pb-2 border-b border-[#2D2824]">
               <h3 class="text-xs font-bold uppercase tracking-wider text-white">Barra de Aviso Superior</h3>
               <p class="text-[11px] text-[#9E968E] mt-0.5">Urgência, datas comemorativas e status de vagas.</p>
@@ -625,100 +581,7 @@ const palettes = [
             </div>
           </div>
 
-          <!-- TAB PANEL 4: Serviços / Formatos de Trabalho -->
-          <div id="panel-services" class="tab-panel hidden p-4 space-y-4">
-            <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
-              <div>
-                <h3 class="text-xs font-bold uppercase tracking-wider text-white">Formatos de Trabalho</h3>
-                <p class="text-[11px] text-[#9E968E] mt-0.5">Edite os serviços, entregáveis e diferenciais.</p>
-              </div>
-              <button
-                type="button"
-                id="btn-add-service"
-                class="px-2.5 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm"
-              >
-                + Novo Formato
-              </button>
-            </div>
-
-            <!-- Quick Navigation Pills to jump to any service card -->
-            <div id="services-pills-container" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-              <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
-              {servicesList.map((item, idx) => (
-                <button
-                  type="button"
-                  class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0"
-                  data-target={`card-service-${idx}`}
-                >
-                  {item.data.step || `0${idx + 1}`}
-                </button>
-              ))}
-            </div>
-
-            <div id="services-list-container" class="space-y-4">
-              {servicesList.map((item, idx) => (
-                <div id={`card-service-${idx}`} class="service-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2" data-path={item.path}>
-                  <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-white flex items-center gap-2">
-                      <span class="service-card-step px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">{item.data.step || `0${idx + 1}`}</span>
-                      <span class="service-card-title-text truncate max-w-[200px]">{item.data.title}</span>
-                    </span>
-                    <button
-                      type="button"
-                      class="btn-delete-service p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
-                      data-path={item.path}
-                      title="Excluir este formato"
-                    >
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                  <div>
-                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Formato</label>
-                    <input
-                      type="text"
-                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                      data-path={item.path}
-                      data-field="title"
-                      value={item.data.title}
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Breve Descrição</label>
-                    <textarea
-                      rows="2"
-                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
-                      data-path={item.path}
-                      data-field="shortDesc"
-                    >{item.data.shortDesc}</textarea>
-                  </div>
-                  <div>
-                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">O que inclui (separe por vírgula)</label>
-                    <input
-                      type="text"
-                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                      data-path={item.path}
-                      data-field="deliverables"
-                      value={item.data.deliverables}
-                    />
-                  </div>
-                  <div>
-                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Ideal para</label>
-                    <input
-                      type="text"
-                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
-                      data-path={item.path}
-                      data-field="idealFor"
-                      value={item.data.idealFor}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <!-- TAB PANEL 5: Marcas Parceiras -->
+          <!-- TAB PANEL 3: Marcas Parceiras -->
           <div id="panel-brands" class="tab-panel hidden p-4 space-y-4">
             <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
               <div>
@@ -911,7 +774,100 @@ const palettes = [
             </div>
           </div>
 
-          <!-- TAB PANEL 7: Depoimentos -->
+          <!-- TAB PANEL 5: Serviços / Formatos de Trabalho -->
+          <div id="panel-services" class="tab-panel hidden p-4 space-y-4">
+            <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold uppercase tracking-wider text-white">Formatos de Trabalho</h3>
+                <p class="text-[11px] text-[#9E968E] mt-0.5">Edite os serviços, entregáveis e diferenciais.</p>
+              </div>
+              <button
+                type="button"
+                id="btn-add-service"
+                class="px-2.5 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm"
+              >
+                + Novo Formato
+              </button>
+            </div>
+
+            <!-- Quick Navigation Pills to jump to any service card -->
+            <div id="services-pills-container" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
+              {servicesList.map((item, idx) => (
+                <button
+                  type="button"
+                  class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0"
+                  data-target={`card-service-${idx}`}
+                >
+                  {item.data.step || `0${idx + 1}`}
+                </button>
+              ))}
+            </div>
+
+            <div id="services-list-container" class="space-y-4">
+              {servicesList.map((item, idx) => (
+                <div id={`card-service-${idx}`} class="service-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2" data-path={item.path}>
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-white flex items-center gap-2">
+                      <span class="service-card-step px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">{item.data.step || `0${idx + 1}`}</span>
+                      <span class="service-card-title-text truncate max-w-[200px]">{item.data.title}</span>
+                    </span>
+                    <button
+                      type="button"
+                      class="btn-delete-service p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950/40 transition cursor-pointer"
+                      data-path={item.path}
+                      title="Excluir este formato"
+                    >
+                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Formato</label>
+                    <input
+                      type="text"
+                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="title"
+                      value={item.data.title}
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Breve Descrição</label>
+                    <textarea
+                      rows="2"
+                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+                      data-path={item.path}
+                      data-field="shortDesc"
+                    >{item.data.shortDesc}</textarea>
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">O que inclui (separe por vírgula)</label>
+                    <input
+                      type="text"
+                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="deliverables"
+                      value={item.data.deliverables}
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Ideal para</label>
+                    <input
+                      type="text"
+                      class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+                      data-path={item.path}
+                      data-field="idealFor"
+                      value={item.data.idealFor}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- TAB PANEL 6: Depoimentos -->
           <div id="panel-testimonials" class="tab-panel hidden p-4 space-y-4">
             <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
               <div>
@@ -1065,6 +1021,50 @@ const palettes = [
                   class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
                 />
               </div>
+            </div>
+          </div>
+
+          <!-- TAB PANEL 8: Paleta de Cores -->
+          <div id="panel-theme" class="tab-panel hidden p-4 space-y-3">
+            <div class="pb-2 border-b border-[#2D2824]">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-white">Paleta de Cores do Portfólio</h3>
+              <p class="text-[11px] text-[#9E968E] mt-0.5">Selecione para ver a mudança imediata no site.</p>
+            </div>
+            <div class="space-y-2">
+              {palettes.map((p) => {
+                const isActive = p.id === currentTheme;
+                return (
+                  <button
+                    type="button"
+                    class={`palette-card w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                      isActive
+                        ? "border-[#A8382B] bg-[#361A16] active-card"
+                        : "border-[#2D2824] hover:border-[#3D3630] bg-[#24201C] hover:bg-[#2D2824]"
+                    }`}
+                    data-theme={p.id}
+                  >
+                    <div class="flex items-center gap-3">
+                      <div class="flex items-center -space-x-1.5 flex-shrink-0">
+                        <span
+                          class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
+                          style={`background-color: ${p.color1};`}
+                        ></span>
+                        <span
+                          class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
+                          style={`background-color: ${p.color2};`}
+                        ></span>
+                      </div>
+                      <div>
+                        <span class="block text-xs font-bold text-white">{p.name}</span>
+                        <span class="block text-[10px] text-[#9E968E]">{p.subtitle}</span>
+                      </div>
+                    </div>
+                    <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
+                      <EditorIcon name="check" class="w-3.5 h-3.5" />
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -1517,7 +1517,19 @@ const palettes = [
 
         if (scrollIframe) {
           const targetAnchor = targetBtn.getAttribute("data-target-anchor");
-          if (targetAnchor && iframe && iframe.contentWindow) {
+          if (targetAnchor === "top") {
+            if (iframe && iframe.contentWindow) {
+              isProgrammaticScroll = true;
+              clearTimeout(scrollTimeout);
+              scrollTimeout = setTimeout(() => {
+                isProgrammaticScroll = false;
+              }, 900);
+              iframe.contentWindow.scrollTo({
+                top: 0,
+                behavior: "smooth",
+              });
+            }
+          } else if (targetAnchor && iframe && iframe.contentWindow) {
             try {
               const doc = iframe.contentWindow.document;
               const el = doc.getElementById(targetAnchor);
@@ -1561,7 +1573,14 @@ const palettes = [
             if (isProgrammaticScroll) return;
 
             const scrollY = iframeWin.scrollY;
-            if (scrollY < 60) {
+            if (scrollY < 20) {
+              if (lastSpiedSection !== "topbar") {
+                lastSpiedSection = "topbar";
+                activateTab("topbar", false);
+              }
+              return;
+            }
+            if (scrollY < 80) {
               if (lastSpiedSection !== "hero") {
                 lastSpiedSection = "hero";
                 activateTab("hero", false);
