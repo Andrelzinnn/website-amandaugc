@@ -1,0 +1,24 @@
+---
+interface Props {
+  variant?: "emerald" | "amber" | "zinc" | "terracotta" | "default";
+  class?: string;
+  id?: string;
+}
+
+const { variant = "default", class: className = "", id } = Astro.props;
+
+const variantClasses = {
+  emerald: "bg-emerald-950 text-emerald-400 border border-emerald-800/60",
+  amber: "bg-amber-950 text-amber-300 border border-amber-800/60",
+  zinc: "bg-zinc-800 text-zinc-400 border border-zinc-700",
+  terracotta: "bg-[#361A16] text-[#FAF8F5] border border-[#A8382B]",
+  default: "bg-[#24201C] text-[#C4BDB5] border border-[#2D2824]",
+};
+---
+
+<span
+  id={id}
+  class={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider ${variantClasses[variant] || variantClasses.default} ${className}`}
+>
+  <slot />
+</span>

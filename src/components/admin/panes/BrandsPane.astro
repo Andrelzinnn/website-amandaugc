@@ -1,0 +1,104 @@
+---
+interface Props {
+  generalData: {
+    showBrandsSection?: boolean;
+    illustrativeBrandsNotice?: boolean;
+  };
+  brandsList: Array<{
+    path: string;
+    data: {
+      name: string;
+    };
+  }>;
+}
+
+const { generalData, brandsList } = Astro.props;
+---
+
+<div id="panel-brands" class="tab-panel hidden p-4 space-y-4">
+  <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
+    <div>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-white">Marcas Parceiras</h3>
+      <p class="text-[11px] text-[#9E968E] mt-0.5">Marcas exibidas no carrossel infinito do portfólio.</p>
+    </div>
+    <button
+      type="button"
+      id="btn-add-brand"
+      class="px-2.5 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm"
+    >
+      + Adicionar Marca
+    </button>
+  </div>
+
+  <!-- Controles Jurídicos & de Visibilidade das Marcas -->
+  <div class="p-3.5 rounded-2xl bg-[#1B1815] border border-[#2D2824] space-y-3">
+    <!-- Switch 1: Exibir / Ocultar Seção de Marcas -->
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex-1">
+        <label for="toggle-show-brands" class="text-xs font-bold text-white flex items-center gap-2 cursor-pointer">
+          <span>Exibir Carrossel de Marcas (#marcas)</span>
+          <span id="badge-brands-status" class={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${generalData.showBrandsSection !== false ? "bg-emerald-950 text-emerald-400 border border-emerald-800/60" : "bg-zinc-800 text-zinc-400 border border-zinc-700"}`}>
+            {generalData.showBrandsSection !== false ? "Ativo" : "Oculto no Site"}
+          </span>
+        </label>
+        <p class="text-[10px] text-[#9E968E] mt-0.5">Mostra ou oculta a seção inteira de marcas parceiras da página inicial.</p>
+      </div>
+      <input
+        type="checkbox"
+        id="toggle-show-brands"
+        checked={generalData.showBrandsSection !== false}
+        class="w-4 h-4 accent-[#A8382B] rounded cursor-pointer"
+      />
+    </div>
+
+    <!-- Divider -->
+    <div class="border-t border-[#24201C]"></div>
+
+    <!-- Switch 2: Modo Teste/Exemplo vs Modo Oficial -->
+    <div class="flex items-center justify-between gap-3">
+      <div class="flex-1">
+        <label for="toggle-illustrative-notice" class="text-xs font-bold text-white flex items-center gap-2 cursor-pointer">
+          <span>Aviso de Marcas Ilustrativas</span>
+          <span id="badge-notice-status" class={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${generalData.illustrativeBrandsNotice !== false ? "bg-amber-950 text-amber-300 border border-amber-800/60" : "bg-emerald-950 text-emerald-400 border border-emerald-800/60"}`}>
+            {generalData.illustrativeBrandsNotice !== false ? "Modo Teste / Exemplo" : "Modo Oficial Verificado"}
+          </span>
+        </label>
+        <p class="text-[10px] text-[#9E968E] mt-0.5">
+          Exibe no rodapé o aviso de que as marcas citadas são apenas demonstrativas. Desmarque quando Amanda já tiver cadastrado marcas reais.
+        </p>
+      </div>
+      <input
+        type="checkbox"
+        id="toggle-illustrative-notice"
+        checked={generalData.illustrativeBrandsNotice !== false}
+        class="w-4 h-4 accent-[#A8382B] rounded cursor-pointer"
+      />
+    </div>
+  </div>
+
+  <div id="brands-list-container" class="space-y-2">
+    {brandsList.map((item) => (
+      <div class="brand-item-row p-2.5 rounded-xl bg-[#24201C] border border-[#2D2824] flex items-center gap-2" data-path={item.path}>
+        <span class="w-2 h-2 rounded-full bg-[#C28D3F]"></span>
+        <input
+          type="text"
+          class="brand-input flex-1 px-2.5 py-1 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+          data-path={item.path}
+          data-field="name"
+          value={item.data.name}
+          placeholder="Nome da Marca"
+        />
+        <button
+          type="button"
+          class="btn-delete-brand p-1.5 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950 transition cursor-pointer"
+          data-path={item.path}
+          title="Remover marca"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+          </svg>
+        </button>
+      </div>
+    ))}
+  </div>
+</div>

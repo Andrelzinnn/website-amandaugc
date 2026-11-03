@@ -1,0 +1,61 @@
+---
+import EditorIcon from "../../icons/EditorIcon.astro";
+
+interface Palette {
+  id: string;
+  name: string;
+  subtitle: string;
+  color1: string;
+  color2: string;
+}
+
+interface Props {
+  palettes: Palette[];
+  currentTheme: string;
+}
+
+const { palettes, currentTheme } = Astro.props;
+---
+
+<div id="panel-theme" class="tab-panel hidden p-4 space-y-3">
+  <div class="pb-2 border-b border-[#2D2824]">
+    <h3 class="text-xs font-bold uppercase tracking-wider text-white">Paleta de Cores do Portfólio</h3>
+    <p class="text-[11px] text-[#9E968E] mt-0.5">Selecione para ver a mudança imediata no site.</p>
+  </div>
+  <div class="space-y-2">
+    {palettes.map((p) => {
+      const isActive = p.id === currentTheme;
+      return (
+        <button
+          type="button"
+          class={`palette-card w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+            isActive
+              ? "border-[#A8382B] bg-[#361A16] active-card"
+              : "border-[#2D2824] hover:border-[#3D3630] bg-[#24201C] hover:bg-[#2D2824]"
+          }`}
+          data-theme={p.id}
+        >
+          <div class="flex items-center gap-3">
+            <div class="flex items-center -space-x-1.5 flex-shrink-0">
+              <span
+                class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
+                style={`background-color: ${p.color1};`}
+              ></span>
+              <span
+                class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
+                style={`background-color: ${p.color2};`}
+              ></span>
+            </div>
+            <div>
+              <span class="block text-xs font-bold text-white">{p.name}</span>
+              <span class="block text-[10px] text-[#9E968E]">{p.subtitle}</span>
+            </div>
+          </div>
+          <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
+            <EditorIcon name="check" class="w-3.5 h-3.5" />
+          </span>
+        </button>
+      );
+    })}
+  </div>
+</div>

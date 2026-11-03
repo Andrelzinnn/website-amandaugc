@@ -1,0 +1,122 @@
+---
+import EditorIcon from "../icons/EditorIcon.astro";
+---
+
+<!-- Modular Studio Navigation Tabs with Scroll Buttons -->
+<div class="border-b border-[#2D2824] bg-[#171412] px-2 py-1.5 flex items-center gap-1 select-none flex-shrink-0 relative">
+  <!-- Left scroll arrow -->
+  <button
+    type="button"
+    id="tabs-scroll-left"
+    class="w-6 h-7 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[#9E968E] hover:text-white border border-[#2D2824] flex items-center justify-center flex-shrink-0 cursor-pointer text-xs transition"
+    title="Rolar abas para esquerda"
+  >
+    ‹
+  </button>
+
+  <!-- Tabs scroll area -->
+  <div id="tabs-scroll-container" class="flex-1 flex items-center gap-1 overflow-x-auto no-scrollbar scroll-smooth py-0.5">
+    <button
+      type="button"
+      class="module-tab active px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer bg-[#24201C] text-white border border-[#3D3630] whitespace-nowrap flex-shrink-0"
+      data-tab="topbar"
+      data-target-anchor="top"
+    >
+      <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
+      <span>Aviso Topo</span>
+    </button>
+    <button
+      type="button"
+      class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+      data-tab="hero"
+      data-target-anchor="conteudo-principal"
+    >
+      <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
+      <span>Hero & Métricas</span>
+    </button>
+    <button
+      type="button"
+      class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+      data-tab="brands"
+      data-target-anchor="marcas"
+    >
+      <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
+      <span>Marcas</span>
+    </button>
+    <button
+      type="button"
+      class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+      data-tab="cases"
+      data-target-anchor="cases"
+    >
+      <EditorIcon name="video" class="w-3.5 h-3.5 text-[#C28D3F]" />
+      <span>Cases 3D</span>
+    </button>
+    <button
+      type="button"
+      class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+      data-tab="services"
+      data-target-anchor="servicos"
+    >
+      <EditorIcon name="clapperboard" class="w-3.5 h-3.5 text-[#C28D3F]" />
+      <span>Serviços</span>
+    </button>
+    <button
+      type="button"
+      class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+      data-tab="testimonials"
+      data-target-anchor="depoimentos"
+    >
+      <EditorIcon name="gift" class="w-3.5 h-3.5 text-[#C28D3F]" />
+      <span>Depoimentos</span>
+    </button>
+    <button
+      type="button"
+      class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+      data-tab="contact"
+      data-target-anchor="contato"
+    >
+      <EditorIcon name="phone" class="w-3.5 h-3.5 text-[#C28D3F]" />
+      <span>Contato</span>
+    </button>
+    <button
+      type="button"
+      class="module-tab px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent whitespace-nowrap flex-shrink-0"
+      data-tab="theme"
+    >
+      <EditorIcon name="palette" class="w-3.5 h-3.5 text-[#C28D3F]" />
+      <span>Cores</span>
+    </button>
+  </div>
+
+  <!-- Right scroll arrow -->
+  <button
+    type="button"
+    id="tabs-scroll-right"
+    class="w-6 h-7 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[#9E968E] hover:text-white border border-[#2D2824] flex items-center justify-center flex-shrink-0 cursor-pointer text-xs transition"
+    title="Rolar abas para direita"
+  >
+    ›
+  </button>
+</div>
+
+<!-- Unauthenticated Session Notice Banner -->
+<div id="auth-warning-banner" style="display: none;" class="m-3 p-3.5 rounded-xl bg-[#221C16] border border-amber-800 text-amber-100 flex-shrink-0">
+  <div class="flex items-start gap-2.5">
+    <span class="text-base select-none">🔒</span>
+    <div class="flex-1 text-xs">
+      <p class="font-bold text-amber-200">Modo de Pré-visualização</p>
+      <p class="text-[11px] text-[#A89F95] mt-0.5 leading-relaxed">
+        Você pode testar e pré-visualizar qualquer alteração em tempo real. Para salvar e publicar as edições no site, conecte sua conta.
+      </p>
+      <button
+        type="button"
+        id="banner-login-btn"
+        class="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-xs font-bold uppercase tracking-wider transition-colors cursor-pointer border border-[#A8382B]"
+      >
+        <span>Conectar Conta / Fazer Login</span>
+        <EditorIcon name="external-link" class="w-3 h-3" />
+      </button>
+    </div>
+  </div>
+</div>

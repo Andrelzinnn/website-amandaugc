@@ -1,0 +1,146 @@
+---
+interface Props {
+  heroData: {
+    headline: string;
+    headlineCursive: string;
+    subheadline: string;
+    photoUrl: string;
+    metric1Value?: string;
+    metric1Label?: string;
+    metric2Value?: string;
+    metric2Label?: string;
+    metric3Value?: string;
+    metric3Label?: string;
+  };
+}
+
+const { heroData } = Astro.props;
+---
+
+<div id="panel-hero" class="tab-panel hidden p-4 space-y-4">
+  <div class="pb-2 border-b border-[#2D2824]">
+    <h3 class="text-xs font-bold uppercase tracking-wider text-white">Início / Proposta de Valor</h3>
+    <p class="text-[11px] text-[#9E968E] mt-0.5">Headline, subtítulo e números expressivos do Hero.</p>
+  </div>
+  <div class="space-y-3">
+    <div>
+      <label for="input-hero-headline" class="block text-[11px] font-bold text-white mb-1">
+        Título Principal (Caixa Alta)
+      </label>
+      <input
+        type="text"
+        id="input-hero-headline"
+        value={heroData.headline}
+        class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+      />
+    </div>
+    <div>
+      <label for="input-hero-cursive" class="block text-[11px] font-bold text-white mb-1">
+        Destaque Cursivo
+      </label>
+      <input
+        type="text"
+        id="input-hero-cursive"
+        value={heroData.headlineCursive}
+        class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+      />
+    </div>
+    <div>
+      <label for="input-hero-subheadline" class="block text-[11px] font-bold text-white mb-1">
+        Subtítulo Explicativo
+      </label>
+      <textarea
+        id="input-hero-subheadline"
+        rows="3"
+        class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition resize-none"
+      >{heroData.subheadline}</textarea>
+    </div>
+
+    <div>
+      <label for="input-hero-photo" class="block text-[11px] font-bold text-white mb-1">
+        Foto Principal (Link do Google Drive ou Imagem)
+      </label>
+      <input
+        type="text"
+        id="input-hero-photo"
+        value={heroData.photoUrl}
+        class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+        placeholder="https://drive.google.com/file/d/... ou link de imagem"
+      />
+      <span class="block text-[10px] text-[#9E968E] mt-1">
+        💡 Aceita link direto do Google Drive ("Qualquer pessoa com o link"), Unsplash ou link de foto.
+      </span>
+    </div>
+
+    <!-- Números Expressivos (Hero) -->
+    <div class="pt-3 border-t border-[#2D2824] space-y-3">
+      <h4 class="text-[11px] font-bold uppercase tracking-wider text-[#C28D3F]">Números Expressivos (Hero)</h4>
+      
+      <!-- Métrica 1 -->
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label for="input-hero-m1-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 1 - Valor</label>
+          <input
+            type="text"
+            id="input-hero-m1-val"
+            value={heroData.metric1Value || "+350"}
+            class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+          />
+        </div>
+        <div>
+          <label for="input-hero-m1-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 1 - Texto</label>
+          <input
+            type="text"
+            id="input-hero-m1-lbl"
+            value={heroData.metric1Label || "Vídeos Entregues"}
+            class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+          />
+        </div>
+      </div>
+
+      <!-- Métrica 2 -->
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label for="input-hero-m2-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 2 - Valor</label>
+          <input
+            type="text"
+            id="input-hero-m2-val"
+            value={heroData.metric2Value || "+90"}
+            class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+          />
+        </div>
+        <div>
+          <label for="input-hero-m2-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 2 - Texto</label>
+          <input
+            type="text"
+            id="input-hero-m2-lbl"
+            value={heroData.metric2Label || "Marcas Atendidas"}
+            class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+          />
+        </div>
+      </div>
+
+      <!-- Métrica 3 -->
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label for="input-hero-m3-val" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 3 - Valor</label>
+          <input
+            type="text"
+            id="input-hero-m3-val"
+            value={heroData.metric3Value || "4.6x"}
+            class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+          />
+        </div>
+        <div>
+          <label for="input-hero-m3-lbl" class="block text-[10px] font-bold text-[#8A827B] mb-1">Métrica 3 - Texto</label>
+          <input
+            type="text"
+            id="input-hero-m3-lbl"
+            value={heroData.metric3Label || "ROAS Médio em Campanhas"}
+            class="w-full px-3 py-1.5 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+---
+interface Props {
+  servicesList: Array<{
+    path: string;
+    data: {
+      step?: string;
+      title?: string;
+      shortDesc?: string;
+      deliverables?: string;
+      idealFor?: string;
+    };
+  }>;
+}
+
+const { servicesList } = Astro.props;
+---
+
+<div id="panel-services" class="tab-panel hidden p-4 space-y-4">
+  <div class="pb-2 border-b border-[#2D2824] flex items-center justify-between">
+    <div>
+      <h3 class="text-xs font-bold uppercase tracking-wider text-white">Formatos de Trabalho</h3>
+      <p class="text-[11px] text-[#9E968E] mt-0.5">Edite os serviços, entregáveis e diferenciais.</p>
+    </div>
+    <button
+      type="button"
+      id="btn-add-service"
+      class="px-2.5 py-1 rounded-lg bg-[#A8382B] hover:bg-[#82271D] text-white text-[11px] font-bold transition flex items-center gap-1 cursor-pointer shadow-sm"
+    >
+      + Novo Formato
+    </button>
+  </div>
+
+  <!-- Quick Navigation Pills to jump to any service card -->
+  <div id="services-pills-container" class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+    <span class="text-[10px] text-[#8A827B] uppercase font-bold flex-shrink-0">Pular para:</span>
+    {servicesList.map((item, idx) => (
+      <button
+        type="button"
+        class="scroll-to-card-btn px-2.5 py-1 rounded-lg bg-[#24201C] hover:bg-[#2D2824] text-[11px] font-semibold text-[#FAF8F5] border border-[#2D2824] hover:border-[#A8382B] transition cursor-pointer flex-shrink-0"
+        data-target={`card-service-${idx}`}
+      >
+        {item.data.step || `0${idx + 1}`}
+      </button>
+    ))}
+  </div>
+
+  <div id="services-list-container" class="space-y-4">
+    {servicesList.map((item, idx) => (
+      <div id={`card-service-${idx}`} class="service-card-item p-3.5 rounded-2xl bg-[#24201C] border border-[#2D2824] space-y-2.5 transition-all scroll-mt-2" data-path={item.path}>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-white flex items-center gap-2">
+            <span class="service-card-step px-2 py-0.5 rounded-md bg-[#A8382B] text-white text-[10px] font-bold">{item.data.step || `0${idx + 1}`}</span>
+            <span class="service-card-title-text truncate max-w-[200px]">{item.data.title}</span>
+          </span>
+          <button
+            type="button"
+            class="btn-delete-service p-1 rounded-lg text-[#8A827B] hover:text-red-400 hover:bg-red-950 transition cursor-pointer"
+            data-path={item.path}
+            title="Excluir este formato"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+          </button>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Nome do Formato</label>
+          <input
+            type="text"
+            class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+            data-path={item.path}
+            data-field="title"
+            value={item.data.title}
+          />
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Breve Descrição</label>
+          <textarea
+            rows="2"
+            class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white resize-none"
+            data-path={item.path}
+            data-field="shortDesc"
+          >{item.data.shortDesc}</textarea>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-[#8A827B] mb-1">O que inclui (separe por vírgula)</label>
+          <input
+            type="text"
+            class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+            data-path={item.path}
+            data-field="deliverables"
+            value={item.data.deliverables}
+          />
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Ideal para</label>
+          <input
+            type="text"
+            class="service-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white"
+            data-path={item.path}
+            data-field="idealFor"
+            value={item.data.idealFor}
+          />
+        </div>
+      </div>
+    ))}
+  </div>
+</div>

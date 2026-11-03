@@ -1,0 +1,58 @@
+---
+import EditorIcon from "../icons/EditorIcon.astro";
+---
+
+<!-- Sticky Bottom Save Area -->
+<div class="p-3 border-t border-[#2D2824] bg-[#171412] space-y-2 flex-shrink-0 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+  <!-- Mobile Quick Preview Link -->
+  <div class="flex items-center justify-between lg:hidden pb-1 pt-0.5">
+    <span class="text-[11px] text-[#9E968E]">Edição em tela cheia</span>
+    <span class="text-[11px] text-[#C28D3F] font-semibold">Studio Mobile</span>
+  </div>
+
+  <div id="pending-badge" class="hidden items-center justify-between text-[11px] text-[#C28D3F] bg-[#24201C] px-3 py-1.5 rounded-xl border border-[#4A3820] font-semibold">
+    <span class="flex items-center gap-1.5">
+      <span class="w-2 h-2 rounded-full bg-[#C28D3F]"></span>
+      <span id="pending-count">1 módulo modificado</span>
+    </span>
+    <span class="text-[10px] text-[#9E968E]">Pendente</span>
+  </div>
+
+  <!-- Auth Status Indicator -->
+  <div id="auth-status-container" class="flex items-center justify-between text-[10px] text-[#9E968E] px-1">
+    <span class="flex items-center gap-1.5">
+      <span id="auth-status-dot" class="w-2 h-2 rounded-full bg-amber-500"></span>
+      <span id="auth-status-text">Verificando sessão...</span>
+    </span>
+    <button
+      type="button"
+      id="btn-auth-action"
+      class="hidden px-2 py-0.5 rounded-lg bg-[#24201C] hover:bg-[#2D2824] border border-[#3D3630] text-[10px] font-bold text-[#C28D3F] hover:text-white transition cursor-pointer"
+    >
+      Fazer Login ↗
+    </button>
+  </div>
+
+  <!-- Mobile Quick Switch to Preview Button (Only on < lg) -->
+  <button
+    type="button"
+    id="mobile-switch-to-preview-btn"
+    class="lg:hidden w-full py-2 px-3 rounded-xl bg-[#24201C] hover:bg-[#2D2824] text-white font-semibold text-xs transition-colors flex items-center justify-center gap-2 cursor-pointer border border-[#3D3630]"
+  >
+    <EditorIcon name="eye" class="w-3.5 h-3.5 text-[#C28D3F]" />
+    <span>Ver Prévia ao Vivo</span>
+  </button>
+
+  <!-- Save Button with Solid State -->
+  <button
+    type="button"
+    id="btn-save-all"
+    disabled
+    class="w-full py-2.5 px-4 rounded-xl bg-[#24201C] text-[#8A827B] font-bold text-xs uppercase tracking-wider transition-colors flex items-center justify-center gap-2 cursor-not-allowed border border-[#2D2824] select-none"
+  >
+    <EditorIcon name="save" class="w-3.5 h-3.5 text-inherit" />
+    <span id="save-btn-text">Nenhuma Alteração</span>
+  </button>
+
+  <div id="save-feedback" class="hidden text-center text-[11px] font-semibold py-1.5 px-2.5 rounded-lg"></div>
+</div>
