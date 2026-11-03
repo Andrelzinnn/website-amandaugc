@@ -139,86 +139,57 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
       "x-keystatic-version": "0.6.9",
     };
 
-    // Keystatic Cloud exige literais 'repo-owner' e 'repo-name' pois o proxy
-    // mapeia o repositório real no backend via token da sessão
-    const CLOUD_REPO_OWNER = "repo-owner";
-    const CLOUD_REPO_NAME = "repo-name";
+    // A. Busca o SHA do commit HEAD mais recente direto via GitHub API pública
+    const refRes = await fetch(
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/ref/heads/${BRANCH_NAME}`,
+      { headers: { Accept: "application/vnd.github.v3+json" } }
+    );
 
-    // A. Busca o OID (SHA) atual do HEAD da branch
-    const refQuery = `
-      query FetchRef($owner: String!, $name: String!, $ref: String!) {
-        repository(owner: $owner, name: $name) {
-          ref(qualifiedName: $ref) {
-            target {
-              oid
-            }
-          }
-        }
-      }
-    `;
-
-    const refRes = await fetch(graphqlEndpoint, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        query: refQuery,
-        variables: {
-          owner: CLOUD_REPO_OWNER,
-          name: CLOUD_REPO_NAME,
-          ref: `refs/heads/${BRANCH_NAME}`,
-        },
-      }),
-    });
-
-    const refJson = await refRes.json();
-    if (refJson.errors && refJson.errors.length > 0) {
-      throw new Error(refJson.errors[0]?.message || "Erro ao consultar referência do repositório");
+    if (!refRes.ok) {
+      throw new Error(`Falha ao consultar GitHub ref: ${refRes.statusText}`);
     }
 
-    const headOid = refJson?.data?.repository?.ref?.target?.oid;
+    const refJson = await refRes.json();
+    const headOid = refJson?.object?.sha;
 
     if (!headOid) {
       throw new Error("Não foi possível obter o commit atual do repositório no GitHub.");
     }
 
-    // B. Envia a mutation CreateCommit
-    const commitMutation = `
-      mutation CreateCommit($input: CreateCommitOnBranchInput!) {
-        createCommitOnBranch(input: $input) {
-          ref {
-            target {
-              oid
-            }
-          }
-        }
-      }
-    `;
+    // B. Envia a mutation CreateCommit usando a Persisted Query oficial da Keystatic Cloud
+    const payload = {
+      extensions: {
+        persistedQuery: {
+          sha256Hash: "8ba2a8aba30b21120c2339fad87e97fca51bdebf8d24ab2a2313f04962908829",
+          version: 1,
+        },
+      },
+      operationName: "CreateCommit",
+      variables: {
+        input: {
+          branch: {
+            branchName: BRANCH_NAME,
+            repositoryNameWithOwner: `${REPO_OWNER}/${REPO_NAME}`,
+          },
+          expectedHeadOid: headOid,
+          fileChanges: {
+            additions: options.files.map((f) => ({
+              path: f.path,
+              contents: toBase64(f.contents),
+            })),
+            deletions: [],
+          },
+          message: {
+            headline: options.message,
+          },
+        },
+      },
+    };
 
     const commitRes = await fetch(graphqlEndpoint, {
       method: "POST",
       headers,
-      body: JSON.stringify({
-        query: commitMutation,
-        variables: {
-          input: {
-            branch: {
-              repositoryNameWithOwner: `${CLOUD_REPO_OWNER}/${CLOUD_REPO_NAME}`,
-              branchName: BRANCH_NAME,
-            },
-            expectedHeadOid: headOid,
-            message: {
-              headline: options.message,
-            },
-            fileChanges: {
-              additions: options.files.map((f) => ({
-                path: f.path,
-                contents: toBase64(f.contents),
-              })),
-              deletions: [],
-            },
-          },
-        },
-      }),
+      body: JSON.stringify(payload),
     });
 
     const commitJson = await commitRes.json();
