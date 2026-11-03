@@ -1206,16 +1206,188 @@ const palettes = [
         evaluateChanges();
       }
 
-      // Live update helper in iframe
-      function updateIframeText(selector: string, text: string) {
-        if (!iframe || !iframe.contentWindow) return;
+      function toDirectGoogleDriveUrl(url: string): string {
+        if (!url || typeof url !== "string") return url;
+        const driveMatch = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+        if (driveMatch) {
+          return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+        }
+        return url;
+      }
+
+      // Live update helper for preview iframe via postMessage and DOM manipulation
+      function sendLivePreviewUpdate(updateData: any) {
+        // 1. PostMessage to iframe window
+        if (iframe && iframe.contentWindow) {
+          iframe.contentWindow.postMessage({ type: "STUDIO_LIVE_UPDATE", data: updateData }, "*");
+        }
+
+        // 2. Direct DOM mutation fallback
         try {
-          const doc = iframe.contentWindow.document;
-          const els = doc.querySelectorAll(selector);
-          els.forEach((el) => {
-            el.textContent = text;
-          });
+          const doc = iframe?.contentDocument || iframe?.contentWindow?.document;
+          if (!doc) return;
+
+          if (updateData.selector && typeof updateData.text === "string") {
+            const els = doc.querySelectorAll(updateData.selector);
+            els.forEach((el) => {
+              el.textContent = updateData.text;
+            });
+          }
+          if (updateData.imageSelector && typeof updateData.imageUrl === "string") {
+            const img = doc.querySelector(updateData.imageSelector) as HTMLImageElement;
+            if (img) img.src = updateData.imageUrl;
+          }
+          if (updateData.theme) {
+            doc.documentElement.setAttribute("data-theme", updateData.theme);
+          }
+
+          if (updateData.caseUpdate) {
+            const { index, brand, title, stats, badge, highlightMetric, metricLabel, quote, author, thumbnail, youtubeId } = updateData.caseUpdate;
+            const card = doc.querySelector(`.case-card[data-index="${index}"]`);
+            if (card) {
+              if (brand) {
+                const bEl = card.querySelector(".inline-block.self-start");
+                if (bEl) bEl.textContent = brand;
+              }
+              if (title) {
+                const tEl = card.querySelector("p.text-xs.font-bold");
+                if (tEl) tEl.textContent = title;
+              }
+              if (stats) {
+                const sEl = card.querySelector("span.text-\\[\\#C28D3F\\]") || card.querySelector(".text-\\[11px\\]");
+                if (sEl) sEl.textContent = stats;
+              }
+              if (thumbnail) {
+                const img = card.querySelector("img");
+                if (img) img.src = thumbnail;
+              }
+              if (youtubeId) {
+                card.setAttribute("data-youtube", youtubeId);
+              }
+            }
+
+            const narr = doc.querySelector(`.case-narrative[data-narrative-index="${index}"]`);
+            if (narr) {
+              if (badge) {
+                const bBadge = narr.querySelector(`[data-i18n="case.${index + 1}.badge"]`) || narr.querySelector(".rounded-full span");
+                if (bBadge) bBadge.textContent = badge;
+              }
+              if (brand) {
+                const h3 = narr.querySelector("h3");
+                if (h3) h3.textContent = brand;
+              }
+              if (highlightMetric) {
+                const mVal = narr.querySelector(".font-impact.font-bold.text-\\[\\#A8382B\\]") || narr.querySelector(".font-impact.text-\\[\\#A8382B\\]");
+                if (mVal) mVal.textContent = highlightMetric;
+              }
+              if (metricLabel) {
+                const mLbl = narr.querySelector(`[data-i18n="case.${index + 1}.metricLabel"]`) || narr.querySelector(".text-lg.font-bold.text-\\[\\#1B1815\\]");
+                if (mLbl) mLbl.textContent = metricLabel;
+              }
+              if (quote) {
+                const qEl = narr.querySelector(`[data-i18n="case.${index + 1}.quote"]`) || narr.querySelector("blockquote p, blockquote, .italic span");
+                if (qEl) qEl.textContent = quote.startsWith('"') ? quote : `"${quote}"`;
+              }
+              if (author) {
+                const aEl = narr.querySelector(`[data-i18n="case.${index + 1}.author"]`) || narr.querySelector("cite, .not-italic");
+                if (aEl) aEl.textContent = author.startsWith("—") ? author : `— ${author}`;
+              }
+            }
+          }
+
+          if (updateData.serviceUpdate) {
+            const { index, title, shortDesc, deliverables, idealFor } = updateData.serviceUpdate;
+            const serviceCards = doc.querySelectorAll("#servicos .lg\\:col-span-7 > div");
+            const card = serviceCards[index];
+            if (card) {
+              if (title) {
+                const h3 = card.querySelector("h3");
+                if (h3) h3.textContent = title;
+              }
+              if (shortDesc) {
+                const p = card.querySelector("p.text-sm");
+                if (p) p.textContent = shortDesc;
+              }
+              if (deliverables) {
+                const container = card.querySelector(".flex.flex-wrap.gap-2");
+                if (container) {
+                  const items = deliverables.split(",").map((s: string) => s.trim()).filter(Boolean);
+                  container.innerHTML = items.map((it: string) => `<span class="px-2.5 py-1 rounded-lg bg-white border border-[#1B1815]/10 text-xs font-medium text-[#57524C]">• ${it}</span>`).join("");
+                }
+              }
+              if (idealFor) {
+                const idealEl = card.querySelector(".pt-4.border-t");
+                if (idealEl) idealEl.innerHTML = `<span class="font-bold text-[#1B1815]">Ideal para:</span> ${idealFor}`;
+              }
+            }
+          }
+
+          if (updateData.testUpdate) {
+            const { index, clientName, brand, role, quote } = updateData.testUpdate;
+            const testCards = doc.querySelectorAll("#depoimentos .grid > div");
+            const card = testCards[index];
+            if (card) {
+              if (quote) {
+                const q = card.querySelector("blockquote");
+                if (q) q.textContent = quote.startsWith('"') ? quote : `"${quote}"`;
+              }
+              if (clientName) {
+                const n = card.querySelector("span.text-xs.font-bold");
+                if (n) n.textContent = clientName;
+              }
+              if (brand || role) {
+                const r = card.querySelector("span.text-\\[11px\\]");
+                if (r) r.innerHTML = `${role || ""} · <strong class="text-[#A8382B]">${brand || ""}</strong>`;
+              }
+            }
+          }
+
+          if (updateData.brandsUpdate && Array.isArray(updateData.brandsUpdate)) {
+            const marqueeTrack = doc.querySelector("#marcas .animate-marquee-left");
+            if (marqueeTrack) {
+              const list = updateData.brandsUpdate.filter((b: any) => b.name && b.name.trim());
+              if (list.length > 0) {
+                const repeat = Math.max(2, Math.ceil(18 / list.length));
+                const repeated = Array.from({ length: repeat }, () => list).flat();
+                marqueeTrack.innerHTML = repeated.map((b: any) => `
+                  <div class="inline-flex items-center gap-10 text-xs sm:text-sm font-impact uppercase tracking-widest text-[#FAF8F5]/90 hover:text-[#C28D3F] transition-colors cursor-default">
+                    <span>${b.name}</span>
+                    <span class="text-[#A8382B] text-xs font-serif">◆</span>
+                  </div>
+                `).join("");
+              }
+            }
+          }
+
+          if (updateData.creatorUpdate) {
+            const { fullName, instagram } = updateData.creatorUpdate;
+            if (fullName) {
+              const parts = fullName.trim().split(" ");
+              const firstName = parts[0] || "";
+              const lastName = parts.slice(1).join(" ") || "";
+              const headerLogo = doc.querySelector("nav a.font-serif-editorial");
+              if (headerLogo) {
+                const spans = headerLogo.querySelectorAll("span");
+                if (spans[0]) spans[0].textContent = firstName;
+                if (spans[1]) spans[1].textContent = lastName;
+              }
+              const footerName = doc.querySelector("footer .font-serif-editorial");
+              if (footerName) footerName.textContent = fullName;
+            }
+            if (instagram) {
+              const instaLinks = doc.querySelectorAll('a[href*="instagram.com"]');
+              instaLinks.forEach((a) => {
+                (a as HTMLAnchorElement).href = `https://instagram.com/${instagram.replace("@", "")}`;
+                const textSpan = a.querySelector("span.text-xs");
+                if (textSpan) textSpan.textContent = instagram.startsWith("@") ? instagram : `@${instagram}`;
+              });
+            }
+          }
         } catch (e) {}
+      }
+
+      function updateIframeText(selector: string, text: string) {
+        sendLivePreviewUpdate({ selector, text });
       }
 
       // Auth UI Setup
@@ -1619,16 +1791,10 @@ const palettes = [
         const val = (e.target as HTMLInputElement).value;
         currentHero.photoUrl = val;
 
-        // Live preview da foto no iframe (convertendo link do Google Drive se houver)
-        if (iframe && iframe.contentWindow) {
-          try {
-            const img = iframe.contentWindow.document.querySelector("#hero img") as HTMLImageElement;
-            if (img) {
-              const driveMatch = val.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || val.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-              img.src = driveMatch ? `https://lh3.googleusercontent.com/d/${driveMatch[1]}` : val;
-            }
-          } catch (e) {}
-        }
+        sendLivePreviewUpdate({
+          imageSelector: "#hero img",
+          imageUrl: toDirectGoogleDriveUrl(val),
+        });
         evaluateChanges();
       });
 
@@ -1751,6 +1917,21 @@ const palettes = [
                 if (titleEl) titleEl.textContent = el.value || "Novo Formato";
               }
               evaluateChanges();
+
+              // Live Preview in Iframe
+              const allCards = Array.from(document.querySelectorAll("#services-list-container .service-card-item"));
+              const index = allCards.indexOf(card);
+              if (index !== -1) {
+                sendLivePreviewUpdate({
+                  serviceUpdate: {
+                    index,
+                    title: data.title,
+                    shortDesc: data.shortDesc,
+                    deliverables: data.deliverables,
+                    idealFor: data.idealFor,
+                  },
+                });
+              }
             }
           });
         });
@@ -1855,6 +2036,18 @@ const palettes = [
       });
 
       // --- MODULE 5: BRANDS EVENT BINDINGS ---
+      function updateBrandsLivePreview() {
+        const brandsList: { name: string }[] = [];
+        const rows = document.querySelectorAll("#brands-list-container .brand-item-row");
+        rows.forEach((row) => {
+          const input = row.querySelector(".brand-input") as HTMLInputElement;
+          if (input && input.value.trim()) {
+            brandsList.push({ name: input.value.trim() });
+          }
+        });
+        sendLivePreviewUpdate({ brandsUpdate: brandsList });
+      }
+
       function bindBrandRow(row: Element) {
         const input = row.querySelector(".brand-input");
         input?.addEventListener("input", (e) => {
@@ -1867,6 +2060,7 @@ const palettes = [
           if (data) {
             data[field] = el.value;
             evaluateChanges();
+            updateBrandsLivePreview();
           }
         });
 
@@ -1877,6 +2071,8 @@ const palettes = [
           if (confirm("Deseja realmente remover esta marca parceira?")) {
             markCollectionDeleted(path);
             row.remove();
+            evaluateChanges();
+            updateBrandsLivePreview();
           }
         });
       }
@@ -1918,6 +2114,7 @@ const palettes = [
         bindBrandRow(row);
         (row.querySelector(".brand-input") as HTMLInputElement)?.focus();
         evaluateChanges();
+        updateBrandsLivePreview();
       });
 
       // --- MODULE 6: CASES EVENT BINDINGS ---
@@ -1940,6 +2137,27 @@ const palettes = [
                 if (statsDisplay) statsDisplay.textContent = el.value || "+0%";
               }
               evaluateChanges();
+
+              // Live Preview in Iframe
+              const allCards = Array.from(document.querySelectorAll("#cases-list-container .case-card-item"));
+              const index = allCards.indexOf(card);
+              if (index !== -1) {
+                sendLivePreviewUpdate({
+                  caseUpdate: {
+                    index,
+                    brand: data.brand,
+                    title: data.title,
+                    stats: data.stats,
+                    badge: data.badge,
+                    highlightMetric: data.highlightMetric,
+                    metricLabel: data.metricLabel,
+                    quote: data.quote,
+                    author: data.author,
+                    thumbnail: toDirectGoogleDriveUrl(data.thumbnail),
+                    youtubeId: data.youtubeId,
+                  },
+                });
+              }
             }
           });
         });
@@ -2126,6 +2344,21 @@ const palettes = [
                 updateTestimonialPills();
               }
               evaluateChanges();
+
+              // Live Preview in Iframe
+              const allCards = Array.from(document.querySelectorAll("#testimonials-list-container .testimonial-card-item"));
+              const index = allCards.indexOf(card);
+              if (index !== -1) {
+                sendLivePreviewUpdate({
+                  testUpdate: {
+                    index,
+                    clientName: data.clientName,
+                    brand: data.brand,
+                    role: data.role,
+                    quote: data.quote,
+                  },
+                });
+              }
             }
           });
         });
@@ -2240,27 +2473,47 @@ const palettes = [
       const inputContactWhatsapp = document.getElementById("input-contact-whatsapp") as HTMLInputElement;
 
       inputContactFullName?.addEventListener("input", (e) => {
-        currentGeneral.fullName = (e.target as HTMLInputElement).value;
+        const val = (e.target as HTMLInputElement).value;
+        currentGeneral.fullName = val;
+        sendLivePreviewUpdate({
+          creatorUpdate: {
+            fullName: val,
+          },
+        });
         evaluateChanges();
       });
 
       inputContactRole?.addEventListener("input", (e) => {
-        currentGeneral.role = (e.target as HTMLInputElement).value;
+        const val = (e.target as HTMLInputElement).value;
+        currentGeneral.role = val;
+        sendLivePreviewUpdate({
+          creatorUpdate: {
+            role: val,
+          },
+        });
         evaluateChanges();
       });
 
       inputContactInstagram?.addEventListener("input", (e) => {
-        currentGeneral.instagram = (e.target as HTMLInputElement).value;
+        const val = (e.target as HTMLInputElement).value;
+        currentGeneral.instagram = val;
+        sendLivePreviewUpdate({
+          creatorUpdate: {
+            instagram: val,
+          },
+        });
         evaluateChanges();
       });
 
       inputContactTiktok?.addEventListener("input", (e) => {
-        currentGeneral.tiktok = (e.target as HTMLInputElement).value;
+        const val = (e.target as HTMLInputElement).value;
+        currentGeneral.tiktok = val;
         evaluateChanges();
       });
 
       inputContactWhatsapp?.addEventListener("input", (e) => {
-        currentGeneral.whatsappNumber = (e.target as HTMLInputElement).value;
+        const val = (e.target as HTMLInputElement).value;
+        currentGeneral.whatsappNumber = val;
         evaluateChanges();
       });
 

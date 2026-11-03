@@ -240,6 +240,179 @@ const schemaOrgPerson = {
 
       checkAdminAuth();
       window.addEventListener("storage", checkAdminAuth);
+
+      // --- STUDIO LIVE PREVIEW BRIDGE (/admin) ---
+      window.addEventListener("message", (event) => {
+        const { type, data } = event.data || {};
+        if (type !== "STUDIO_LIVE_UPDATE" || !data) return;
+
+        // 1. Text selector updates
+        if (data.selector && typeof data.text === "string") {
+          const els = document.querySelectorAll(data.selector);
+          els.forEach((el) => {
+            el.textContent = data.text;
+          });
+        }
+
+        // 2. Image updates
+        if (data.imageSelector && typeof data.imageUrl === "string") {
+          const img = document.querySelector(data.imageSelector) as HTMLImageElement;
+          if (img) img.src = data.imageUrl;
+        }
+
+        // 3. Theme update
+        if (data.theme) {
+          document.documentElement.setAttribute("data-theme", data.theme);
+        }
+
+        // 4. Case card updates
+        if (data.caseUpdate) {
+          const { index, brand, title, stats, badge, highlightMetric, metricLabel, quote, author, thumbnail, youtubeId } = data.caseUpdate;
+          const card = document.querySelector(`.case-card[data-index="${index}"]`);
+          if (card) {
+            if (brand) {
+              const bEl = card.querySelector(".inline-block.self-start");
+              if (bEl) bEl.textContent = brand;
+            }
+            if (title) {
+              const tEl = card.querySelector("p.text-xs.font-bold");
+              if (tEl) tEl.textContent = title;
+            }
+            if (stats) {
+              const sEl = card.querySelector("span.text-\\[\\#C28D3F\\]") || card.querySelector(".text-\\[11px\\]");
+              if (sEl) sEl.textContent = stats;
+            }
+            if (thumbnail) {
+              const img = card.querySelector("img");
+              if (img) img.src = thumbnail;
+            }
+            if (youtubeId) {
+              card.setAttribute("data-youtube", youtubeId);
+            }
+          }
+
+          const narr = document.querySelector(`.case-narrative[data-narrative-index="${index}"]`);
+          if (narr) {
+            if (badge) {
+              const bBadge = narr.querySelector(`[data-i18n="case.${index + 1}.badge"]`) || narr.querySelector(".rounded-full span");
+              if (bBadge) bBadge.textContent = badge;
+            }
+            if (brand) {
+              const h3 = narr.querySelector("h3");
+              if (h3) h3.textContent = brand;
+            }
+            if (highlightMetric) {
+              const mVal = narr.querySelector(".font-impact.font-bold.text-\\[\\#A8382B\\]") || narr.querySelector(".font-impact.text-\\[\\#A8382B\\]");
+              if (mVal) mVal.textContent = highlightMetric;
+            }
+            if (metricLabel) {
+              const mLbl = narr.querySelector(`[data-i18n="case.${index + 1}.metricLabel"]`) || narr.querySelector(".text-lg.font-bold.text-\\[\\#1B1815\\]");
+              if (mLbl) mLbl.textContent = metricLabel;
+            }
+            if (quote) {
+              const qEl = narr.querySelector(`[data-i18n="case.${index + 1}.quote"]`) || narr.querySelector("blockquote p, blockquote, .italic span");
+              if (qEl) qEl.textContent = quote.startsWith('"') ? quote : `"${quote}"`;
+            }
+            if (author) {
+              const aEl = narr.querySelector(`[data-i18n="case.${index + 1}.author"]`) || narr.querySelector("cite, .not-italic");
+              if (aEl) aEl.textContent = author.startsWith("—") ? author : `— ${author}`;
+            }
+          }
+        }
+
+        // 5. Service card updates
+        if (data.serviceUpdate) {
+          const { index, title, shortDesc, deliverables, idealFor } = data.serviceUpdate;
+          const serviceCards = document.querySelectorAll("#servicos .lg\\:col-span-7 > div");
+          const card = serviceCards[index];
+          if (card) {
+            if (title) {
+              const h3 = card.querySelector("h3");
+              if (h3) h3.textContent = title;
+            }
+            if (shortDesc) {
+              const p = card.querySelector("p.text-sm");
+              if (p) p.textContent = shortDesc;
+            }
+            if (deliverables) {
+              const container = card.querySelector(".flex.flex-wrap.gap-2");
+              if (container) {
+                const items = deliverables.split(",").map((s: string) => s.trim()).filter(Boolean);
+                container.innerHTML = items.map((it: string) => `<span class="px-2.5 py-1 rounded-lg bg-white border border-[#1B1815]/10 text-xs font-medium text-[#57524C]">• ${it}</span>`).join("");
+              }
+            }
+            if (idealFor) {
+              const idealEl = card.querySelector(".pt-4.border-t");
+              if (idealEl) idealEl.innerHTML = `<span class="font-bold text-[#1B1815]">Ideal para:</span> ${idealFor}`;
+            }
+          }
+        }
+
+        // 6. Testimonial card updates
+        if (data.testUpdate) {
+          const { index, clientName, brand, role, quote } = data.testUpdate;
+          const testCards = document.querySelectorAll("#depoimentos .grid > div");
+          const card = testCards[index];
+          if (card) {
+            if (quote) {
+              const q = card.querySelector("blockquote");
+              if (q) q.textContent = quote.startsWith('"') ? quote : `"${quote}"`;
+            }
+            if (clientName) {
+              const n = card.querySelector("span.text-xs.font-bold");
+              if (n) n.textContent = clientName;
+            }
+            if (brand || role) {
+              const r = card.querySelector("span.text-\\[11px\\]");
+              if (r) r.innerHTML = `${role || ""} · <strong class="text-[#A8382B]">${brand || ""}</strong>`;
+            }
+          }
+        }
+
+        // 7. Brands marquee updates
+        if (data.brandsUpdate && Array.isArray(data.brandsUpdate)) {
+          const marqueeTrack = document.querySelector("#marcas .animate-marquee-left");
+          if (marqueeTrack) {
+            const list = data.brandsUpdate.filter((b: any) => b.name && b.name.trim());
+            if (list.length > 0) {
+              const repeat = Math.max(2, Math.ceil(18 / list.length));
+              const repeated = Array.from({ length: repeat }, () => list).flat();
+              marqueeTrack.innerHTML = repeated.map((b: any) => `
+                <div class="inline-flex items-center gap-10 text-xs sm:text-sm font-impact uppercase tracking-widest text-[#FAF8F5]/90 hover:text-[#C28D3F] transition-colors cursor-default">
+                  <span>${b.name}</span>
+                  <span class="text-[#A8382B] text-xs font-serif">◆</span>
+                </div>
+              `).join("");
+            }
+          }
+        }
+
+        // 8. Creator / Identity updates
+        if (data.creatorUpdate) {
+          const { fullName, role, instagram } = data.creatorUpdate;
+          if (fullName) {
+            const parts = fullName.trim().split(" ");
+            const firstName = parts[0] || "";
+            const lastName = parts.slice(1).join(" ") || "";
+            const headerLogo = document.querySelector("nav a.font-serif-editorial");
+            if (headerLogo) {
+              const spans = headerLogo.querySelectorAll("span");
+              if (spans[0]) spans[0].textContent = firstName;
+              if (spans[1]) spans[1].textContent = lastName;
+            }
+            const footerName = document.querySelector("footer .font-serif-editorial");
+            if (footerName) footerName.textContent = fullName;
+          }
+          if (instagram) {
+            const instaLinks = document.querySelectorAll('a[href*="instagram.com"]');
+            instaLinks.forEach((a) => {
+              (a as HTMLAnchorElement).href = `https://instagram.com/${instagram.replace("@", "")}`;
+              const textSpan = a.querySelector("span.text-xs");
+              if (textSpan) textSpan.textContent = instagram.startsWith("@") ? instagram : `@${instagram}`;
+            });
+          }
+        }
+      });
     </script>
   </body>
 </html>
