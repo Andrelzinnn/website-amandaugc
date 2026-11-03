@@ -237,18 +237,6 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
 
     // B. Envia a mutation CreateCommit
     const payload: any = {
-      query: `
-        mutation CreateCommit($input: CreateCommitOnBranchInput!) {
-          createCommitOnBranch(input: $input) {
-            ref {
-              id
-              target {
-                oid
-              }
-            }
-          }
-        }
-      `,
       operationName: "CreateCommit",
       variables: {
         input: {
@@ -272,12 +260,27 @@ export async function saveContentFiles(options: SaveOptions): Promise<{ success:
     };
 
     if (isCloudToken) {
+      // Keystatic Cloud exige APQ (Automated Persisted Queries) sem o campo `query`.
+      // Enviar `query` junto com `persistedQuery` faz o proxy tentar validar o hash da string contra o hash APQ pré-registrado, resultando em "Invalid query data".
       payload.extensions = {
         persistedQuery: {
           sha256Hash: "8ba2a8aba30b21120c2339fad87e97fca51bdebf8d24ab2a2313f04962908829",
           version: 1,
         },
       };
+    } else {
+      payload.query = `
+        mutation CreateCommit($input: CreateCommitOnBranchInput!) {
+          createCommitOnBranch(input: $input) {
+            ref {
+              id
+              target {
+                oid
+              }
+            }
+          }
+        }
+      `;
     }
 
     const commitRes = await fetch(graphqlEndpoint, {
