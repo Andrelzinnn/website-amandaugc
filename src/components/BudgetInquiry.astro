@@ -45,7 +45,7 @@ const {
               💬
             </div>
             <div>
-              <span class="text-xs font-bold uppercase tracking-wider text-[#1B1815] block">WhatsApp Comercial</span>
+              <span data-i18n="contact.whatsappChannel" class="text-xs font-bold uppercase tracking-wider text-[#1B1815] block">WhatsApp Comercial</span>
               <span class="text-xs text-[#57524C] group-hover:text-[#A8382B] transition-colors">+55 (11) 99999-8888</span>
             </div>
           </a>
@@ -58,7 +58,7 @@ const {
               ✉️
             </div>
             <div>
-              <span class="text-xs font-bold uppercase tracking-wider text-[#1B1815] block">E-mail para Briefings</span>
+              <span data-i18n="contact.emailChannel" class="text-xs font-bold uppercase tracking-wider text-[#1B1815] block">E-mail para Briefings</span>
               <span class="text-xs text-[#57524C] group-hover:text-[#A8382B] transition-colors">{creator.email}</span>
             </div>
           </a>
@@ -92,6 +92,7 @@ const {
                 type="text"
                 id="form-name"
                 required
+                data-i18n-placeholder="placeholder.name"
                 placeholder="Ex.: Mariana Silva"
                 class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
               />
@@ -105,6 +106,7 @@ const {
                 type="text"
                 id="form-brand"
                 required
+                data-i18n-placeholder="placeholder.brand"
                 placeholder="Ex.: Glow Skincare"
                 class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
               />
@@ -120,6 +122,7 @@ const {
                 type="tel"
                 id="form-whatsapp"
                 required
+                data-i18n-placeholder="placeholder.whatsapp"
                 placeholder="(11) 99999-9999"
                 class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
               />
@@ -133,12 +136,12 @@ const {
                 id="form-niche"
                 class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
               >
-                <option value="Beleza & Skincare">Beleza & Skincare</option>
-                <option value="Moda & Acessórios">Moda & Acessórios</option>
-                <option value="Casa & Decoração">Casa & Decoração</option>
-                <option value="Saúde & Suplementos">Saúde & Suplementos</option>
-                <option value="Tecnologia & Apps">Tecnologia & Apps</option>
-                <option value="Outro">Outro nicho</option>
+                <option value="Beleza & Skincare" data-i18n="opt.niche.beauty">Beleza & Skincare</option>
+                <option value="Moda & Acessórios" data-i18n="opt.niche.fashion">Moda & Acessórios</option>
+                <option value="Casa & Decoração" data-i18n="opt.niche.home">Casa & Decoração</option>
+                <option value="Saúde & Suplementos" data-i18n="opt.niche.health">Saúde & Suplementos</option>
+                <option value="Tecnologia & Apps" data-i18n="opt.niche.tech">Tecnologia & Apps</option>
+                <option value="Outro" data-i18n="opt.niche.other">Outro nicho</option>
               </select>
             </div>
           </div>
@@ -152,10 +155,10 @@ const {
                 id="form-qty"
                 class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
               >
-                <option value="1 vídeo teste">1 vídeo teste</option>
-                <option value="Pacote com 3 vídeos">Pacote com 3 vídeos (Mais pedido)</option>
-                <option value="Pacote com 5 vídeos">Pacote com 5 vídeos</option>
-                <option value="Contrato mensal recorrente">Contrato mensal recorrente</option>
+                <option value="1 vídeo teste" data-i18n="opt.qty.1">1 vídeo teste</option>
+                <option value="Pacote com 3 vídeos" data-i18n="opt.qty.3">Pacote com 3 vídeos (Mais pedido)</option>
+                <option value="Pacote com 5 vídeos" data-i18n="opt.qty.5">Pacote com 5 vídeos</option>
+                <option value="Contrato mensal recorrente" data-i18n="opt.qty.monthly">Contrato mensal recorrente</option>
               </select>
             </div>
 
@@ -166,6 +169,7 @@ const {
               <input
                 type="text"
                 id="form-budget"
+                data-i18n-placeholder="placeholder.budget"
                 placeholder="Ex.: R$ 2.500"
                 class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
               />
@@ -179,6 +183,7 @@ const {
             <textarea
               id="form-message"
               rows="3"
+              data-i18n-placeholder="placeholder.details"
               placeholder="Fale brevemente sobre o produto, objetivo do anúncio ou link do site..."
               class="w-full px-4 py-3 rounded-xl border border-[#1B1815]/20 bg-white text-sm focus:outline-none focus:border-[#A8382B]"
             ></textarea>
