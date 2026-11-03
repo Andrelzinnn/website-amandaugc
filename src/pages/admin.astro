@@ -2,6 +2,8 @@
 import { portfolioData } from "../data/portfolioData";
 import EditorIcon from "../components/icons/EditorIcon.astro";
 import generalData from "../content/general.json";
+import topbarData from "../content/topbar.json";
+import heroData from "../content/hero.json";
 
 const currentTheme = generalData.theme || portfolioData.theme || "terracotta";
 
@@ -134,61 +136,263 @@ const palettes = [
     <div class="flex-1 flex flex-col lg:flex-row overflow-hidden">
       <!-- Left Sidebar: Visual Theme & Quick Settings -->
       <aside class="w-full lg:w-96 border-b lg:border-b-0 lg:border-r border-[#2D2824] bg-[#1B1815] flex flex-col flex-shrink-0 overflow-y-auto max-h-72 lg:max-h-full">
-        <!-- Palette Header -->
-        <div class="p-5 border-b border-[#2D2824]">
-          <div class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[#C28D3F] mb-1">
+        <!-- Modular Studio Navigation Tabs -->
+        <div class="border-b border-[#2D2824] bg-[#171412] p-2 flex items-center gap-1 overflow-x-auto select-none flex-shrink-0">
+          <button
+            type="button"
+            class="module-tab active px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer bg-[#24201C] text-white border border-[#3D3630]"
+            data-tab="theme"
+          >
+            <EditorIcon name="palette" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Cores</span>
+          </button>
+          <button
+            type="button"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent"
+            data-tab="topbar"
+          >
+            <EditorIcon name="megaphone" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Aviso Topo</span>
+          </button>
+          <button
+            type="button"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent"
+            data-tab="hero"
+          >
             <EditorIcon name="sparkle" class="w-3.5 h-3.5 text-[#C28D3F]" />
-            <span>Personalização Visual</span>
-          </div>
-          <h2 class="text-lg font-bold text-white">Paleta de Cores do Site</h2>
-          <p class="text-xs text-[#9E968E] mt-1 leading-relaxed">
-            Clique em qualquer paleta abaixo para pré-visualizar a mudança de cor no site ao vivo em tempo real.
-          </p>
+            <span>Hero</span>
+          </button>
+          <button
+            type="button"
+            class="module-tab px-3 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition-all cursor-pointer text-[#9E968E] hover:text-white hover:bg-[#24201C] border border-transparent"
+            data-tab="contact"
+          >
+            <EditorIcon name="phone" class="w-3.5 h-3.5 text-[#C28D3F]" />
+            <span>Contato</span>
+          </button>
         </div>
 
-        <!-- Color Swatch Cards -->
-        <div class="p-4 space-y-2.5">
-          {palettes.map((p) => {
-            const isActive = p.id === currentTheme;
-            return (
+        <!-- TAB PANEL 1: Paleta de Cores -->
+        <div id="panel-theme" class="tab-panel p-4 space-y-3">
+          <div class="pb-2 border-b border-[#2D2824]">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Paleta de Cores do Portfólio</h3>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">Selecione para ver a mudança imediata no site.</p>
+          </div>
+          <div class="space-y-2">
+            {palettes.map((p) => {
+              const isActive = p.id === currentTheme;
+              return (
+                <button
+                  type="button"
+                  class={`palette-card w-full text-left p-3 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                    isActive
+                      ? "border-[#A8382B] bg-[#361A16] active-card"
+                      : "border-[#2D2824] hover:border-[#3D3630] bg-[#24201C] hover:bg-[#2D2824]"
+                  }`}
+                  data-theme={p.id}
+                >
+                  <div class="flex items-center gap-3">
+                    <div class="flex items-center -space-x-1.5 flex-shrink-0">
+                      <span
+                        class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
+                        style={`background-color: ${p.color1};`}
+                      ></span>
+                      <span
+                        class="w-5 h-5 rounded-full border-2 border-[#1B1815] shadow-sm"
+                        style={`background-color: ${p.color2};`}
+                      ></span>
+                    </div>
+                    <div>
+                      <span class="block text-xs font-bold text-white">{p.name}</span>
+                      <span class="block text-[10px] text-[#9E968E]">{p.subtitle}</span>
+                    </div>
+                  </div>
+                  <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
+                    <EditorIcon name="check" class="w-3.5 h-3.5" />
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <!-- TAB PANEL 2: Aviso Topo (Topbar) -->
+        <div id="panel-topbar" class="tab-panel hidden p-4 space-y-4">
+          <div class="pb-2 border-b border-[#2D2824]">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Barra de Aviso Superior</h3>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">Urgência, datas comemorativas e status de vagas.</p>
+          </div>
+
+          <!-- Presets Rápidos -->
+          <div>
+            <label class="block text-[10px] font-bold uppercase tracking-wider text-[#8A827B] mb-1.5">
+              Sugestões Rápidas (1-Clique)
+            </label>
+            <div class="grid grid-cols-2 gap-1.5">
               <button
                 type="button"
-                class={`palette-card w-full text-left p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
-                  isActive
-                    ? "border-[#A8382B] bg-[#361A16] active-card"
-                    : "border-[#2D2824] hover:border-[#3D3630] bg-[#24201C] hover:bg-[#2D2824]"
-                }`}
-                data-theme={p.id}
+                class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
+                data-badge="Vagas Abertas"
+                data-text="Recebendo projetos para as próximas semanas · Entrega em 5 a 7 dias úteis"
+                data-cta="Garantir data →"
               >
-                <div class="flex items-center gap-3">
-                  <div class="flex items-center -space-x-1.5 flex-shrink-0">
-                    <span
-                      class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm"
-                      style={`background-color: ${p.color1};`}
-                    ></span>
-                    <span
-                      class="w-6 h-6 rounded-full border-2 border-[#1B1815] shadow-sm"
-                      style={`background-color: ${p.color2};`}
-                    ></span>
-                  </div>
-                  <div>
-                    <span class="block text-xs font-bold text-white">{p.name}</span>
-                    <span class="block text-[10px] text-[#9E968E]">{p.subtitle}</span>
-                  </div>
-                </div>
-                <span class={`check-icon text-xs text-[#A8382B] font-bold ${isActive ? "" : "hidden"}`}>
-                  <EditorIcon name="check" class="w-3.5 h-3.5" />
-                </span>
+                ✨ Vagas Abertas
               </button>
-            );
-          })}
+              <button
+                type="button"
+                class="topbar-preset-btn p-2 rounded-xl bg-[#24201C] hover:bg-[#2D2824] border border-[#2D2824] text-[10px] text-left text-[#E8E2D9] font-medium transition cursor-pointer"
+                data-badge="Black Friday 🔥"
+                data-text="Campanhas de Black Friday abertas · Vagas limitadas para criativos de alta conversão"
+                data-cta="Reservar Campanha →"
+              >
+                🔥 Black Friday
+              </button>
+            </div>
+          </div>
+
+          <!-- Campos Form Topbar -->
+          <div class="space-y-3">
+            <div>
+              <label for="input-topbar-badge" class="block text-[11px] font-bold text-white mb-1">
+                Selo / Destaque
+              </label>
+              <input
+                type="text"
+                id="input-topbar-badge"
+                value={topbarData.badge}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+                placeholder="Ex: Vagas Abertas"
+              />
+            </div>
+            <div>
+              <label for="input-topbar-text" class="block text-[11px] font-bold text-white mb-1">
+                Texto do Aviso
+              </label>
+              <textarea
+                id="input-topbar-text"
+                rows="2"
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition resize-none"
+                placeholder="Texto explicativo do banner..."
+              >{topbarData.text}</textarea>
+            </div>
+            <div>
+              <label for="input-topbar-cta" class="block text-[11px] font-bold text-white mb-1">
+                Texto do Link / Botão
+              </label>
+              <input
+                type="text"
+                id="input-topbar-cta"
+                value={topbarData.ctaText}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+                placeholder="Ex: Garantir data →"
+              />
+            </div>
+          </div>
         </div>
 
-        <!-- Action & Publish Box -->
+        <!-- TAB PANEL 3: Hero (Início) -->
+        <div id="panel-hero" class="tab-panel hidden p-4 space-y-4">
+          <div class="pb-2 border-b border-[#2D2824]">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Início / Proposta de Valor</h3>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">Headline e subtítulo visíveis ao abrir o site.</p>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <label for="input-hero-headline" class="block text-[11px] font-bold text-white mb-1">
+                Título Principal (Caixa Alta)
+              </label>
+              <input
+                type="text"
+                id="input-hero-headline"
+                value={heroData.headline}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+              />
+            </div>
+            <div>
+              <label for="input-hero-cursive" class="block text-[11px] font-bold text-white mb-1">
+                Destaque Cursivo
+              </label>
+              <input
+                type="text"
+                id="input-hero-cursive"
+                value={heroData.headlineCursive}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+              />
+            </div>
+            <div>
+              <label for="input-hero-subheadline" class="block text-[11px] font-bold text-white mb-1">
+                Subtítulo Explicativo
+              </label>
+              <textarea
+                id="input-hero-subheadline"
+                rows="3"
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition resize-none"
+              >{heroData.subheadline}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB PANEL 4: Contato & Redes -->
+        <div id="panel-contact" class="tab-panel hidden p-4 space-y-4">
+          <div class="pb-2 border-b border-[#2D2824]">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-white">Canais de Contato & Redes</h3>
+            <p class="text-[11px] text-[#9E968E] mt-0.5">WhatsApp de recebimento de leads e perfis sociais.</p>
+          </div>
+          <div class="space-y-3">
+            <div>
+              <label for="input-contact-fullname" class="block text-[11px] font-bold text-white mb-1">
+                Nome da Criadora
+              </label>
+              <input
+                type="text"
+                id="input-contact-fullname"
+                value={generalData.fullName}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+              />
+            </div>
+            <div>
+              <label for="input-contact-role" class="block text-[11px] font-bold text-white mb-1">
+                Especialidade / Cargo
+              </label>
+              <input
+                type="text"
+                id="input-contact-role"
+                value={generalData.role}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+              />
+            </div>
+            <div>
+              <label for="input-contact-instagram" class="block text-[11px] font-bold text-white mb-1">
+                Instagram (@)
+              </label>
+              <input
+                type="text"
+                id="input-contact-instagram"
+                value={generalData.instagram}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+              />
+            </div>
+            <div>
+              <label for="input-contact-tiktok" class="block text-[11px] font-bold text-white mb-1">
+                TikTok (@)
+              </label>
+              <input
+                type="text"
+                id="input-contact-tiktok"
+                value={generalData.tiktok}
+                class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white focus:outline-none transition"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Universal Action & Publish Box -->
         <div
           id="publish-card"
-          class="p-4 mx-4 mb-4 rounded-2xl bg-[#24201C] border border-[#2D2824] flex flex-col gap-3"
+          class="p-4 mx-4 mb-4 rounded-2xl bg-[#24201C] border border-[#2D2824] flex flex-col gap-3 mt-auto"
           data-general={JSON.stringify(generalData)}
+          data-topbar={JSON.stringify(topbarData)}
+          data-hero={JSON.stringify(heroData)}
           data-saved-theme={currentTheme}
         >
           <!-- Connection Status Line -->
@@ -206,17 +410,23 @@ const palettes = [
             </button>
           </div>
 
+          <!-- Pending changes indicator -->
+          <div id="pending-changes-badge" class="hidden items-center justify-between text-[11px] px-2 py-1 rounded-lg bg-[#2D2824] text-[#C28D3F]">
+            <span id="pending-changes-count">1 alteração pendente</span>
+            <span class="text-[10px] text-[#9E968E]">Não publicado</span>
+          </div>
+
           <!-- Save Button -->
           <button
             type="button"
-            id="btn-save-theme"
+            id="btn-save-all"
             disabled
             class="w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-[#8A827B] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-transparent select-none"
           >
             <span id="save-btn-icon">
               <EditorIcon name="check" class="w-3.5 h-3.5" />
             </span>
-            <span id="save-btn-text">Paleta Atual Ativa</span>
+            <span id="save-btn-text">Nenhuma Alteração</span>
           </button>
 
           <!-- Toast Message Feedback -->
@@ -290,13 +500,34 @@ const palettes = [
       const authStatusDot = document.getElementById("auth-status-dot");
       const authStatusText = document.getElementById("auth-status-text");
       const btnAuthAction = document.getElementById("btn-auth-action");
-      const btnSaveTheme = document.getElementById("btn-save-theme") as HTMLButtonElement;
+      const btnSaveAll = document.getElementById("btn-save-all") as HTMLButtonElement;
       const saveBtnText = document.getElementById("save-btn-text");
       const saveFeedback = document.getElementById("save-feedback");
+      const pendingBadge = document.getElementById("pending-changes-badge");
+      const pendingCount = document.getElementById("pending-changes-count");
 
-      let currentGeneralData = publishCard?.dataset.general ? JSON.parse(publishCard.dataset.general) : {};
-      let savedTheme = publishCard?.dataset.savedTheme || "terracotta";
-      let selectedTheme = savedTheme;
+      // Tab switcher elements
+      const moduleTabs = document.querySelectorAll(".module-tab");
+      const tabPanels = document.querySelectorAll(".tab-panel");
+
+      // Initial saved state from Astro data attributes
+      const initialGeneral = publishCard?.dataset.general ? JSON.parse(publishCard.dataset.general) : {};
+      const initialTopbar = publishCard?.dataset.topbar ? JSON.parse(publishCard.dataset.topbar) : {};
+      const initialHero = publishCard?.dataset.hero ? JSON.parse(publishCard.dataset.hero) : {};
+
+      // Working copies (mutable)
+      let currentGeneral = { ...initialGeneral };
+      let currentTopbar = { ...initialTopbar };
+      let currentHero = { ...initialHero };
+
+      // Helper to update text safely inside the iframe document
+      function updateIframeText(selector: string, text: string) {
+        if (!iframe || !iframe.contentDocument) return;
+        const target = iframe.contentDocument.querySelector(selector);
+        if (target) {
+          target.textContent = text;
+        }
+      }
 
       // Check Authentication Status
       function updateAuthUI() {
@@ -322,27 +553,77 @@ const palettes = [
 
       updateAuthUI();
 
-      // Update Save Button State
-      function updateSaveButtonState() {
-        if (!btnSaveTheme || !saveBtnText) return;
-        const hasChanged = selectedTheme !== savedTheme;
+      // Tab Switching Handler
+      moduleTabs.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const targetTab = tab.getAttribute("data-tab");
 
-        if (hasChanged) {
-          btnSaveTheme.disabled = false;
-          btnSaveTheme.className = "w-full py-2.5 px-4 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#A8382B]/20 border border-[#C28D3F]/40";
-          saveBtnText.textContent = "Salvar e Publicar no Site";
+          moduleTabs.forEach((t) => {
+            t.classList.remove("active", "bg-[#24201C]", "text-white", "border-[#3D3630]");
+            t.classList.add("text-[#9E968E]", "border-transparent");
+          });
+
+          tab.classList.remove("text-[#9E968E]", "border-transparent");
+          tab.classList.add("active", "bg-[#24201C]", "text-white", "border-[#3D3630]");
+
+          tabPanels.forEach((panel) => {
+            panel.classList.add("hidden");
+          });
+
+          const activePanel = document.getElementById(`panel-${targetTab}`);
+          if (activePanel) {
+            activePanel.classList.remove("hidden");
+          }
+        });
+      });
+
+      // Dirty Tracking & Save Button State
+      function evaluateChanges() {
+        let changedCount = 0;
+
+        const isGeneralChanged = JSON.stringify(currentGeneral) !== JSON.stringify(initialGeneral);
+        const isTopbarChanged = JSON.stringify(currentTopbar) !== JSON.stringify(initialTopbar);
+        const isHeroChanged = JSON.stringify(currentHero) !== JSON.stringify(initialHero);
+
+        if (isGeneralChanged) changedCount++;
+        if (isTopbarChanged) changedCount++;
+        if (isHeroChanged) changedCount++;
+
+        if (changedCount > 0) {
+          if (pendingBadge) {
+            pendingBadge.classList.remove("hidden");
+            pendingBadge.classList.add("flex");
+          }
+          if (pendingCount) {
+            pendingCount.textContent = `${changedCount} módulo${changedCount > 1 ? "s" : ""} modificado${changedCount > 1 ? "s" : ""}`;
+          }
+
+          if (btnSaveAll && saveBtnText) {
+            btnSaveAll.disabled = false;
+            btnSaveAll.className = "w-full py-2.5 px-4 rounded-xl bg-[#A8382B] hover:bg-[#82271D] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-[#A8382B]/20 border border-[#C28D3F]/40";
+            saveBtnText.textContent = "Salvar e Publicar no Site";
+          }
         } else {
-          btnSaveTheme.disabled = true;
-          btnSaveTheme.className = "w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-[#8A827B] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-transparent select-none";
-          saveBtnText.textContent = "Paleta Atual Ativa";
+          if (pendingBadge) {
+            pendingBadge.classList.add("hidden");
+            pendingBadge.classList.remove("flex");
+          }
+
+          if (btnSaveAll && saveBtnText) {
+            btnSaveAll.disabled = true;
+            btnSaveAll.className = "w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-[#8A827B] font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-not-allowed border border-transparent select-none";
+            saveBtnText.textContent = "Nenhuma Alteração";
+          }
         }
+
+        return { isGeneralChanged, isTopbarChanged, isHeroChanged, changedCount };
       }
 
-      // Palette Card Selection & Live Iframe Theme Update
+      // --- MODULE 1: PALETTE SWATCHES ---
       paletteCards.forEach((card) => {
         card.addEventListener("click", () => {
           const theme = card.getAttribute("data-theme") || "terracotta";
-          selectedTheme = theme;
+          currentGeneral.theme = theme;
 
           paletteCards.forEach((c) => {
             c.classList.remove("border-[#A8382B]", "bg-[#361A16]", "active-card");
@@ -356,9 +637,9 @@ const palettes = [
           const check = card.querySelector(".check-icon");
           if (check) check.classList.remove("hidden");
 
-          updateSaveButtonState();
+          evaluateChanges();
 
-          // Directly message the iframe or update its location query
+          // Live update in iframe
           if (iframe && iframe.contentWindow) {
             try {
               iframe.contentWindow.document.documentElement.setAttribute("data-theme", theme);
@@ -369,44 +650,168 @@ const palettes = [
         });
       });
 
-      // Save Theme Handler
-      btnSaveTheme?.addEventListener("click", async () => {
-        if (selectedTheme === savedTheme) return;
+      // --- MODULE 2: TOPBAR LIVE-BINDING & PRESETS ---
+      const inputTopbarBadge = document.getElementById("input-topbar-badge") as HTMLInputElement;
+      const inputTopbarText = document.getElementById("input-topbar-text") as HTMLTextAreaElement;
+      const inputTopbarCta = document.getElementById("input-topbar-cta") as HTMLInputElement;
 
-        btnSaveTheme.disabled = true;
-        btnSaveTheme.className = "w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-wait border border-transparent";
+      inputTopbarBadge?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentTopbar.badge = val;
+        updateIframeText('[data-i18n="topbar.badge"]', val);
+        evaluateChanges();
+      });
+
+      inputTopbarText?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLTextAreaElement).value;
+        currentTopbar.text = val;
+        updateIframeText('[data-i18n="topbar.text"]', val);
+        evaluateChanges();
+      });
+
+      inputTopbarCta?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentTopbar.ctaText = val;
+        updateIframeText('[data-i18n="topbar.cta"]', val);
+        evaluateChanges();
+      });
+
+      // Topbar presets buttons
+      document.querySelectorAll(".topbar-preset-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const badge = btn.getAttribute("data-badge") || "";
+          const text = btn.getAttribute("data-text") || "";
+          const cta = btn.getAttribute("data-cta") || "";
+
+          if (inputTopbarBadge) inputTopbarBadge.value = badge;
+          if (inputTopbarText) inputTopbarText.value = text;
+          if (inputTopbarCta) inputTopbarCta.value = cta;
+
+          currentTopbar.badge = badge;
+          currentTopbar.text = text;
+          currentTopbar.ctaText = cta;
+
+          updateIframeText('[data-i18n="topbar.badge"]', badge);
+          updateIframeText('[data-i18n="topbar.text"]', text);
+          updateIframeText('[data-i18n="topbar.cta"]', cta);
+
+          evaluateChanges();
+        });
+      });
+
+      // --- MODULE 3: HERO LIVE-BINDING ---
+      const inputHeroHeadline = document.getElementById("input-hero-headline") as HTMLInputElement;
+      const inputHeroCursive = document.getElementById("input-hero-cursive") as HTMLInputElement;
+      const inputHeroSubheadline = document.getElementById("input-hero-subheadline") as HTMLTextAreaElement;
+
+      inputHeroHeadline?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.headline = val;
+        updateIframeText('[data-i18n="hero.headline"]', val);
+        evaluateChanges();
+      });
+
+      inputHeroCursive?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.headlineCursive = val;
+        updateIframeText('[data-i18n="hero.headlineCursive"]', val);
+        evaluateChanges();
+      });
+
+      inputHeroSubheadline?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLTextAreaElement).value;
+        currentHero.subheadline = val;
+        updateIframeText('[data-i18n="hero.subheadline"]', val);
+        evaluateChanges();
+      });
+
+      // --- MODULE 4: CONTACT LIVE-BINDING ---
+      const inputContactFullName = document.getElementById("input-contact-fullname") as HTMLInputElement;
+      const inputContactRole = document.getElementById("input-contact-role") as HTMLInputElement;
+      const inputContactInstagram = document.getElementById("input-contact-instagram") as HTMLInputElement;
+      const inputContactTiktok = document.getElementById("input-contact-tiktok") as HTMLInputElement;
+
+      inputContactFullName?.addEventListener("input", (e) => {
+        currentGeneral.fullName = (e.target as HTMLInputElement).value;
+        evaluateChanges();
+      });
+
+      inputContactRole?.addEventListener("input", (e) => {
+        currentGeneral.role = (e.target as HTMLInputElement).value;
+        evaluateChanges();
+      });
+
+      inputContactInstagram?.addEventListener("input", (e) => {
+        currentGeneral.instagram = (e.target as HTMLInputElement).value;
+        evaluateChanges();
+      });
+
+      inputContactTiktok?.addEventListener("input", (e) => {
+        currentGeneral.tiktok = (e.target as HTMLInputElement).value;
+        evaluateChanges();
+      });
+
+      // --- ATOMIC MULTI-FILE SAVE HANDLER ---
+      btnSaveAll?.addEventListener("click", async () => {
+        const { isGeneralChanged, isTopbarChanged, isHeroChanged, changedCount } = evaluateChanges();
+        if (changedCount === 0) return;
+
+        btnSaveAll.disabled = true;
+        btnSaveAll.className = "w-full py-2.5 px-4 rounded-xl bg-[#2D2824] text-white font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 cursor-wait border border-transparent";
         if (saveBtnText) saveBtnText.textContent = "Publicando no GitHub...";
         if (saveFeedback) saveFeedback.classList.add("hidden");
 
-        const updatedGeneral = {
-          ...currentGeneralData,
-          theme: selectedTheme,
-        };
+        const filesToSave: { path: string; contents: string }[] = [];
+        const commitParts: string[] = [];
+
+        if (isTopbarChanged) {
+          filesToSave.push({
+            path: "src/content/topbar.json",
+            contents: JSON.stringify(currentTopbar, null, 2) + "\n",
+          });
+          commitParts.push("aviso do topo");
+        }
+
+        if (isHeroChanged) {
+          filesToSave.push({
+            path: "src/content/hero.json",
+            contents: JSON.stringify(currentHero, null, 2) + "\n",
+          });
+          commitParts.push("hero");
+        }
+
+        if (isGeneralChanged) {
+          filesToSave.push({
+            path: "src/content/general.json",
+            contents: JSON.stringify(currentGeneral, null, 2) + "\n",
+          });
+          commitParts.push("identidade e cores");
+        }
+
+        const commitMessage = `Atualiza ${commitParts.join(", ")} via Studio Admin`;
 
         const result = await saveContentFiles({
-          message: `Atualiza paleta de cores para ${selectedTheme}`,
-          files: [
-            {
-              path: "src/content/general.json",
-              contents: JSON.stringify(updatedGeneral, null, 2) + "\n",
-            },
-          ],
+          message: commitMessage,
+          files: filesToSave,
         });
 
         if (result.success) {
-          savedTheme = selectedTheme;
-          currentGeneralData = updatedGeneral;
-          updateSaveButtonState();
+          // Sync initial state with current state
+          Object.assign(initialGeneral, currentGeneral);
+          Object.assign(initialTopbar, currentTopbar);
+          Object.assign(initialHero, currentHero);
+
+          evaluateChanges();
 
           if (saveFeedback) {
             saveFeedback.className = "text-center text-[11px] font-semibold py-1.5 px-2.5 rounded-lg bg-emerald-950/80 border border-emerald-800 text-emerald-300 block";
-            saveFeedback.textContent = "✓ Paleta salva com sucesso!";
+            saveFeedback.textContent = "✓ Alterações publicadas com sucesso!";
             setTimeout(() => {
               saveFeedback.classList.add("hidden");
-            }, 4000);
+            }, 5000);
           }
         } else {
-          updateSaveButtonState();
+          evaluateChanges();
           if (saveFeedback) {
             saveFeedback.className = "text-center text-[11px] font-semibold py-1.5 px-2.5 rounded-lg bg-red-950/80 border border-red-800 text-red-300 block";
             saveFeedback.textContent = `Erro: ${result.error || "Falha ao salvar"}`;
@@ -441,7 +846,7 @@ const palettes = [
 
       btnReload?.addEventListener("click", () => {
         if (iframe) {
-          iframe.src = `/?theme=${selectedTheme}`;
+          iframe.src = `/?theme=${currentGeneral.theme || "terracotta"}`;
         }
       });
     </script>
