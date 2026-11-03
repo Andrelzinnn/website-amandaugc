@@ -424,6 +424,17 @@ const rawPortfolioData = {
 import fs from "node:fs";
 import path from "node:path";
 
+export function resolveMediaUrl(url: string): string {
+  if (!url || typeof url !== "string") return url;
+  const trimmed = url.trim();
+  // Se for link de arquivo do Google Drive, converte para CDN de alta resolução do Google
+  const driveMatch = trimmed.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || trimmed.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+  if (driveMatch) {
+    return `https://lh3.googleusercontent.com/d/${driveMatch[1]}`;
+  }
+  return trimmed;
+}
+
 function loadKeystaticOverrides(base: any) {
   try {
     const contentDir = path.resolve(process.cwd(), "src/content");
@@ -504,7 +515,7 @@ function loadKeystaticOverrides(base: any) {
       if (hero.headline) data.hero.headline = hero.headline;
       if (hero.headlineCursive) data.hero.headlineCursive = hero.headlineCursive;
       if (hero.subheadline) data.hero.subheadline = hero.subheadline;
-      if (hero.photoUrl) data.hero.photoUrl = hero.photoUrl;
+      if (hero.photoUrl) data.hero.photoUrl = resolveMediaUrl(hero.photoUrl);
       if (hero.metric1Value) data.hero.metrics[0].value = hero.metric1Value;
       if (hero.metric1Label) data.hero.metrics[0].label = hero.metric1Label;
       if (hero.metric2Value) data.hero.metrics[1].value = hero.metric2Value;
@@ -526,7 +537,7 @@ function loadKeystaticOverrides(base: any) {
             brand: item.brand || "",
             title: item.title || "",
             badge: item.badge || "Top Performer Ads",
-            thumbnail: item.thumbnail || "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=700&q=80",
+            thumbnail: resolveMediaUrl(item.thumbnail || "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=700&q=80"),
             youtubeId: item.youtubeId || "dQw4w9WgXcQ",
             stats: item.stats || "",
             highlightMetric: item.highlightMetric || "",
@@ -563,7 +574,7 @@ function loadKeystaticOverrides(base: any) {
             brand: v.brand || "Marca Parceira",
             nicheId: nId,
             format: "9:16",
-            thumbnailUrl: v.thumbnail || "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80",
+            thumbnailUrl: resolveMediaUrl(v.thumbnail || "https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80"),
             tag: v.views || "UGC Ad",
             youtubeId: v.youtubeId || "dQw4w9WgXcQ",
             metrics: {
@@ -592,7 +603,7 @@ function loadKeystaticOverrides(base: any) {
             clientName: t.clientName || "",
             role: t.role || "",
             brand: t.brand || "",
-            avatarUrl: t.avatarUrl || "",
+            avatarUrl: resolveMediaUrl(t.avatarUrl || ""),
             quote: t.quote || "",
           };
         });

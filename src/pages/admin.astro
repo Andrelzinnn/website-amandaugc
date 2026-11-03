@@ -488,6 +488,22 @@ const palettes = [
                 >{heroData.subheadline}</textarea>
               </div>
 
+              <div>
+                <label for="input-hero-photo" class="block text-[11px] font-bold text-white mb-1">
+                  Foto Principal (Link do Google Drive ou Imagem)
+                </label>
+                <input
+                  type="text"
+                  id="input-hero-photo"
+                  value={heroData.photoUrl}
+                  class="w-full px-3 py-2 rounded-xl bg-[#24201C] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B] focus:outline-none transition"
+                  placeholder="https://drive.google.com/file/d/... ou link de imagem"
+                />
+                <span class="block text-[10px] text-[#9E968E] mt-1">
+                  💡 Aceita link direto do Google Drive ("Qualquer pessoa com o link"), Unsplash ou link de foto.
+                </span>
+              </div>
+
               <!-- Números Expressivos (Hero) -->
               <div class="pt-3 border-t border-[#2D2824] space-y-3">
                 <h4 class="text-[11px] font-bold uppercase tracking-wider text-[#C28D3F]">Números Expressivos (Hero)</h4>
@@ -737,6 +753,28 @@ const palettes = [
                       data-path={item.path}
                       data-field="author"
                       value={item.data.author}
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Vídeo (Link Google Drive ou YouTube)</label>
+                    <input
+                      type="text"
+                      class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B]"
+                      data-path={item.path}
+                      data-field="youtubeId"
+                      value={item.data.youtubeId}
+                      placeholder="Ex: https://drive.google.com/file/d/... ou ID do YouTube"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-[10px] font-bold text-[#8A827B] mb-1">Capa / Thumbnail (Link Google Drive ou Imagem)</label>
+                    <input
+                      type="text"
+                      class="case-input w-full px-2.5 py-1.5 rounded-lg bg-[#1B1815] border border-[#2D2824] focus:border-[#A8382B] text-xs text-white placeholder-[#8A827B]"
+                      data-path={item.path}
+                      data-field="thumbnail"
+                      value={item.data.thumbnail}
+                      placeholder="Ex: https://drive.google.com/file/d/... ou link de imagem"
                     />
                   </div>
                 </div>
@@ -1385,6 +1423,24 @@ const palettes = [
         const val = (e.target as HTMLTextAreaElement).value;
         currentHero.subheadline = val;
         updateIframeText('[data-i18n="hero.subheadline"]', val);
+        evaluateChanges();
+      });
+
+      const inputHeroPhoto = document.getElementById("input-hero-photo") as HTMLInputElement;
+      inputHeroPhoto?.addEventListener("input", (e) => {
+        const val = (e.target as HTMLInputElement).value;
+        currentHero.photoUrl = val;
+
+        // Live preview da foto no iframe (convertendo link do Google Drive se houver)
+        if (iframe && iframe.contentWindow) {
+          try {
+            const img = iframe.contentWindow.document.querySelector("#hero img") as HTMLImageElement;
+            if (img) {
+              const driveMatch = val.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || val.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+              img.src = driveMatch ? `https://lh3.googleusercontent.com/d/${driveMatch[1]}` : val;
+            }
+          } catch (e) {}
+        }
         evaluateChanges();
       });
 
